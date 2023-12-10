@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RuleEnum;
 use App\Models\Rule;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,7 +21,7 @@ class UserSeeder extends Seeder
                 'password' => '123456789'
             ])
             ->rules()
-            ->attach(Rule::whereName('student')->first()->id);
+            ->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
         User::factory()
             ->create([
@@ -29,7 +30,7 @@ class UserSeeder extends Seeder
                 'password' => '123456789'
             ])
             ->rules()
-            ->attach(Rule::whereName('student')->first()->id);
+            ->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
         User::factory()
             ->create([
@@ -38,7 +39,7 @@ class UserSeeder extends Seeder
                 'password' => '123456789'
             ])
             ->rules()
-            ->attach(Rule::whereName('secretary')->first()->id);
+            ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
 
         User::factory()
             ->create([
@@ -47,16 +48,16 @@ class UserSeeder extends Seeder
                 'password' => '123456789'
             ])
             ->rules()
-            ->attach(Rule::whereName('staff')->first()->id);
+            ->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
 
         User::factory()
             ->create([
-                'name' => 'Zogo dylan',
-                'email' => 'zaz@gmail.com',
+                'name' => 'Equipe Technique',
+                'email' => 'request-app@gmail.com',
                 'password' => '123456789'
             ])
             ->rules()
-            ->attach(Rule::whereName('technical_admin')->first()->id);
+            ->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
 
     }
 }

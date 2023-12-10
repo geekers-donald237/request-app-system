@@ -19,17 +19,17 @@ class RuleSeeder extends Seeder
         ]);
 
         Rule::factory()->create([
-            'name' => 'staff',
+            'name' => RuleEnum::STAFF->value,
             'description' => 'Staff Role',
         ]);
 
         Rule::factory()->create([
-            'name' => 'secretary',
+            'name' => RuleEnum::SECRETARY->value,
             'description' => 'Secretary Role',
         ]);
 
         Rule::factory()->create([
-            'name' => 'technical_admin',
+            'name' => RuleEnum::TECHNICAL_ADMIN->value,
             'description' => 'Technical Admin Role',
         ]);
     }
