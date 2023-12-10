@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\RuleEnum;
 use App\Models\Rule;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,7 @@ class RuleSeeder extends Seeder
     public function run(): void
     {
         Rule::factory()->create([
-            'name' => 'student',
+            'name' => RuleEnum::STUDENT->value,
             'description' => 'Student Role',
         ]);
 
