@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\RuleEnum;
 use App\Models\Rule;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -23,6 +24,11 @@ class UserSeeder extends Seeder
             ->rules()
             ->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
+        Student::factory()->create([
+            'user_id' => (User::whereEmail('bayidris@gmail.com')->first()->id)
+            , 'matricule' => '21Q2915',
+        ]);
+
         User::factory()
             ->create([
                 'name' => 'Nyadjou Lucie',
@@ -32,6 +38,10 @@ class UserSeeder extends Seeder
             ->rules()
             ->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
+        Student::factory()->create([
+            'user_id' => (User::whereEmail('nyadjou@gmail.com')->first()->id)
+            , 'matricule' => '21Q5915',
+        ]);
         User::factory()
             ->create([
                 'name' => 'Jane doe',

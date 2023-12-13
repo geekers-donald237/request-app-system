@@ -47,4 +47,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Rule::class);
     }
+
+    public function student() {
+        return $this->hasOne(Student::all());
+    }
 }
