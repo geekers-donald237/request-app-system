@@ -2,14 +2,24 @@
 
 namespace App\Models;
 
+use Database\Factories\StudentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Student extends Model
 {
     use HasFactory;
 
-    public function user() {
-        return $this->hasOne(User::all());
+    protected $guarded = [];
+
+    public static function newFactory(): StudentFactory
+    {
+        return StudentFactory::new();
+    }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
     }
 }

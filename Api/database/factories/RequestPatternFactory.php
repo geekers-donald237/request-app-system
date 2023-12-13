@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\RequestPattern;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RequestPattern>
+ * @extends Factory<RequestPattern>
  */
 class RequestPatternFactory extends Factory
 {
@@ -17,7 +18,8 @@ class RequestPatternFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'pattern_name' => $this->faker->name,
+            'pattern_description' => $this->faker->text
         ];
     }
 }
