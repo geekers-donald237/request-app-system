@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Factories\Auth\AuthLogoutCommandFactory;
 use App\Factories\LoginCommandFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginActionRequest;
