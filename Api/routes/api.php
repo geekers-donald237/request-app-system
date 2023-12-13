@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RequestManagement\RequestPatternController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+
     return $request->user();
 });
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
+
+});
+
 
 require __DIR__ . '/auth.php';
