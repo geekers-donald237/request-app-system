@@ -3,12 +3,12 @@
 namespace App\Factories;
 
 use App\Commands\LoginActionCommand;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\LoginActionRequest;
 
-class AuthCommandFactory
+class LoginCommandFactory
 {
 
-    public static function buildFromRequest(LoginRequest $request): LoginActionCommand
+    public static function buildFromRequest(LoginActionRequest $request): LoginActionCommand
     {
         return new LoginActionCommand(
             email: $request->get('email'),
