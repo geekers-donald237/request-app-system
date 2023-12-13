@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RequestManagement\RequestController;
 use App\Http\Controllers\RequestManagement\RequestPatternController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
+    Route::post('/request', [RequestController::class, 'save'])->name('request');
 
 });
 
