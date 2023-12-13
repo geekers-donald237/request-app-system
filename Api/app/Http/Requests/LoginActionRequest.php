@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Shared\Infrastructure\HttpDataRequest;
 
-class LoginRequest extends HttpDataRequest
+class LoginActionRequest extends HttpDataRequest
 {
 
     public function messages(): array
