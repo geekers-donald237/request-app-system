@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Commands\SaveRequestActionCommand;
+use App\Enums\RuleEnum;
 use App\Models\Request;
+use App\Models\RequestPattern;
 use App\Responses\saveRequestActionResponse;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +18,7 @@ class RequestService
     public function handle(SaveRequestActionCommand $command): saveRequestActionResponse
     {
         $response = new saveRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
 
 
@@ -46,10 +49,21 @@ class RequestService
      */
     private function checkIfRequestPatternExistOrThrowException(int $requestPatternId): void
     {
-        $existingRequestPattern = Request::whereRequestPatternId($requestPatternId)->whereIsDeleted(false)->first();
+        $existingRequestPattern = RequestPattern::whereId($requestPatternId)->whereIsDeleted(false)->first();
 
         if (is_null($existingRequestPattern)) {
-            throw new Exception('Motif inexistant');
+            throw new Exception('Request pattern does not exist');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthenticateUserIsStudentOrThrowException(): void
+    {
+        $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
+        if (!in_array(RuleEnum::STUDENT->value, $authUserRules)) {
+            throw new Exception('This user is not a student, so he cannot create a request');
         }
     }
 }
