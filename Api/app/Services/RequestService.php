@@ -4,24 +4,31 @@ namespace App\Services;
 
 use App\Commands\SaveRequestActionCommand;
 use App\Models\Request;
-use App\Responses\saveRequestToDBActionResponse;
+use App\Responses\saveRequestActionResponse;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
 {
-    public function handle(SaveRequestActionCommand $command): saveRequestToDBActionResponse
+    public function handle(SaveRequestActionCommand $command): saveRequestActionResponse
     {
-        $response = new saveRequestToDBActionResponse();
-        $request = new Request();   // request tranlate of requet or not default request laravel variables;
-        $request->sender_id = Auth::user()->id;
-        $request->request_pattern_id = $command->request_pattern_id;
-        $request->title = $command->title;
-        $request->content = $command->content;
-        $request->save();
+        $response = new saveRequestActionResponse();
+        $request = new Request();
+        $dataToSave = $this->buildRequestData($command);
+        $request->fill($dataToSave)->save();
 
-        $response->status = 201;
-        $response->message = 'request succesfully store';
+        $response->requestId = $request->id;
+        $response->message = 'Request Successfully saved';
 
         return $response;
+    }
+
+    private function buildRequestData(SaveRequestActionCommand $command): array
+    {
+        return [
+            'sender_id' => Auth::user()->getAuthIdentifier(),
+            'request_pattern_id' => $command->requestPatternId,
+            'title' => $command->title,
+            'content' => $command->content
+        ];
     }
 }

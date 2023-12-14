@@ -10,7 +10,7 @@ class SaveActionRequest extends HttpDataRequest
     {
         return [
             'title.required' => 'Le champ intitulé est obligatoire.',
-            'request_pattern_id.required' => 'Le champ motif de la requête est obligatoire.',
+            'requestPatternId.required' => 'Le champ motif de la requête est obligatoire.',
             'content.required' => 'Le champ contenu de la requête est obligatoire.',
 //            'piece_manuscrite.required' => 'Veuillez fournir la pièce manuscrite.',
 //            'piece_jointe.*.required' => 'Toutes les pièces jointes sont obligatoires.',
@@ -23,7 +23,7 @@ class SaveActionRequest extends HttpDataRequest
     {
         return [
             'title' => 'required',
-            'request_pattern_id' => 'required',
+            'requestPatternId' => 'required',
             'content' => 'required',
 //            'piece_manuscrite' => 'required|file|mimes:jpeg,png,pdf',
 //            'piece_jointe.*' => 'required|file|mimes:jpeg,png,pdf',

@@ -9,5 +9,5 @@ class Request extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sender_id' ,'request_pattern_id' ,'title' ,'content'];
+    protected $guarded = [];
 }

@@ -2,8 +2,8 @@
 
 namespace App\Responses;
 
-class saveRequestToDBActionResponse
+class saveRequestActionResponse
 {
-    public string $status = '';
     public string $message = '';
+    public ?int $requestId = null;
 }

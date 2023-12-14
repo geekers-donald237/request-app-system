@@ -18,7 +18,8 @@ class RequestController extends Controller
     {
         $httpJson = [
             'status' => 200,
-            'message' => ''
+            'message' => '',
+            'request' => null
         ];
 
         try {
@@ -27,6 +28,7 @@ class RequestController extends Controller
 
             $httpJson = [
                 'status' => 201,
+                'request' => $response->requestId,
                 'message' => $response->message
             ];
         } catch (Exception $e) {

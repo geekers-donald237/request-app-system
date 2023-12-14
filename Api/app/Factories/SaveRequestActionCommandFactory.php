@@ -11,7 +11,7 @@ class SaveRequestActionCommandFactory
     public static function buildFromRequest(SaveActionRequest $request): SaveRequestActionCommand
     {
         return new SaveRequestActionCommand(
-            request_pattern_id : $request->get('request_pattern_id'),
+            requestPatternId: $request->get('requestPatternId'),
             content: $request->get('content'),
             title: $request->get('title'),
         );
