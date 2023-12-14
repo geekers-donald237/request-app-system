@@ -5,12 +5,13 @@ namespace App\Services;
 use App\Commands\SaveRequestActionCommand;
 use App\Models\Request;
 use App\Responses\saveRequestActionResponse;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(SaveRequestActionCommand $command): saveRequestActionResponse
     {
@@ -22,6 +23,7 @@ class RequestService
         $dataToSave = $this->buildRequestData($command);
         $request->fill($dataToSave)->save();
 
+        $response->isSaved = true;
         $response->requestId = $request->id;
         $response->message = 'Request Successfully saved';
 
@@ -40,14 +42,14 @@ class RequestService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkIfRequestPatternExistOrThrowException(int $requestPatternId): void
     {
         $existingRequestPattern = Request::whereRequestPatternId($requestPatternId)->whereIsDeleted(false)->first();
 
-        if (!$existingRequestPattern) {
-            throw new \Exception('Motif inexistant');
+        if (is_null($existingRequestPattern)) {
+            throw new Exception('Motif inexistant');
         }
     }
 }

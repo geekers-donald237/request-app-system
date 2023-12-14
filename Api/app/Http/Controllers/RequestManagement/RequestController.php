@@ -19,6 +19,7 @@ class RequestController extends Controller
         $httpJson = [
             'status' => 200,
             'message' => '',
+            'isSaved' => false
         ];
 
         try {
@@ -27,7 +28,8 @@ class RequestController extends Controller
 
             $httpJson = [
                 'status' => 201,
-                'request' => $response->requestId,
+                'requestId' => $response->requestId,
+                'isSaved' => $response->isSaved,
                 'message' => $response->message
             ];
         } catch (Exception $e) {
