@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('request_pattern_id')->constrained('request_patterns');
             $table->string('title');
             $table->text('content');
+            $table->boolean('is_deleted')->default(0);
             $table->timestamps();
         });
     }

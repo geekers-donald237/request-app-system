@@ -19,7 +19,6 @@ class RequestController extends Controller
         $httpJson = [
             'status' => 200,
             'message' => '',
-            'request' => null
         ];
 
         try {
