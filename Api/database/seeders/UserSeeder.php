@@ -16,16 +16,22 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->create([
-                'name' => 'Mbiada Idris',
+                'name' => 'Mbiada',
+                'sur_name' => 'Idris',
                 'email' => 'bayidris@gmail.com',
-                'password' => '123456789'
+                'password' => '123456789',
+                'matricule' => '21Q2919'
+
             ])
             ->rules()
             ->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
         User::factory()
             ->create([
-                'name' => 'Nyadjou Lucie',
+                'name' => 'Nyadjou',
+                'sur_name' => 'Lucie',
+                'matricule' => '21Q2519',
+
                 'email' => 'nyadjou@gmail.com',
                 'password' => '123456789'
             ])
@@ -34,7 +40,8 @@ class UserSeeder extends Seeder
 
         User::factory()
             ->create([
-                'name' => 'Jane doe',
+                'name' => 'Jane',
+                'sur_name' => 'Doe',
                 'email' => 'janedoe@gmail.com',
                 'password' => '123456789'
             ])
@@ -43,7 +50,8 @@ class UserSeeder extends Seeder
 
         User::factory()
             ->create([
-                'name' => 'John doe',
+                'name' => 'John',
+                'sur_name' => 'Doe',
                 'email' => 'johndoe@gmail.com',
                 'password' => '123456789'
             ])
@@ -52,7 +60,8 @@ class UserSeeder extends Seeder
 
         User::factory()
             ->create([
-                'name' => 'Equipe Technique',
+                'name' => 'Equipe',
+                'sur_name' => 'Technique',
                 'email' => 'request-app@gmail.com',
                 'password' => '123456789'
             ])
