@@ -15,6 +15,63 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->createdStudentUsers();
+        $this->createSecretaryUser();
+        $this->createStaffUser();
+        $this->createTechnicalAdminUser();
+
+    }
+
+    /**
+     * @return void
+     */
+    public function createTechnicalAdminUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'Equipe Technique',
+                'email' => 'request-app@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
+    }
+
+    /**
+     * @return void
+     */
+    public function createStaffUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'John doe',
+                'email' => 'johndoe@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+    }
+
+    /**
+     * @return void
+     */
+    public function createSecretaryUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'Jane doe',
+                'email' => 'janedoe@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
+    }
+
+    /**
+     * @return void
+     */
+    public function createdStudentUsers(): void
+    {
         User::factory()
             ->create([
                 'name' => 'Mbiada Idris',
@@ -42,32 +99,5 @@ class UserSeeder extends Seeder
             'user_id' => (User::whereEmail('nyadjou@gmail.com')->first()->id)
             , 'matricule' => '21Q5915',
         ]);
-        User::factory()
-            ->create([
-                'name' => 'Jane doe',
-                'email' => 'janedoe@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
-
-        User::factory()
-            ->create([
-                'name' => 'John doe',
-                'email' => 'johndoe@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
-
-        User::factory()
-            ->create([
-                'name' => 'Equipe Technique',
-                'email' => 'request-app@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
-
     }
 }

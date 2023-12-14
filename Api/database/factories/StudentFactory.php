@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Student>
+ * @extends Factory<Student>
  */
 class StudentFactory extends Factory
 {
@@ -17,7 +18,8 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => $this->faker->numberBetween(1,1000),
+            'matricule' => $this->faker->uuid
         ];
     }
 }

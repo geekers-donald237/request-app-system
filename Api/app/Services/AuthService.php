@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Commands\LoginActionCommand;
-use App\Http\Requests\LoginActionRequest;
 use App\Models\User;
 use App\Responses\LoginActionResponse;
 use App\Responses\LogoutActionResponse;
@@ -23,16 +22,16 @@ class AuthService
         if (!Auth::attempt(['email' => $command->email, 'password' => $command->password])) {
             throw new Exception('Email & Password does not match with our record.');
         }
-        $user = User::whereEmail($command->email)->first();
+        $user = User::whereEmail($command->email)->whereIsDeleted(false)->first();
 
         if ($user) {
             $response->token = $user->createToken(self::API_TOKEN)->plainTextToken;
             $response->message = 'User Logged Successfully';
-        } else {
-            throw new Exception('User Not Found');
+            return $response;
         }
 
-        return $response;
+        throw new Exception('User Not Found');
+
     }
 
     public function handleLogout(): LogoutActionResponse

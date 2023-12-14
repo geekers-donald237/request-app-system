@@ -1,11 +1,11 @@
 <?php
 
+use App\Enums\RuleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rules', function (Blueprint $table) {
             $table->id();
-            $table->enum('name',['student' ,'staff' ,'secretary','technical_admin'])->unique();
+            $table->enum('name', [RuleEnum::STUDENT->value, RuleEnum::STAFF->value, RuleEnum::SECRETARY->value, RuleEnum::TECHNICAL_ADMIN->value])->unique();
             $table->string('description');
             $table->timestamps();
         });

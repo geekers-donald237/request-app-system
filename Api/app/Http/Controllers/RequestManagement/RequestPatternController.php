@@ -13,9 +13,9 @@ class RequestPatternController extends Controller
     ): JsonResponse
     {
         $httpJson = [
-            'status' => 200,
-            'patterns' => []
+            'status' => 200
         ];
+
         $response = $handler->handle();
 
         $httpJson['patterns'] = $response->patterns;
