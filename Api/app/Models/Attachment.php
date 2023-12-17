@@ -10,6 +10,7 @@ class Attachment extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     public function request() : BelongsTo
     {
         return $this->belongsTo(Request::class);

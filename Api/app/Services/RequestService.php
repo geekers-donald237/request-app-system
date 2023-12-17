@@ -24,23 +24,10 @@ class RequestService
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
 
-
-        $request = new Request();
-        $dataToSave = $this->buildRequestData($command);
-        $request->fill($dataToSave)->save();
-
-        $attachement = new Attachment();
-        $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite, StorageDirectoryEnum::FileHandWrite->value);
-        $attachement->file_path = $fileName;
-        $attachement->request_id = $request->id;
-        $attachement->is_handwritten = true;
-        $attachement->save();
-
-        $this->processAttachments($command->fileAttachement, $request);
+        $request = $this->saveUserRequest($command);
         $response->isSaved = true;
         $response->requestId = $request->id;
         $response->message = 'Request Successfully saved';
-
 
         return $response;
     }
@@ -68,6 +55,33 @@ class RequestService
         }
     }
 
+    /**
+     * @param SaveRequestActionCommand $command
+     * @return Request
+     * @throws Exception
+     */
+    private function saveUserRequest(SaveRequestActionCommand $command): Request
+    {
+        $request = $this->saveRequest($command);
+
+        $this->saveFileHandWritten($command, $request);
+
+        $this->saveFileAttachments($command->fileAttachements, $request);
+        return $request;
+    }
+
+    /**
+     * @param SaveRequestActionCommand $command
+     * @return Request
+     */
+    private function saveRequest(SaveRequestActionCommand $command): Request
+    {
+        $request = new Request();
+        $dataToSave = $this->buildRequestData($command);
+        $request->fill($dataToSave)->save();
+        return $request;
+    }
+
     private function buildRequestData(SaveRequestActionCommand $command): array
     {
         return [
@@ -79,23 +93,57 @@ class RequestService
     }
 
     /**
+     * @param SaveRequestActionCommand $command
+     * @param Request $request
+     * @return void
      * @throws Exception
      */
-    private function processAttachments($attachments, Request $request): void
+    private function saveFileHandWritten(SaveRequestActionCommand $command, Request $request): void
     {
+        $attachment = new Attachment();
+        $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite, StorageDirectoryEnum::FileHandWritten->value);
+        $handWrittenData = $this->buildAttachementData($fileName, $request, true);
 
+        $attachment->fill($handWrittenData)->save();
+
+    }
+
+    /**
+     * @param string $fileName
+     * @param Request $request
+     * @param bool $isHandWritten
+     * @return array
+     */
+    private function buildAttachementData(string $fileName, Request $request, bool $isHandWritten): array
+    {
+        return [
+            'file_path' => $fileName,
+            'request_id' => $request->id,
+            'is_handwritten' => $isHandWritten
+        ];
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function saveFileAttachments(?array $attachments, Request $request): void
+    {
+        if (is_null($attachments)) {
+            return;
+        }
         foreach ($attachments as $attachment) {
+
+            $attachmentModel = new Attachment();
+
             $fileName = HelpersFunction::handleFileUpload(
                 $attachment,
                 StorageDirectoryEnum::FileAttachement->value
             );
 
-            $attachmentModel = new Attachment();
-            $attachmentModel->request_id = $request->id;
-            $attachmentModel->file_path = $fileName;
-            $attachmentModel->is_handwritten = false;
+            $attachmentData = $this->buildAttachementData($fileName, $request, false);
+            $attachmentModel->fill($attachmentData)->save();
 
-            $attachmentModel->save();
         }
     }
 }

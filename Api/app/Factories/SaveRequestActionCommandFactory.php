@@ -10,12 +10,14 @@ class SaveRequestActionCommandFactory
 
     public static function buildFromRequest(SaveActionRequest $request): SaveRequestActionCommand
     {
-        return new SaveRequestActionCommand(
+        $command = new SaveRequestActionCommand(
             requestPatternId: $request->get('requestPatternId'),
             content: $request->get('content'),
             title: $request->get('title'),
-            fileHandWrite: $request->file('fileHandWrite'), // Utiliser la méthode file() pour les fichiers
-            fileAttachement: $request->file('fileAttachement'), // Utiliser la méthode file() pour les fichiers
+            fileHandWrite: $request->file('fileHandWrite')
         );
+
+        $command->fileAttachements = $request->file('fileAttachements');
+        return $command;
     }
 }

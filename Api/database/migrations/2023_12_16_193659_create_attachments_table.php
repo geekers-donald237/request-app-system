@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_id')->constrained('requests');
-            $table->string('file_path',1000);
+            $table->string('file_path');
             $table->boolean('is_handwritten');
             $table->timestamps();
         });
