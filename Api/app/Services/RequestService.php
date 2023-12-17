@@ -69,6 +69,9 @@ class RequestService
         $this->saveFileHandWritten($command, $request);
 
         $this->saveFileAttachments($command->fileAttachements, $request);
+
+        $this->associateRequestWithReceivers($request , $command->receiverIds);
+
         return $request;
     }
 
@@ -93,6 +96,7 @@ class RequestService
             'content' => $command->content
         ];
     }
+
 
     /**
      * @param SaveRequestActionCommand $command
@@ -147,6 +151,30 @@ class RequestService
             $attachmentModel->fill($attachmentData)->save();
 
         }
+    }
+
+
+    private function associateRequestWithReceivers(Request $request, array $receiverIds): void
+    {
+        $request->receivers()->attach($receiverIds);
+    }
+
+    /**
+     * Créer une nouvelle instance de ReceiverRequest avec les données spécifiées.
+     *
+     * @param int $requestId
+     * @param int $receiverId
+     * @return array
+     */
+
+
+    private function createReceiverRequest(int $requestId, int $receiverId): array
+    {
+        return [
+            'request_id' => $requestId,
+            'receiver_id' => $receiverId,
+        ];
+
     }
 
     /**

@@ -13,6 +13,7 @@ class SaveRequestActionCommand
         public string       $content,
         public string       $title,
         public UploadedFile $fileHandWrite,
+        public  array $receiverIds
 
     )
     {
