@@ -14,6 +14,7 @@ class SaveActionRequest extends HttpDataRequest
             'requestPatternId.required' => 'Le champ motif de la requête est obligatoire.',
             'content.required' => 'Le champ contenu de la requête est obligatoire.',
             'fileHandWrite.required' => 'Veuillez fournir la pièce manuscrite.',
+            'receiverIds.required' => 'Veuillez indiquer le(s) destinataire(s) pour la requete'
         ];
     }
 
@@ -24,6 +25,7 @@ class SaveActionRequest extends HttpDataRequest
             'requestPatternId' => 'required',
             'content' => 'required|string',
             'fileHandWrite' => 'required|file',
+            'receiverIds' => 'required'
         ];
     }
 
