@@ -11,6 +11,7 @@ use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
 use App\Models\Student;
+use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -77,7 +78,7 @@ class RequestService
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $request = $this->getRequestIfExistOrThrowException($command->requestId);
         foreach ($command->receiverIds as $receiverId) {
-            $this->getStudentIfExistOrThrowException($receiverId);
+            $this->checkIfReceiverExistOrThrowException($receiverId);
         }
         $request->receivers()->attach($command->receiverIds);
         $response->isSaved = true;
@@ -255,6 +256,17 @@ class RequestService
     private function removeAttachmentsFromDisk(Collection $attachments): void
     {
         //TODO : implement disk attachments suppression
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfReceiverExistOrThrowException(string $receiverId): void
+    {
+        $user = User::whereId($receiverId)->whereIsDeleted(false)->first();
+        if (is_null($user)) {
+            throw new Exception('Cet utilisateur n\'existe pas!');
+        }
     }
 
 
