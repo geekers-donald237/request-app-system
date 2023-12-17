@@ -25,7 +25,7 @@ class HelpersFunction
         $filename = time() . $file->getClientOriginalName();
         $file->storeAs($storagePath, $filename);
 
-        return storage_path($storagePath . DIRECTORY_SEPARATOR . $filename);
+        return $storagePath . DIRECTORY_SEPARATOR . $filename;
     }
 
     private static function isFileSizeLowerThan5Mo(UploadedFile $file): bool
