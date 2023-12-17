@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('rule_id')->constrained('rules');
-            $table->boolean('is_deleted')->default(0);
-
             $table->timestamps();
         });
     }

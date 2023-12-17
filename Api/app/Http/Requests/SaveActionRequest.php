@@ -13,8 +13,7 @@ class SaveActionRequest extends HttpDataRequest
             'title.string' => 'Le champ title n\'pas valide.',
             'requestPatternId.required' => 'Le champ motif de la requête est obligatoire.',
             'content.required' => 'Le champ contenu de la requête est obligatoire.',
-            'fileHandWrite.required' => 'Veuillez fournir la pièce manuscrite.',
-            'receiverIds.required' => 'Veuillez indiquer le(s) destinataire(s) pour la requete'
+            'fileHandWritten.required' => 'Veuillez fournir la pièce manuscrite.'
         ];
     }
 
@@ -24,8 +23,7 @@ class SaveActionRequest extends HttpDataRequest
             'title' => 'required|string',
             'requestPatternId' => 'required',
             'content' => 'required|string',
-            'fileHandWrite' => 'required|file',
-            'receiverIds' => 'required'
+            'fileHandWritten' => 'required|file'
         ];
     }
 

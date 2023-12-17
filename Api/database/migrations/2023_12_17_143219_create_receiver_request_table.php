@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('request_id')->constrained('requests');
             $table->foreignId('receiver_id')->constrained('users');
-            $table->boolean('is_deleted')->default(0);
-
         });
     }
 

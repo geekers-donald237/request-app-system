@@ -14,8 +14,7 @@ class SaveRequestActionCommandFactory
             requestPatternId: $request->get('requestPatternId'),
             content: $request->get('content'),
             title: $request->get('title'),
-            fileHandWrite: $request->file('fileHandWrite'),
-            receiverIds: $request->get('receiverIds')
+            fileHandWritten: $request->file('fileHandWritten')
         );
 
         $command->fileAttachments = $request->file('fileAttachments');

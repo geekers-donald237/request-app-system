@@ -3,18 +3,22 @@
 namespace App\Services;
 
 use App\Commands\SaveRequestActionCommand;
+use App\Commands\SendRequestActionCommand;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
+use App\Models\Student;
 use App\Models\User;
-use App\Responses\DeleteRequestResponse;
-use App\Responses\GetUserRequestsResponse;
+use App\Responses\DeleteRequestActionResponse;
+use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
+use App\Responses\SendRequestActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
@@ -28,9 +32,9 @@ class RequestService
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
 
-        $request = $this->saveUserRequest($command);
+        $request = $this->saveStudentRequest($command);
         $response->isSaved = true;
-        $response->requestId = $request->id;
+        $response->requestId = $request->getAttributeValue('id');
         $response->message = 'Request Successfully saved';
 
         return $response;
@@ -39,11 +43,11 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleGetUserRequests(string $userId): GetUserRequestsResponse
+    public function handleGetUserRequests(string $userId): GetUserRequestsActionResponse
     {
-        $response = new GetUserRequestsResponse();
+        $response = new GetUserRequestsActionResponse();
         $user = $this->getUserIfExistOrThrowException($userId);
-        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->get();
+        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
         $response->message = 'Requests of ' . $user->name();
         return $response;
     }
@@ -51,17 +55,36 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleDeleteRequest(string $requestId): DeleteRequestResponse
+    public function handleDeleteRequest(string $requestId): DeleteRequestActionResponse
     {
-        $response = new DeleteRequestResponse();
+        $response = new DeleteRequestActionResponse();
         $request = $this->getRequestIfExistOrThrowException($requestId);
-        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        //$this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
         $this->deleteRequestAndItsAttachments($request);
 
         $response->isDeleted = true;
         $response->message = 'Deleted Request and its attachments successful';
         return $response;
     }
+
+
+    /**
+     * @throws Exception
+     */
+    public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
+    {
+        $response = new SendRequestActionResponse();
+        $request = $this->getRequestIfExistOrThrowException($command->requestId);
+        foreach ($command->receiverIds as $receiverId) {
+            $this->getUserIfExistOrThrowException($receiverId);
+        }
+        $request->receivers()->attach($command->receiverIds);
+        $response->isSaved = true;
+        $response->message = 'Send request successfully !';
+
+        return $response;
+    }
+
 
     /**
      * @throws Exception
@@ -91,15 +114,13 @@ class RequestService
      * @return Request
      * @throws Exception
      */
-    private function saveUserRequest(SaveRequestActionCommand $command): Request
+    private function saveStudentRequest(SaveRequestActionCommand $command): Request
     {
         $request = $this->saveRequest($command);
 
         $this->saveFileHandWritten($command, $request);
 
         $this->saveFileAttachments($command->fileAttachments, $request);
-
-        $this->associateRequestWithReceivers($request, $command->receiverIds);
 
         return $request;
     }
@@ -120,7 +141,7 @@ class RequestService
     private function buildRequestData(SaveRequestActionCommand $command): array
     {
         return [
-            'sender_id' => Auth::user()->getAuthIdentifier(),
+            'sender_id' => Student::whereUserId(Auth::user()->getAuthIdentifier())->first()->id,
             'request_pattern_id' => $command->requestPatternId,
             'title' => $command->title,
             'content' => $command->content
@@ -136,8 +157,8 @@ class RequestService
     private function saveFileHandWritten(SaveRequestActionCommand $command, Request $request): void
     {
         $attachment = new Attachment();
-        $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite, StorageDirectoryEnum::FileHandWritten->value);
-        $handWrittenData = $this->buildAttachmentData($fileName, $request, true);
+        $filePath = HelpersFunction::handleFileUpload($command->fileHandWritten, StorageDirectoryEnum::FileHandWritten->value);
+        $handWrittenData = $this->buildAttachmentData($filePath, $request, true);
 
         $attachment->fill($handWrittenData)->save();
 
@@ -145,16 +166,16 @@ class RequestService
 
 
     /**
-     * @param string $fileName
+     * @param string $filePath
      * @param Request $request
      * @param bool $isHandWritten
      * @return array
      */
-    private function buildAttachmentData(string $fileName, Request $request, bool $isHandWritten): array
+    private function buildAttachmentData(string $filePath, Request $request, bool $isHandWritten): array
     {
         return [
-            'file_path' => $fileName,
-            'request_id' => $request->id,
+            'file_path' => $filePath,
+            'request_id' => $request->getAttributeValue('id'),
             'is_handwritten' => $isHandWritten
         ];
 
@@ -172,20 +193,15 @@ class RequestService
 
             $attachmentModel = new Attachment();
 
-            $fileName = HelpersFunction::handleFileUpload(
+            $filePath = HelpersFunction::handleFileUpload(
                 $attachment,
-                StorageDirectoryEnum::FileAttachement->value
+                StorageDirectoryEnum::FileAttachment->value
             );
 
-            $attachmentData = $this->buildAttachmentData($fileName, $request, false);
+            $attachmentData = $this->buildAttachmentData($filePath, $request, false);
             $attachmentModel->fill($attachmentData)->save();
 
         }
-    }
-
-    private function associateRequestWithReceivers(Request $request, array $receiverIds): void
-    {
-        $request->receivers()->attach($receiverIds);
     }
 
     /**
@@ -194,26 +210,9 @@ class RequestService
      */
     private function deleteRequestAndItsAttachments(Request $request): void
     {
+        $this->removeAttachmentsFromDisk($request->attachments()->get());
         $request->attachments()->delete();
         $request->fill(['is_deleted' => true])->save();
-    }
-
-    /**
-     * Créer une nouvelle instance de ReceiverRequest avec les données spécifiées.
-     *
-     * @param int $requestId
-     * @param int $receiverId
-     * @return array
-     */
-
-
-    private function createReceiverRequest(int $requestId, int $receiverId): array
-    {
-        return [
-            'request_id' => $requestId,
-            'receiver_id' => $receiverId,
-        ];
-
     }
 
     /**
@@ -250,6 +249,11 @@ class RequestService
             return;
         }
         throw new Exception('Vous n\êtes pas autorisé à supprimer cette requête');
+    }
+
+    private function removeAttachmentsFromDisk(Collection $attachments): void
+    {
+        //TODO : implement disk attachments suppression
     }
 
 

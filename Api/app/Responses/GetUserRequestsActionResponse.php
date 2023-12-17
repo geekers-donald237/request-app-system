@@ -3,7 +3,7 @@
 namespace App\Responses;
 
 
-class GetUserRequestsResponse
+class GetUserRequestsActionResponse
 {
 
     public mixed $requests;

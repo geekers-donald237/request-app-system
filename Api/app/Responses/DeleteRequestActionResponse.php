@@ -2,7 +2,7 @@
 
 namespace App\Responses;
 
-class DeleteRequestResponse
+class DeleteRequestActionResponse
 {
 
     /**

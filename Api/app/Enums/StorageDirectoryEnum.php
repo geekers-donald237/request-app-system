@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-enum StorageDirectoryEnum : string
+enum StorageDirectoryEnum: string
 {
-    const ROOTDIRECTORY = 'public/request_app_system/';
-    case FileHandWritten =  self::ROOTDIRECTORY . 'FileHandWrite';
-    case FileAttachement =  self::ROOTDIRECTORY .'FileAttachement';
+    const ROOT_DIRECTORY = 'students/attachments/';
+    case FileHandWritten = self::ROOT_DIRECTORY . 'fileHandWritten';
+    case FileAttachment = self::ROOT_DIRECTORY . 'fileAttachment';
 }
