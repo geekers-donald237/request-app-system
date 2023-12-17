@@ -40,8 +40,8 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
-    public function getUserRequests(
-        string         $userId,
+    public function getStudentRequests(
+        string         $studentId,
         RequestService $handler
     ): JsonResponse
     {
@@ -52,7 +52,7 @@ class RequestController extends Controller
         ];
 
         try {
-            $response = $handler->handleGetUserRequests($userId);
+            $response = $handler->handleGetStudentRequests($studentId);
 
             $httpJson = [
                 'status' => 200,

@@ -11,7 +11,6 @@ use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
 use App\Models\Student;
-use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -43,12 +42,13 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleGetUserRequests(string $userId): GetUserRequestsActionResponse
+    public function handleGetStudentRequests(string $studentId): GetUserRequestsActionResponse
     {
         $response = new GetUserRequestsActionResponse();
-        $user = $this->getUserIfExistOrThrowException($userId);
-        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
-        $response->message = 'Requests of ' . $user->name();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $student = $this->getStudentIfExistOrThrowException($studentId);
+        $response->requests = $student->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
+        $response->message = 'Requests of ' . $student->user()->first()->name();
         return $response;
     }
 
@@ -74,9 +74,10 @@ class RequestService
     public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
     {
         $response = new SendRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $request = $this->getRequestIfExistOrThrowException($command->requestId);
         foreach ($command->receiverIds as $receiverId) {
-            $this->getUserIfExistOrThrowException($receiverId);
+            $this->getStudentIfExistOrThrowException($receiverId);
         }
         $request->receivers()->attach($command->receiverIds);
         $response->isSaved = true;
@@ -218,13 +219,13 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function getUserIfExistOrThrowException(string $userId): User
+    private function getStudentIfExistOrThrowException(string $studentId): Student
     {
-        $user = User::whereId($userId)->whereIsDeleted(false)->first();
-        if (is_null($user)) {
-            throw new Exception('Cet utilisateur n\'existe pas!');
+        $student = Student::whereId($studentId)->whereIsDeleted(false)->first();
+        if (is_null($student)) {
+            throw new Exception('Cet étudiant n\'existe pas!');
         }
-        return $user;
+        return $student;
     }
 
     /**
