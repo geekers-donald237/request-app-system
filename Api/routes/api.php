@@ -24,8 +24,11 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
-    Route::post('/request', [RequestController::class, 'save'])->name('request');
-    Route::get('/user/{userId}/requests', [RequestController::class, 'getUserRequests'])->name('/users/{userId}/requests');
+    Route::prefix('student')->group(function () {
+        Route::post('/request', [RequestController::class, 'save'])->name('request');
+        Route::get('/user/{userId}/requests', [RequestController::class, 'getUserRequests'])->name('/users/{userId}/requests');
+        Route::patch('/request/{requestId}', [RequestController::class, 'deleteRequest'])->name('/request/delete');
+    });
 
 });
 

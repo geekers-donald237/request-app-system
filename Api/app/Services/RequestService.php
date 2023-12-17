@@ -10,9 +10,11 @@ use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
 use App\Models\User;
+use App\Responses\DeleteRequestResponse;
 use App\Responses\GetUserRequestsResponse;
 use App\Responses\saveRequestActionResponse;
 use Exception;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
@@ -31,6 +33,33 @@ class RequestService
         $response->requestId = $request->id;
         $response->message = 'Request Successfully saved';
 
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleGetUserRequests(string $userId): GetUserRequestsResponse
+    {
+        $response = new GetUserRequestsResponse();
+        $user = $this->getUserIfExistOrThrowException($userId);
+        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->get();
+        $response->message = 'Requests of ' . $user->name();
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleDeleteRequest(string $requestId): DeleteRequestResponse
+    {
+        $response = new DeleteRequestResponse();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        $this->deleteRequestAndItsAttachments($request);
+
+        $response->isDeleted = true;
+        $response->message = 'Deleted Request and its attachments successful';
         return $response;
     }
 
@@ -70,10 +99,11 @@ class RequestService
 
         $this->saveFileAttachments($command->fileAttachments, $request);
 
-        $this->associateRequestWithReceivers($request , $command->receiverIds);
+        $this->associateRequestWithReceivers($request, $command->receiverIds);
 
         return $request;
     }
+
 
     /**
      * @param SaveRequestActionCommand $command
@@ -97,7 +127,6 @@ class RequestService
         ];
     }
 
-
     /**
      * @param SaveRequestActionCommand $command
      * @param Request $request
@@ -113,6 +142,7 @@ class RequestService
         $attachment->fill($handWrittenData)->save();
 
     }
+
 
     /**
      * @param string $fileName
@@ -153,10 +183,19 @@ class RequestService
         }
     }
 
-
     private function associateRequestWithReceivers(Request $request, array $receiverIds): void
     {
         $request->receivers()->attach($receiverIds);
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    private function deleteRequestAndItsAttachments(Request $request): void
+    {
+        $request->attachments()->delete();
+        $request->fill(['is_deleted' => true])->save();
     }
 
     /**
@@ -180,18 +219,6 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleGetUserRequests(string $userId): GetUserRequestsResponse
-    {
-        $response = new GetUserRequestsResponse();
-        $user = $this->getUserIfExistOrThrowException($userId);
-        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->get();
-        $response->message = 'Requests of ' . $user->name();
-        return $response;
-    }
-
-    /**
-     * @throws Exception
-     */
     private function getUserIfExistOrThrowException(string $userId): User
     {
         $user = User::whereId($userId)->whereIsDeleted(false)->first();
@@ -200,4 +227,30 @@ class RequestService
         }
         return $user;
     }
+
+    /**
+     * @throws Exception
+     */
+    private function getRequestIfExistOrThrowException(string $requestId): Request
+    {
+        $request = Request::whereId($requestId)->whereIsDeleted(false)->first();
+        if (is_null($request)) {
+            throw new Exception('Cette requête n\'existe pas !');
+        }
+
+        return $request;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
+    {
+        if ($request->sender()->getForeignKeyName() === $user->getAuthIdentifier()) {
+            return;
+        }
+        throw new Exception('Vous n\êtes pas autorisé à supprimer cette requête');
+    }
+
+
 }

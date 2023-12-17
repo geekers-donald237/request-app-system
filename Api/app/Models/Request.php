@@ -14,7 +14,7 @@ class Request extends Model
 
     protected $guarded = [];
 
-    public function user(): BelongsTo
+    public function sender(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'sender_id', 'id');
     }

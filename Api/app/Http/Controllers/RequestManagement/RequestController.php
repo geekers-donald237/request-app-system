@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\RequestManagement;
 
-use App\Factories\GetUserRequestsActionCommandFactory;
 use App\Factories\SaveRequestActionCommandFactory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetUserRequestsActionRequest;
 use App\Http\Requests\SaveActionRequest;
 use App\Services\RequestService;
 use Exception;
@@ -57,6 +55,29 @@ class RequestController extends Controller
             $httpJson = [
                 'status' => 201,
                 'requests' => $response->requests,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
+    public function deleteRequest(
+        string         $requestId,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+
+        try {
+            $response = $handler->handleDeleteRequest($requestId);
+
+            $httpJson = [
+                'status' => 200,
                 'message' => $response->message
             ];
         } catch (Exception $e) {
