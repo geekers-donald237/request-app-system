@@ -7,11 +7,11 @@ use Illuminate\Http\UploadedFile;
 class SaveRequestActionCommand
 {
     public function __construct(
-        public string $requestPatternId,
-        public string $content,
-        public string $title,
-        public UploadedFile  $fileHandWrite,
-        public UploadedFile  $fileAttachement
+        public string             $requestPatternId,
+        public string             $content,
+        public string             $title,
+        public UploadedFile       $fileHandWrite,
+        public array|UploadedFile $fileAttachement
     )
     {
 

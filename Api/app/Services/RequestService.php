@@ -25,47 +25,24 @@ class RequestService
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
 
 
-
         $request = new Request();
         $dataToSave = $this->buildRequestData($command);
         $request->fill($dataToSave)->save();
 
         $attachement = new Attachment();
-        $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite , StorageDirectoryEnum::FileHandWrite->value );
+        $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite, StorageDirectoryEnum::FileHandWrite->value);
         $attachement->file_path = $fileName;
         $attachement->request_id = $request->id;
         $attachement->is_handwritten = true;
         $attachement->save();
 
-        $this->processAttachments($command->fileAttachement , $request);
+        $this->processAttachments($command->fileAttachement, $request);
         $response->isSaved = true;
         $response->requestId = $request->id;
         $response->message = 'Request Successfully saved';
 
 
         return $response;
-    }
-
-    private function buildRequestData(SaveRequestActionCommand $command): array
-    {
-        return [
-            'sender_id' => Auth::user()->getAuthIdentifier(),
-            'request_pattern_id' => $command->requestPatternId,
-            'title' => $command->title,
-            'content' => $command->content
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfRequestPatternExistOrThrowException(int $requestPatternId): void
-    {
-        $existingRequestPattern = RequestPattern::whereId($requestPatternId)->whereIsDeleted(false)->first();
-
-        if (is_null($existingRequestPattern)) {
-            throw new Exception('Request pattern does not exist');
-        }
     }
 
     /**
@@ -82,11 +59,34 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function processAttachments($attachments , Request $request): void
+    private function checkIfRequestPatternExistOrThrowException(int $requestPatternId): void
     {
+        $existingRequestPattern = RequestPattern::whereId($requestPatternId)->whereIsDeleted(false)->first();
+
+        if (is_null($existingRequestPattern)) {
+            throw new Exception('Request pattern does not exist');
+        }
+    }
+
+    private function buildRequestData(SaveRequestActionCommand $command): array
+    {
+        return [
+            'sender_id' => Auth::user()->getAuthIdentifier(),
+            'request_pattern_id' => $command->requestPatternId,
+            'title' => $command->title,
+            'content' => $command->content
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function processAttachments($attachments, Request $request): void
+    {
+
         foreach ($attachments as $attachment) {
             $fileName = HelpersFunction::handleFileUpload(
-                $attachment['fileAttachement'],
+                $attachment,
                 StorageDirectoryEnum::FileAttachement->value
             );
 
