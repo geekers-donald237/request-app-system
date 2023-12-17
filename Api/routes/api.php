@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
     Route::post('/request', [RequestController::class, 'save'])->name('request');
+    Route::get('/user/{userId}/requests', [RequestController::class, 'getUserRequests'])->name('/users/{userId}/requests');
 
 });
 

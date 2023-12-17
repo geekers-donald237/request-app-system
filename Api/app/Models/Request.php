@@ -18,7 +18,7 @@ class Request extends Model
         return $this->belongsTo(Student::class, 'sender_id', 'id');
     }
 
-    public function attachements(): HasMany
+    public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
     }

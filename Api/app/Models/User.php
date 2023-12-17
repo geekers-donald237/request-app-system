@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,4 +49,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Rule::class);
     }
 
+    public function requests(): HasMany
+    {
+        return $this->hasMany(Request::class, 'sender_id', 'id');
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
 }

@@ -9,6 +9,8 @@ use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
+use App\Models\User;
+use App\Responses\GetUserRequestsResponse;
 use App\Responses\saveRequestActionResponse;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -102,7 +104,7 @@ class RequestService
     {
         $attachment = new Attachment();
         $fileName = HelpersFunction::handleFileUpload($command->fileHandWrite, StorageDirectoryEnum::FileHandWritten->value);
-        $handWrittenData = $this->buildAttachementData($fileName, $request, true);
+        $handWrittenData = $this->buildAttachmentData($fileName, $request, true);
 
         $attachment->fill($handWrittenData)->save();
 
@@ -114,7 +116,7 @@ class RequestService
      * @param bool $isHandWritten
      * @return array
      */
-    private function buildAttachementData(string $fileName, Request $request, bool $isHandWritten): array
+    private function buildAttachmentData(string $fileName, Request $request, bool $isHandWritten): array
     {
         return [
             'file_path' => $fileName,
@@ -141,9 +143,33 @@ class RequestService
                 StorageDirectoryEnum::FileAttachement->value
             );
 
-            $attachmentData = $this->buildAttachementData($fileName, $request, false);
+            $attachmentData = $this->buildAttachmentData($fileName, $request, false);
             $attachmentModel->fill($attachmentData)->save();
 
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleGetUserRequests(string $userId): GetUserRequestsResponse
+    {
+        $response = new GetUserRequestsResponse();
+        $user = $this->getUserIfExistOrThrowException($userId);
+        $response->requests = $user->requests()->whereIsDeleted(false)->with('attachments')->get();
+        $response->message = 'Requests of ' . $user->name();
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getUserIfExistOrThrowException(string $userId): User
+    {
+        $user = User::whereId($userId)->whereIsDeleted(false)->first();
+        if (is_null($user)) {
+            throw new Exception('Cet utilisateur n\'existe pas!');
+        }
+        return $user;
     }
 }
