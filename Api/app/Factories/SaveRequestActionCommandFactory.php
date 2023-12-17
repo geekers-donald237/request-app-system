@@ -18,7 +18,7 @@ class SaveRequestActionCommandFactory
             receiverIds: $request->get('receiverIds')
         );
 
-        $command->fileAttachements = $request->file('fileAttachements');
+        $command->fileAttachments = $request->file('fileAttachments');
         return $command;
     }
 }

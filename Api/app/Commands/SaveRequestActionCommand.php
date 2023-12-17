@@ -6,18 +6,18 @@ use Illuminate\Http\UploadedFile;
 
 class SaveRequestActionCommand
 {
-    public ?array $fileAttachements;
+    public ?array $fileAttachments;
 
     public function __construct(
         public string       $requestPatternId,
         public string       $content,
         public string       $title,
         public UploadedFile $fileHandWrite,
-        public  array $receiverIds
+        public array        $receiverIds
 
     )
     {
-        $this->fileAttachements = null;
+        $this->fileAttachments = null;
 
     }
 }

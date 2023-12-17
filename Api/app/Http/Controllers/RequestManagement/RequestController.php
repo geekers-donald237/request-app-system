@@ -26,7 +26,7 @@ class RequestController extends Controller
 
         try {
             $command = SaveRequestActionCommandFactory::buildFromRequest($request);
-            $response = $handler->handle($command);
+            $response = $handler->handleSaveRequest($command);
 
             $httpJson = [
                 'status' => 201,

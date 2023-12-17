@@ -20,7 +20,7 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handle(SaveRequestActionCommand $command): saveRequestActionResponse
+    public function handleSaveRequest(SaveRequestActionCommand $command): saveRequestActionResponse
     {
         $response = new saveRequestActionResponse();
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
@@ -68,7 +68,7 @@ class RequestService
 
         $this->saveFileHandWritten($command, $request);
 
-        $this->saveFileAttachments($command->fileAttachements, $request);
+        $this->saveFileAttachments($command->fileAttachments, $request);
 
         $this->associateRequestWithReceivers($request , $command->receiverIds);
 
