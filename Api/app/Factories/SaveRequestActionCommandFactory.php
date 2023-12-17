@@ -14,7 +14,9 @@ class SaveRequestActionCommandFactory
             requestPatternId: $request->get('requestPatternId'),
             content: $request->get('content'),
             title: $request->get('title'),
-        );
+            fileHandWrite: $request->file('fileHandWrite'), // Utiliser la méthode file() pour les fichiers
+            fileAttachement: $request->file('fileAttachement'), // Utiliser la méthode file() pour les fichiers
 
+        );
     }
 }
