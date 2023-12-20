@@ -7,7 +7,6 @@ use App\Http\Requests\SaveActionRequest;
 
 class SaveRequestActionCommandFactory
 {
-
     public static function buildFromRequest(SaveActionRequest $request): SaveRequestActionCommand
     {
         $command = new SaveRequestActionCommand(

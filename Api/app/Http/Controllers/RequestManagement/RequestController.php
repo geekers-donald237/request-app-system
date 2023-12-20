@@ -4,9 +4,11 @@ namespace App\Http\Controllers\RequestManagement;
 
 use App\Factories\SaveRequestActionCommandFactory;
 use App\Factories\SendRequestActionCommandFactory;
+use App\Factories\UpdateRequestActionCommandFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveActionRequest;
 use App\Http\Requests\SendRequestActionRequest;
+use App\Http\Requests\UpdateActionRequest;
 use App\Services\RequestService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +34,31 @@ class RequestController extends Controller
                 'status' => 201,
                 'requestId' => $response->requestId,
                 'isSaved' => $response->isSaved,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
+    public function updateRequest(
+        RequestService      $handler,
+        UpdateActionRequest $request
+
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+        try {
+            $command = UpdateRequestActionCommandFactory::buildFromRequest($request);
+            $response = $handler->handleUpdateRequest($command);
+
+            $httpJson = [
+                'status' => 201,
+                'request' => $response->request,
                 'message' => $response->message
             ];
         } catch (Exception $e) {

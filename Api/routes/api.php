@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/request/send', [RequestController::class, 'sendRequest'])->name('/request/send');
     Route::get('/student/{studentId}/requests', [RequestController::class, 'getStudentRequests'])->name('/users/{userId}/requests');
     Route::patch('/request/{requestId}', [RequestController::class, 'deleteRequest'])->name('/request/delete');
-    Route::patch('/request/{requestId}/update', [RequestController::class, 'updateRequest'])->name('/request/{requestId}/update');
+    Route::post('/requests/{requestId}', [RequestController::class, 'updateRequest'])->name('/requests/{requestId}');
 
     Route::get('/staff/{staff_id}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staff_id}/requests');
 });
