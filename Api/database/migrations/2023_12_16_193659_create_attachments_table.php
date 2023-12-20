@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rule_user', function (Blueprint $table) {
+        Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('rule_id')->constrained('rules');
+            $table->foreignId('request_id')->constrained('requests');
+            $table->string('file_path');
+            $table->boolean('is_handwritten');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rule_user');
+        Schema::dropIfExists('attachments');
     }
 };

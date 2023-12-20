@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rule_user', function (Blueprint $table) {
+        Schema::create('receiver_request', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('rule_id')->constrained('rules');
-            $table->timestamps();
+            $table->foreignId('request_id')->constrained('requests');
+            $table->foreignId('receiver_id')->constrained('users');
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rule_user');
+        Schema::dropIfExists('receiver_request');
     }
 };

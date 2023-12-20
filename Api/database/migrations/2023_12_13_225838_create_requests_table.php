@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->enum('status', [1, 2, 3, 4, 5, 6, 7, 8])->default(1);
             $table->boolean('in_draft')->default(1);
             $table->boolean('is_deleted')->default(0);
+            $table->boolean('handwritten_piece_present_disc')->default(false);
             $table->timestamps();
         });
     }

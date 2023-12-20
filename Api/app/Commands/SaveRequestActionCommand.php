@@ -2,14 +2,21 @@
 
 namespace App\Commands;
 
+use Illuminate\Http\UploadedFile;
+
 class SaveRequestActionCommand
 {
-    public function __construct(
-        public string $requestPatternId,
-        public string $content,
-        public string $title)
-    {
+    public ?array $fileAttachments;
 
+    public function __construct(
+        public string       $requestPatternId,
+        public string       $content,
+        public string       $title,
+        public UploadedFile $fileHandWritten
+
+    )
+    {
+        $this->fileAttachments = null;
 
     }
 }

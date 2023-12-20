@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->enum('name', [RuleEnum::STUDENT->value, RuleEnum::STAFF->value, RuleEnum::SECRETARY->value, RuleEnum::TECHNICAL_ADMIN->value])->unique();
             $table->string('description');
+
             $table->timestamps();
         });
 
