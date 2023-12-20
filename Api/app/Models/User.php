@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     public function receiveRequests(): BelongsToMany
     {
-        return $this->belongsToMany(Request::class, 'receiver_request', 'request_id', 'request_id');
+        return $this->belongsToMany(Request::class, 'receiver_request', 'receiver_id', 'request_id');
     }
 
 

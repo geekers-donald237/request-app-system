@@ -13,6 +13,7 @@ use App\Models\RequestPattern;
 use App\Models\Student;
 use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
+use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
 use App\Responses\SendRequestActionResponse;
@@ -39,54 +40,6 @@ class RequestService
 
         return $response;
     }
-
-    /**
-     * @throws Exception
-     */
-    public function handleGetStudentRequests(string $studentId): GetUserRequestsActionResponse
-    {
-        $response = new GetUserRequestsActionResponse();
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $student = $this->getStudentIfExistOrThrowException($studentId);
-        $response->requests = $student->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
-        $response->message = 'Requests of ' . $student->user()->first()->name();
-        return $response;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function handleDeleteRequest(string $requestId): DeleteRequestActionResponse
-    {
-        $response = new DeleteRequestActionResponse();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
-        //$this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
-        $this->deleteRequestAndItsAttachments($request);
-
-        $response->isDeleted = true;
-        $response->message = 'Deleted Request and its attachments successful';
-        return $response;
-    }
-
-
-    /**
-     * @throws Exception
-     */
-    public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
-    {
-        $response = new SendRequestActionResponse();
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $request = $this->getRequestIfExistOrThrowException($command->requestId);
-        foreach ($command->receiverIds as $receiverId) {
-            $this->checkIfReceiverExistOrThrowException($receiverId);
-        }
-        $request->receivers()->attach($command->receiverIds);
-        $response->isSaved = true;
-        $response->message = 'Send request successfully !';
-
-        return $response;
-    }
-
 
     /**
      * @throws Exception
@@ -127,7 +80,6 @@ class RequestService
         return $request;
     }
 
-
     /**
      * @param SaveRequestActionCommand $command
      * @return Request
@@ -165,7 +117,6 @@ class RequestService
         $attachment->fill($handWrittenData)->save();
 
     }
-
 
     /**
      * @param string $filePath
@@ -207,14 +158,16 @@ class RequestService
     }
 
     /**
-     * @param Request $request
-     * @return void
+     * @throws Exception
      */
-    private function deleteRequestAndItsAttachments(Request $request): void
+    public function handleGetStudentRequests(string $studentId): GetUserRequestsActionResponse
     {
-        $this->removeAttachmentsFromDisk($request->attachments()->get());
-        $request->attachments()->delete();
-        $request->fill(['is_deleted' => true])->save();
+        $response = new GetUserRequestsActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $student = $this->getStudentIfExistOrThrowException($studentId);
+        $response->requests = $student->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
+        $response->message = 'Requests of ' . $student->user()->first()->name();
+        return $response;
     }
 
     /**
@@ -232,6 +185,61 @@ class RequestService
     /**
      * @throws Exception
      */
+    public function handleGetStaffRequests(string $staffId): GetStaffRequestActionResponse
+    {
+        $response = new GetStaffRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
+        $staff = $this->getStaffIfExistOrThrowException($staffId);
+        $response->requests = $staff->receiveRequests()->with('attachments')->get();
+        $response->message = 'Requests of ' . $staff['name'];
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthenticateUserIsStaffMemberOrThrowException(): void
+    {
+        $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
+        if (!in_array(RuleEnum::STAFF->value, $authUserRules)) {
+            throw new Exception('This user is not a member of staff, so he cannot read a request');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getStaffIfExistOrThrowException(string $staffId): User
+    {
+        $staff = User::whereId($staffId)->whereIsDeleted(false)->first();
+
+        if (is_null($staff)) {
+            throw new Exception('Le membre du personnel spécifié n\'existe pas !');
+        }
+
+
+        return $staff;
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleDeleteRequest(string $requestId): DeleteRequestActionResponse
+    {
+        $response = new DeleteRequestActionResponse();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        //$this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        $this->deleteRequestAndItsAttachments($request);
+
+        $response->isDeleted = true;
+        $response->message = 'Deleted Request and its attachments successful';
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
     private function getRequestIfExistOrThrowException(string $requestId): Request
     {
         $request = Request::whereId($requestId)->whereIsDeleted(false)->first();
@@ -243,19 +251,37 @@ class RequestService
     }
 
     /**
-     * @throws Exception
+     * @param Request $request
+     * @return void
      */
-    private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
+    private function deleteRequestAndItsAttachments(Request $request): void
     {
-        if ($request->sender()->getForeignKeyName() === $user->getAuthIdentifier()) {
-            return;
-        }
-        throw new Exception('Vous n\êtes pas autorisé à supprimer cette requête');
+        $this->removeAttachmentsFromDisk($request->attachments()->get());
+        $request->attachments()->delete();
+        $request->fill(['is_deleted' => true])->save();
     }
 
     private function removeAttachmentsFromDisk(Collection $attachments): void
     {
         //TODO : implement disk attachments suppression
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
+    {
+        $response = new SendRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $request = $this->getRequestIfExistOrThrowException($command->requestId);
+        foreach ($command->receiverIds as $receiverId) {
+            $this->checkIfReceiverExistOrThrowException($receiverId);
+        }
+        $request->receivers()->attach($command->receiverIds);
+        $response->isSaved = true;
+        $response->message = 'Send request successfully !';
+
+        return $response;
     }
 
     /**
@@ -269,5 +295,21 @@ class RequestService
         }
     }
 
+    /**
+     * @throws Exception
+     */
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
+    {
+        if ($request->sender()->getForeignKeyName() === $user->getAuthIdentifier()) {
+            return;
+        }
+        throw new Exception('Vous n\êtes pas autorisé à supprimer cette requête');
+    }
+
 
 }
+

@@ -29,4 +29,5 @@ class Request extends Model
         return $this->belongsToMany(User::class, 'receiver_request', 'request_id', 'receiver_id');
     }
 
+
 }
