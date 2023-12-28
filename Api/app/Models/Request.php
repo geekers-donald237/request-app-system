@@ -26,7 +26,7 @@ class Request extends Model
 
     public function receivers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'receiver_request', 'request_id', 'receiver_id');
+        return $this->belongsToMany(Staff::class, 'receiver_request', 'request_id', 'receiver_id');
     }
 
 

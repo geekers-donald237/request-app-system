@@ -49,11 +49,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Rule::class);
     }
 
-    public function receiveRequests(): BelongsToMany
-    {
-        return $this->belongsToMany(Request::class, 'receiver_request', 'receiver_id', 'request_id');
-    }
-
 
     public function student(): HasOne
     {

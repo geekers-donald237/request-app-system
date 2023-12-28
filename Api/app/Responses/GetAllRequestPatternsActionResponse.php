@@ -4,5 +4,5 @@ namespace App\Responses;
 
 class GetAllRequestPatternsActionResponse
 {
-    public array $patterns = [];
+    public mixed $patterns = null;
 }

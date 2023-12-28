@@ -47,6 +47,25 @@ class RequestService
     /**
      * @throws Exception
      */
+    public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
+    {
+        $requestId = $command->requestId;
+        $response = new UpdateRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        $request = $this->updateStudentRequest($requestId, $command);
+
+
+        $response->request = $request;
+        $response->message = 'Request Successfully updated';
+
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
     private function checkIfAuthenticateUserIsStudentOrThrowException(): void
     {
         $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
@@ -75,7 +94,7 @@ class RequestService
     private function saveStudentRequest(SaveRequestActionCommand $command): Request
     {
         $request = $this->saveRequest($command);
-
+        //TODO: implements event listeners for upload file on disk
         $this->saveFileHandWritten($command, $request);
 
         $this->saveFileAttachments($command->fileAttachments, $request);
@@ -158,25 +177,6 @@ class RequestService
             $attachmentModel->fill($attachmentData)->save();
 
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
-    {
-        $requestId = $command->requestId;
-        $response = new UpdateRequestActionResponse();
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
-        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
-        $request = $this->updateStudentRequest($requestId, $command);
-
-
-        $response->request = $request;
-        $response->message = 'Request Successfully updated';
-
-        return $response;
     }
 
     /**
