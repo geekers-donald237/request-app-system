@@ -405,23 +405,23 @@ class RequestService
         }
     }
 
-    private function updateRequestState(string $requestId, string $newRequestState): Request
+    /**
+     * @throws Exception
+     */
+    private function updateRequestState(Request $request, RequestStateEnum $newRequestState): Request
     {
-        $request = $this->getRequestIfExistOrThrowException($requestId);
-        $request->update(['statut', $newRequestState]);
-
+        $request->update(['statut', $newRequestState->value]);
         return $request;
     }
 
     /**
      * @throws Exception
      */
-    private function checkIfIsPossibleToDeleteOrModifyRequest(string $requestId): void
+    private function checkIfIsPossibleToDeleteOrModifyRequest(Request $request): void
     {
         $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
-        $request = $this->getRequestIfExistOrThrowException($requestId);
-        if (!in_array($request->status, $requestStatutPossibleModified)) {
-            throw new Exception('IMpossible de modifier | Supprimer cette requete');
+        if (!in_array($request->statut(), $requestStatutPossibleModified)) {
+            throw new Exception('Impossible de modifier | Supprimer cette requête');
 
         }
 

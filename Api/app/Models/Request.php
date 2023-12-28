@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RequestStateEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,11 @@ class Request extends Model
     public function senderId(): int
     {
         return $this->sender_id;
+    }
+
+    public function statut(): string
+    {
+        return $this->statut;
     }
 
 
