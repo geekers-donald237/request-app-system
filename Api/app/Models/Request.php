@@ -29,5 +29,4 @@ class Request extends Model
         return $this->belongsToMany(Staff::class, 'receiver_request', 'request_id', 'receiver_id');
     }
 
-
 }

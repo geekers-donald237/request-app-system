@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RequestStateEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,17 @@ return new class extends Migration {
             $table->foreignId('request_pattern_id')->constrained('request_patterns');
             $table->string('title');
             $table->text('content');
-            $table->enum('status', [1, 2, 3, 4, 5, 6, 7, 8])->default(1);
+            $table->enum('statut', [
+                RequestStateEnum::ATTENTE_DE_SOUMISSION->value,
+                RequestStateEnum::ATTENTE_DE_VALIDATION->value,
+                RequestStateEnum::ATTENTE_DE_TRAITEMENT->value,
+                RequestStateEnum::EN_COURS_DE_TRAITEMENT->value,
+                RequestStateEnum::ATTENTE_DE_DECISION->value,
+                RequestStateEnum::ACCEPTEE->value,
+                RequestStateEnum::REFUSEE->value,
+                RequestStateEnum::EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT->value,
+                RequestStateEnum::TERMINEE->value,
+            ])->default(RequestStateEnum::ATTENTE_DE_SOUMISSION->value,);
             $table->boolean('in_draft')->default(1);
             $table->boolean('is_deleted')->default(0);
             $table->boolean('handwritten_piece_present_disc')->default(false);

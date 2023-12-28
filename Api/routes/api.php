@@ -33,6 +33,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/staff/{staff_id}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staff_id}/requests');
 });
 
-
 require __DIR__ . '/auth.php';
 

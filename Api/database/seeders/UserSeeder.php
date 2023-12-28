@@ -90,7 +90,7 @@ class UserSeeder extends Seeder
             'user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id),
             'job_title' => 'Enseignant ICT317',
             'address' => 'Bloc Pedagogique Porte S107',
-            'phone_number' => '585458558',
+            'phone_number' => '+237 699854525',
         ]);
     }
 
