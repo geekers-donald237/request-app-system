@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
     Route::post('/request', [RequestController::class, 'save'])->name('request');
     Route::post('/request/send', [RequestController::class, 'sendRequest'])->name('/request/send');
-    Route::get('/student/{studentId}/requests', [RequestController::class, 'getStudentRequests'])->name('/users/{userId}/requests');
+    Route::get('/student/{studentId}/requests', [RequestController::class, 'getStudentRequests'])->name('/student/{studentId}/requests');
     Route::patch('/request/{requestId}', [RequestController::class, 'deleteRequest'])->name('/request/delete');
     Route::post('/requests/{requestId}', [RequestController::class, 'updateRequest'])->name('/requests/{requestId}');
 
