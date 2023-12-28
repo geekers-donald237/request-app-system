@@ -88,8 +88,8 @@ class UserSeeder extends Seeder
 
         Staff::factory()->create([
             'user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id),
-            'job_title' => 'prof de francais',
-            'address' => 'lorem ipsum dolor',
+            'job_title' => 'Enseignant ICT317',
+            'address' => 'Bloc Pedagogique Porte S107',
             'phone_number' => '585458558',
         ]);
     }
