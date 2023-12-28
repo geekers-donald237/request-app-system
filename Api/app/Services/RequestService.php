@@ -23,6 +23,7 @@ use App\Responses\SendRequestActionResponse;
 use App\Responses\UpdateRequestActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,25 +42,6 @@ class RequestService
         $response->isSaved = true;
         $response->requestId = $request->getAttributeValue('id');
         $response->message = 'Request Successfully saved';
-
-        return $response;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
-    {
-        $requestId = $command->requestId;
-        $response = new UpdateRequestActionResponse();
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
-        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
-        $request = $this->updateStudentRequest($requestId, $command);
-
-
-        $response->request = $request;
-        $response->message = 'Request Successfully updated';
 
         return $response;
     }
@@ -180,6 +162,25 @@ class RequestService
             $attachmentModel->fill($attachmentData)->save();
 
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
+    {
+        $requestId = $command->requestId;
+        $response = new UpdateRequestActionResponse();
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        $request = $this->updateStudentRequest($requestId, $command);
+
+
+        $response->request = $request;
+        $response->message = 'Request Successfully updated';
+
+        return $response;
     }
 
     /**
