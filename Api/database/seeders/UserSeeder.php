@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\RuleEnum;
 use App\Models\Rule;
+use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
@@ -70,6 +71,13 @@ class UserSeeder extends Seeder
             ])
             ->rules()
             ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
+
+        Secretary::factory()->create([
+            'user_id' => (User::whereEmail('janedoe@gmail.com')->first()->id),
+            'job_title' => 'secretaire dpt info',
+            'address' => 'Extension 2',
+            'phone_number' => '+237 699854525',
+        ]);
     }
 
     /**

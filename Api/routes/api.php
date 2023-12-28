@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/requests/{requestId}', [RequestController::class, 'updateRequest'])->name('/requests/{requestId}');
 
     Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
+    Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');
+    Route::patch('/request/statut', [\App\Services\RequestService::class, 'updateRequestState'])->name('/request/statut');
 });
 
 require __DIR__ . '/auth.php';

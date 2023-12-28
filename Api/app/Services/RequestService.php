@@ -8,14 +8,15 @@ use App\Commands\UpdateRequestActionCommand;
 use App\Enums\RequestStateEnum;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
-use App\Events\SaveFileEvent;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
+use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Responses\DeleteRequestActionResponse;
+use App\Responses\GetSecretaryRequestActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -78,10 +79,10 @@ class RequestService
         $request = $this->saveRequest($command);
         //TODO: implements event listeners for upload file on disk
 
-        SaveFileEvent::dispatch($command, $request);
-        /*$this->saveFileHandWritten($command, $request);
+//        SaveFileEvent::dispatch($command, $request);
+        $this->saveFileHandWritten($command, $request);
 
-        $this->saveFileAttachments($command->fileAttachments, $request);*/
+        $this->saveFileAttachments($command->fileAttachments, $request);
 
         return $request;
     }
@@ -221,14 +222,33 @@ class RequestService
         return $request;
     }
 
+    /**
+     * @throws Exception
+     */
     private function updateRequest(string $requestId, UpdateRequestActionCommand $command): Request
     {
+        $this->checkIfAuthenticateUserIsStudentOrThrowException();
+
         $request = Request::findOrFail($requestId);
+
+        $this->checkIfIsPossibleToModifyRequest($request);
 
         $dataToUpdate = $this->buildUpdateRequestData($command);
         $request->update($dataToUpdate);
 
         return $request;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfIsPossibleToModifyRequest(Request $request): void
+    {
+        $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
+        if (in_array($request->statut(), $requestStatutPossibleModified)) {
+            throw new Exception('Impossible de modifier cette requete car en cours de traitement');
+        }
+
     }
 
     private function buildUpdateRequestData(UpdateRequestActionCommand $command): array
@@ -307,6 +327,42 @@ class RequestService
     /**
      * @throws Exception
      */
+    public function handleGetSecretaryRequests(string $secretaryId): GetSecretaryRequestActionResponse
+    {
+        $response = new GetSecretaryRequestActionResponse();
+        $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
+        $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
+        $response->requests = $secretary->w  ith('attachments')->with('receivers')->whereIsDeleted(false)->get();
+        $response->message = 'Requests of ' . $secretary->user()->first()->name();
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthenticateUserIsSecretaryOrThrowException(): void
+    {
+        $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
+        if (!in_array(RuleEnum::SECRETARY->value, $authUserRules)) {
+            throw new Exception('This user is not a secretary, so he cannot get request ');
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getSecretaryIfExistOrThrowException(string $secretaryId): Secretary
+    {
+        $secretary = Secretary::whereUserId($secretaryId)->whereIsDeleted(false)->first();
+        if (is_null($secretary)) {
+            throw new Exception('Cet secretaire n\'existe pas!');
+        }
+        return $secretary;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function handleGetStaffRequests(string $staffId): GetStaffRequestActionResponse
     {
         $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
@@ -350,11 +406,21 @@ class RequestService
         $response = new DeleteRequestActionResponse();
         $request = $this->getRequestIfExistOrThrowException($requestId);
         $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
+        $this->checkIfIsPossibleTodeleteRequest($request);
         $this->deleteRequestAndItsAttachments($request);
 
         $response->isDeleted = true;
         $response->message = 'Deleted Request and its attachments successful';
         return $response;
+    }
+
+    private function checkIfIsPossibleTodeleteRequest(Request $request): void
+    {
+        $requestStatutPossibleToDeleted = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value, RequestStateEnum::ACCEPTEE, RequestStateEnum::TERMINEE];
+        if (in_array($request->statut(), $requestStatutPossibleToDeleted)) {
+            throw new Exception('Impossible de modifier cette requete car en cours de traitement');
+        }
+
     }
 
     /**
@@ -376,6 +442,10 @@ class RequestService
     /**
      * @throws Exception
      */
+
+    /**
+     * @throws Exception
+     */
     public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
     {
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
@@ -385,14 +455,12 @@ class RequestService
             $this->checkIfReceiverExistOrThrowException($receiverId);
         }
         $request->receivers()->attach($command->receiverIds);
+        $this->updateRequestState($request, RequestStateEnum::ATTENTE_DE_VALIDATION);
+
         $response->isSent = true;
         $response->message = 'Send request successfully !';
         return $response;
     }
-
-    /**
-     * @throws Exception
-     */
 
     /**
      * @throws Exception
@@ -408,23 +476,9 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function updateRequestState(Request $request, RequestStateEnum $newRequestState): Request
+    public function updateRequestState(Request $request, RequestStateEnum $newRequestState): void
     {
-        $request->update(['statut', $newRequestState->value]);
-        return $request;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfIsPossibleToDeleteOrModifyRequest(Request $request): void
-    {
-        $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
-        if (!in_array($request->statut(), $requestStatutPossibleModified)) {
-            throw new Exception('Impossible de modifier | Supprimer cette requête');
-
-        }
-
+        $request->fill(['statut' => $newRequestState->value])->save();
     }
 
 

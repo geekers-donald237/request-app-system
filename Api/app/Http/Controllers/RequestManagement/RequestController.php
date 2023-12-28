@@ -130,7 +130,6 @@ class RequestController extends Controller
 
         try {
             $response = $handler->handleDeleteRequest($requestId);
-
             $httpJson = [
                 'status' => 200,
                 'isDeleted' => $response->isDeleted,
@@ -167,4 +166,30 @@ class RequestController extends Controller
         }
         return response()->json($httpJson);
     }
+
+    public function getSecretaryRequests(
+        string         $secretaryId,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => '',
+            'requests' => []
+        ];
+
+        try {
+            $response = $handler->handleGetSecretaryRequests($secretaryId);
+
+            $httpJson = [
+                'status' => 200,
+                'requests' => $response->requests,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
 }
