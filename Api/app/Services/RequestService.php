@@ -198,7 +198,7 @@ class RequestService
      */
     private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
     {
-        if ($request->sender_id === $user->getAuthIdentifier()) {
+        if ($request->senderId() == $user->getAuthIdentifier()) {
             return;
         }
         throw new Exception('Vous n\êtes pas autorisé à effectuer une action sur cette requête');
@@ -307,11 +307,11 @@ class RequestService
      */
     public function handleGetStaffRequests(string $staffId): GetStaffRequestActionResponse
     {
-        $response = new GetStaffRequestActionResponse();
         $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
+        $response = new GetStaffRequestActionResponse();
         $staff = $this->getStaffIfExistOrThrowException($staffId);
-        $response->requests = $staff->receiveRequests()->with('attachments')->get();
-        $response->message = 'Requests of ' . $staff['name'];
+        $response->requests = $staff->receiveRequests()->with('attachments')->with('sender')->get();
+        $response->message = 'Requests receive by ' . $staff->user()->first()->name();
         return $response;
     }
 
@@ -329,9 +329,9 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function getStaffIfExistOrThrowException(string $staffId): User
+    private function getStaffIfExistOrThrowException(string $staffId): Staff
     {
-        $staff = User::whereId($staffId)->whereIsDeleted(false)->first();
+        $staff = Staff::whereId($staffId)->whereIsDeleted(false)->first();
 
         if (is_null($staff)) {
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');
@@ -399,7 +399,7 @@ class RequestService
     {
         $staff = Staff::whereId($receiverId)->whereIsDeleted(false)->first();
         if (is_null($staff)) {
-            throw new Exception('Cet utilisateur n\'existe pas!');
+            throw new Exception('Ce personnel n\'existe pas!');
         }
     }
 

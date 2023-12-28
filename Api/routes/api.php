@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/request/{requestId}', [RequestController::class, 'deleteRequest'])->name('/request/delete');
     Route::post('/requests/{requestId}', [RequestController::class, 'updateRequest'])->name('/requests/{requestId}');
 
-    Route::get('/staff/{staff_id}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staff_id}/requests');
+    Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
 });
 
 require __DIR__ . '/auth.php';
