@@ -7,6 +7,7 @@ use App\Commands\SendRequestActionCommand;
 use App\Commands\UpdateRequestActionCommand;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
+use App\Events\SaveFileEvent;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
@@ -95,9 +96,11 @@ class RequestService
     {
         $request = $this->saveRequest($command);
         //TODO: implements event listeners for upload file on disk
-        $this->saveFileHandWritten($command, $request);
 
-        $this->saveFileAttachments($command->fileAttachments, $request);
+        SaveFileEvent::dispatch($command, $request);
+        /*$this->saveFileHandWritten($command, $request);
+
+        $this->saveFileAttachments($command->fileAttachments, $request);*/
 
         return $request;
     }
