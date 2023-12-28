@@ -22,9 +22,10 @@ class AuthService
         if (!Auth::attempt(['email' => $command->email, 'password' => $command->password])) {
             throw new Exception('Email & Password does not match with our record.');
         }
-        $user = User::whereEmail($command->email)->whereIsDeleted(false)->first();
+        $user = User::whereEmail($command->email)->whereIsDeleted(false)->with('rules')->first();
 
         if ($user) {
+            $response->user = $user;
             $response->token = $user->createToken(self::API_TOKEN)->plainTextToken;
             $response->message = 'User Logged Successfully';
             return $response;

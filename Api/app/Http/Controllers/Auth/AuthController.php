@@ -27,6 +27,7 @@ class AuthController extends Controller
             $httpJson =
                 [
                     'token' => $response->token,
+                    'user' => $response->user,
                     'message' => $response->message
                 ];
 
