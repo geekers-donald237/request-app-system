@@ -7,7 +7,6 @@ use App\Commands\SendRequestActionCommand;
 use App\Commands\UpdateRequestActionCommand;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
-use App\Factories\UpdateRequestActionCommandFactory;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
@@ -163,31 +162,6 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function updateFileAttachments(?array $attachments, Request $request, string $requestId): void
-    {
-        Attachment::where('request_id', $requestId)->whereIsHandwritten(false)->delete();
-
-        if (is_null($attachments)) {
-            return;
-        }
-
-        foreach ($attachments as $attachment) {
-            $attachmentModel = new Attachment();
-
-            $filePath = HelpersFunction::handleFileUpload(
-                $attachment,
-                StorageDirectoryEnum::FileAttachment->value
-            );
-
-            $attachmentData = $this->buildAttachmentData($filePath, $request, false);
-            $attachmentModel->fill($attachmentData)->save();
-        }
-    }
-
-
-    /**
-     * @throws Exception
-     */
     public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
     {
         $requestId = $command->requestId;
@@ -238,7 +212,7 @@ class RequestService
 
         $this->UpdateFileHandWritten($command, $request);
 
-        $this->UpdateFileAttachments($command->fileAttachments, $request , $requestId);
+        $this->UpdateFileAttachments($command->fileAttachments, $request, $requestId);
 
         return $request;
     }
@@ -275,6 +249,30 @@ class RequestService
         $handWrittenData = $this->buildAttachmentData($filePath, $request, true);
 
         $attachment->fill($handWrittenData)->save();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function updateFileAttachments(?array $attachments, Request $request, string $requestId): void
+    {
+        Attachment::where('request_id', $requestId)->whereIsHandwritten(false)->delete();
+
+        if (is_null($attachments)) {
+            return;
+        }
+
+        foreach ($attachments as $attachment) {
+            $attachmentModel = new Attachment();
+
+            $filePath = HelpersFunction::handleFileUpload(
+                $attachment,
+                StorageDirectoryEnum::FileAttachment->value
+            );
+
+            $attachmentData = $this->buildAttachmentData($filePath, $request, false);
+            $attachmentModel->fill($attachmentData)->save();
+        }
     }
 
     /**
@@ -336,8 +334,6 @@ class RequestService
         if (is_null($staff)) {
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');
         }
-
-
         return $staff;
 
     }
@@ -387,7 +383,6 @@ class RequestService
         $request->receivers()->attach($command->receiverIds);
         $response->isSaved = true;
         $response->message = 'Send request successfully !';
-
         return $response;
     }
 
