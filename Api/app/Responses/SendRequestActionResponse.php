@@ -8,6 +8,6 @@ class SendRequestActionResponse
     /**
      * @var true
      */
-    public bool $isSaved = false;
+    public bool $isSent = false;
     public string $message = '';
 }

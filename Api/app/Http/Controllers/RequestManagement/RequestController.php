@@ -149,7 +149,7 @@ class RequestController extends Controller
     {
         $httpJson = [
             'status' => 200,
-            'isSaved' => false,
+            'isSent' => false,
             'message' => ''
         ];
 
@@ -159,7 +159,7 @@ class RequestController extends Controller
 
             $httpJson = [
                 'status' => 200,
-                'isSaved' => $response->isSaved,
+                'isSent' => $response->isSent,
                 'message' => $response->message
             ];
         } catch (Exception $e) {

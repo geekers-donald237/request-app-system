@@ -22,7 +22,7 @@ class HelpersFunction
             throw new Exception('Le type de fichier n\'est pas autorisé.');
         }
 
-        $filename = time() . $file->getClientOriginalName();
+        $filename = time() . '_' . $file->getClientOriginalName();
         $file->storeAs($storagePath, $filename);
 
         return $storagePath . DIRECTORY_SEPARATOR . $filename;

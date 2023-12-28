@@ -11,6 +11,7 @@ use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
@@ -374,14 +375,14 @@ class RequestService
      */
     public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
     {
-        $response = new SendRequestActionResponse();
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
+        $response = new SendRequestActionResponse();
         $request = $this->getRequestIfExistOrThrowException($command->requestId);
         foreach ($command->receiverIds as $receiverId) {
             $this->checkIfReceiverExistOrThrowException($receiverId);
         }
         $request->receivers()->attach($command->receiverIds);
-        $response->isSaved = true;
+        $response->isSent = true;
         $response->message = 'Send request successfully !';
         return $response;
     }
@@ -395,8 +396,8 @@ class RequestService
      */
     private function checkIfReceiverExistOrThrowException(string $receiverId): void
     {
-        $user = User::whereId($receiverId)->whereIsDeleted(false)->first();
-        if (is_null($user)) {
+        $staff = Staff::whereId($receiverId)->whereIsDeleted(false)->first();
+        if (is_null($staff)) {
             throw new Exception('Cet utilisateur n\'existe pas!');
         }
     }
