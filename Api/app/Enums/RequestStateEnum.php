@@ -21,7 +21,6 @@ enum RequestStateEnum: string
     case TERMINEE = 'terminee'; // la demande a été traitée et a abouti à une décision finale.
 
     case EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT = 'en_attente_de_reponse_etudiant'; // la demande a été approuvée sous réserve de l'acceptation de l'étudiant, qui doit encore fournir une réponse.
-    case TERMINE = 'Terminée'; // la demande a été traitée et a abouti à une décision finale.
 
 
 }

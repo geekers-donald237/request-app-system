@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Commands\SaveRequestActionCommand;
 use App\Commands\SendRequestActionCommand;
 use App\Commands\UpdateRequestActionCommand;
+use App\Enums\RequestStateEnum;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
 use App\Helpers\HelpersFunction;
@@ -13,7 +14,6 @@ use App\Models\Request;
 use App\Models\RequestPattern;
 use App\Models\Staff;
 use App\Models\Student;
-use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
@@ -22,7 +22,6 @@ use App\Responses\SendRequestActionResponse;
 use App\Responses\UpdateRequestActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -401,6 +400,28 @@ class RequestService
         if (is_null($staff)) {
             throw new Exception('Ce personnel n\'existe pas!');
         }
+    }
+
+    private function updateRequestState(string $requestId, string $newRequestState): Request
+    {
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $request->update(['statut', $newRequestState]);
+
+        return $request;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfIsPossibleToDeleteOrModifyRequest(string $requestId): void
+    {
+        $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        if (!in_array($request->status, $requestStatutPossibleModified)) {
+            throw new Exception('IMpossible de modifier | Supprimer cette requete');
+
+        }
+
     }
 
 
