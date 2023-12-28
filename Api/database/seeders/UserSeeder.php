@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\RuleEnum;
 use App\Models\Rule;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,51 +21,6 @@ class UserSeeder extends Seeder
         $this->createStaffUser();
         $this->createTechnicalAdminUser();
 
-    }
-
-    /**
-     * @return void
-     */
-    public function createTechnicalAdminUser(): void
-    {
-        User::factory()
-            ->create([
-                'name' => 'Equipe Technique',
-                'email' => 'request-app@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
-    }
-
-    /**
-     * @return void
-     */
-    public function createStaffUser(): void
-    {
-        User::factory()
-            ->create([
-                'name' => 'John doe',
-                'email' => 'johndoe@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
-    }
-
-    /**
-     * @return void
-     */
-    public function createSecretaryUser(): void
-    {
-        User::factory()
-            ->create([
-                'name' => 'Jane doe',
-                'email' => 'janedoe@gmail.com',
-                'password' => '123456789'
-            ])
-            ->rules()
-            ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
     }
 
     /**
@@ -99,5 +55,57 @@ class UserSeeder extends Seeder
             'user_id' => (User::whereEmail('nyadjou@gmail.com')->first()->id)
             , 'matricule' => '21Q5915',
         ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function createSecretaryUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'Jane doe',
+                'email' => 'janedoe@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
+    }
+
+    /**
+     * @return void
+     */
+    public function createStaffUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'John doe',
+                'email' => 'johndoe@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+
+        Staff::factory()->create([
+            'user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id),
+            'job_title' => 'prof de francais',
+            'address' => 'lorem ipsum dolor',
+            'phone_number' => '585458558',
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function createTechnicalAdminUser(): void
+    {
+        User::factory()
+            ->create([
+                'name' => 'Equipe Technique',
+                'email' => 'request-app@gmail.com',
+                'password' => '123456789'
+            ])
+            ->rules()
+            ->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
     }
 }
