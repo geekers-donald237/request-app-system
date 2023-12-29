@@ -5,7 +5,6 @@
 /public/storage
 /storage/*.key
 /vendor
-/storage
 .env
 .env.backup
 .env.production
@@ -18,4 +17,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+<<<<<<< Updated upstream
+=======
 
+
+>>>>>>> Stashed changes

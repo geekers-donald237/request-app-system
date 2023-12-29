@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AjoutProgrammeComponent } from './ajout-programme.component';
+
+describe('AjoutProgrammeComponent', () => {
+  let component: AjoutProgrammeComponent;
+  let fixture: ComponentFixture<AjoutProgrammeComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AjoutProgrammeComponent]
+    })
+    .compileComponents();
+    
+    fixture = TestBed.createComponent(AjoutProgrammeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
