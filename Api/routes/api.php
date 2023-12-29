@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
     Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');
-    Route::patch('/request/statut', [\App\Services\RequestService::class, 'updateRequestState'])->name('/request/statut');
+    Route::patch('/request/{requestId}/statut/{statut}/', [RequestController::class, 'updateSecretaryRequestStatus'])->name('/request/statut');
 });
 
 require __DIR__ . '/auth.php';

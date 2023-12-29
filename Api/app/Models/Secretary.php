@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\RequestStateEnum;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Secretary extends Model
 {
@@ -19,13 +19,10 @@ class Secretary extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function requests(): HasMany
+    public function requests(): Builder
     {
-        return $this->hasMany(Request::class, 'sender_id', 'id');
+        return Request::with('attachments', 'receivers')
+            ->whereIsDeleted(false)->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value);
     }
 
-    public function receivers(): BelongsToMany
-    {
-        return $this->belongsToMany(Staff::class, 'receiver_request', 'request_id', 'receiver_id');
-    }
 }

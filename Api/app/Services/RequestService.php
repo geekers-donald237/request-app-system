@@ -22,6 +22,7 @@ use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
 use App\Responses\SendRequestActionResponse;
 use App\Responses\UpdateRequestActionResponse;
+use App\Responses\UpdateRequestStatutActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
@@ -332,10 +333,18 @@ class RequestService
         $response = new GetSecretaryRequestActionResponse();
         $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
         $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
-        $response->requests = $secretary->w  ith('attachments')->with('receivers')->whereIsDeleted(false)->get();
-        $response->message = 'Requests of ' . $secretary->user()->first()->name();
+
+        $response->requests = $secretary->requests()->get();
+        $response->message = 'Requetes envoyees ' . $secretary->user->name;
+
         return $response;
     }
+
+
+
+    /**
+     * @throws Exception
+     */
 
     /**
      * @throws Exception
@@ -353,9 +362,9 @@ class RequestService
      */
     private function getSecretaryIfExistOrThrowException(string $secretaryId): Secretary
     {
-        $secretary = Secretary::whereUserId($secretaryId)->whereIsDeleted(false)->first();
+        $secretary = Secretary::whereId($secretaryId)->whereIsDeleted(false)->first();
         if (is_null($secretary)) {
-            throw new Exception('Cet secretaire n\'existe pas!');
+            throw new Exception('Ce secretaire n\'existe pas!');
         }
         return $secretary;
     }
@@ -479,6 +488,29 @@ class RequestService
     public function updateRequestState(Request $request, RequestStateEnum $newRequestState): void
     {
         $request->fill(['statut' => $newRequestState->value])->save();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleUpdateSecretaryRequestStatus(string $requestId, string $newRequestStatut): UpdateRequestStatutActionResponse
+    {
+        $response = new UpdateRequestStatutActionResponse();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $this->checkIfNewStateRequestExistInRequestEnumStatut($newRequestStatut);
+        $request->update(['statut' => $newRequestStatut]);
+        $response->message = 'Statut Updated succeffuly';
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfNewStateRequestExistInRequestEnumStatut(string $newRequestStatut): void
+    {
+        if (!in_array($newRequestStatut, RequestStateEnum::values())) {
+            throw new Exception('Statut Inexistant');
+        }
     }
 
 

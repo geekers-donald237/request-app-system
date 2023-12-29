@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\RequestStateEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,6 +38,5 @@ class Request extends Model
     {
         return $this->statut;
     }
-
 
 }

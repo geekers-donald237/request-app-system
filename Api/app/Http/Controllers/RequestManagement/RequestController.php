@@ -192,4 +192,28 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+    public function updateSecretaryRequestStatus(
+        string         $requestId,
+        string         $newRequestStatut,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+
+        try {
+            $response = $handler->handleUpdateSecretaryRequestStatus($requestId,$newRequestStatut);
+
+            $httpJson = [
+                'status' => 200,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
 }

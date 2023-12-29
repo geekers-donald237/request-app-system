@@ -23,4 +23,8 @@ enum RequestStateEnum: string
     case EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT = 'en_attente_de_reponse_etudiant'; // la demande a été approuvée sous réserve de l'acceptation de l'étudiant, qui doit encore fournir une réponse.
 
 
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }
