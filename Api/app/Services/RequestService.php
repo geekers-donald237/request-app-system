@@ -398,7 +398,7 @@ class RequestService
      */
     private function getStaffIfExistOrThrowException(string $staffId): Staff
     {
-        $staff = Staff::whereId($staffId)->whereIsDeleted(false)->first();
+        $staff = Staff::whereUserId($staffId)->whereIsDeleted(false)->first();
 
         if (is_null($staff)) {
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');

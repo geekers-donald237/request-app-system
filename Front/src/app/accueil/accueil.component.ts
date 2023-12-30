@@ -6,6 +6,7 @@ import {CommonModule, NgIf} from "@angular/common";
 import {ToastModule} from 'primeng/toast';
 import {AuthService} from "../services/auth/auth.service";
 import {MessageService} from "primeng/api";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
@@ -18,6 +19,7 @@ import {MessageService} from "primeng/api";
     CommonModule,
     ToastModule,
     NgIf,
+    RouterLink,
   ],
   // providers: [MessageService],
   templateUrl: './accueil.component.html',
@@ -50,14 +52,13 @@ export class AccueilComponent {
 
   login() {
     const {email, password} = this.loginForm.value;
-    this.showToast();
+    // this.showToast();
     this.authService.loginUser(email, password).subscribe(
       (response) => {
         if (response.isLogged) {
           const user = response.user;
           const token = response.token;
           const userRule = this.authService.getUserRule(user);
-
           this.authService.setUserData(response, token);
           this.authService.gotoSpecificDashboard(userRule!);
         } else {

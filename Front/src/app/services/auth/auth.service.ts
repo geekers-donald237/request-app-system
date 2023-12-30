@@ -37,7 +37,7 @@ export class AuthService {
     if (userRule === UserRoleConstants.STUDENT) {
       this.router.navigate(['/liste_requete'])
     } else if (userRule === UserRoleConstants.STAFF) {
-      console.log('redirection ici staff');
+      this.router.navigate(['enseignant'])
     } else if (userRule === UserRoleConstants.SECRETARY) {
       console.log('redirection ici secretaire');
     } else if (userRule === UserRoleConstants.TECHNICAL_ADMIN) {
