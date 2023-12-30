@@ -25,6 +25,7 @@ class AuthService
         $user = User::whereEmail($command->email)->whereIsDeleted(false)->with('rules')->first();
 
         if ($user) {
+            $response->isLogged = true;
             $response->user = $user;
             $response->token = $user->createToken(self::API_TOKEN)->plainTextToken;
             $response->message = 'User Logged Successfully';

@@ -17,6 +17,7 @@ class AuthController extends Controller
     ): JsonResponse
     {
         $httpJson = [
+            'isLogged' => false,
             'status' => 200,
             'token' => '',
             'message' => ''
@@ -26,6 +27,7 @@ class AuthController extends Controller
             $response = $handler->handleLogin($command);
             $httpJson =
                 [
+                    'isLogged' => $response->isLogged,
                     'token' => $response->token,
                     'user' => $response->user,
                     'message' => $response->message
