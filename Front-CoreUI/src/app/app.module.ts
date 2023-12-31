@@ -10,7 +10,7 @@ import {NgScrollbarModule} from 'ngx-scrollbar';
 import {AppRoutingModule} from './app-routing.module';
 
 // Import app component
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 
 // Import containers
 import {DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent} from './containers';
@@ -36,7 +36,8 @@ import {
   UtilitiesModule
 } from '@coreui/angular';
 
-import { IconModule, IconSetService } from '@coreui/icons-angular';
+import {IconModule, IconSetService} from '@coreui/icons-angular';
+
 import {ScreensModule} from "./features/screens/screens.module";
 
 const APP_CONTAINERS = [
