@@ -99,20 +99,17 @@
 //
 //
 
-import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AccueilComponent} from './accueil/accueil.component';
+import {NgModule} from "@angular/core";
 import {ListeRequete2Component} from "./components/enseignant/liste-requete2/liste-requete2.component";
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/enseignant', pathMatch: 'full' }, // Redirection par défaut
-  { path: 'home', component: AccueilComponent },
-  { path: 'enseignant', component: ListeRequete2Component },
-  { path: '**', redirectTo: '/home' }, // Redirection vers '/home' pour les routes non trouvées
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirection par défaut
-
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'home', component: AccueilComponent},
+  {path: 'enseignant', component: ListeRequete2Component},
+  {path: '**', redirectTo: '/home'}, // Redirige vers '/home' pour les routes non trouvées
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
@@ -120,5 +117,4 @@ export const routes: Routes = [
 })
 export class AppRoutingModule {
 }
-
 
