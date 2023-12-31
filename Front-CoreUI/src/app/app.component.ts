@@ -29,4 +29,12 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  static getUserIdFromLocalStorage(): number {
+    const userDataString = localStorage.getItem('user');
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    return userData ? parseInt(userData.id) : 0;
+  }
+
+
 }
