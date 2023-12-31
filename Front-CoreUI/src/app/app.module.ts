@@ -74,7 +74,7 @@ const APP_CONTAINERS = [
     ListGroupModule,
     CardModule,
     NgScrollbarModule,
-    HttpClientModule,
+    ScreensModule
   ],
   providers: [
     {
