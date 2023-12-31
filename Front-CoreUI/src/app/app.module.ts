@@ -37,7 +37,7 @@ import {
 } from '@coreui/angular';
 
 import { IconModule, IconSetService } from '@coreui/icons-angular';
-import {HomeComponent} from "./features/screens/home/home.component";
+import {HttpClientModule} from "@angular/common/http";
 
 const APP_CONTAINERS = [
   DefaultFooterComponent,
@@ -74,7 +74,7 @@ const APP_CONTAINERS = [
     ListGroupModule,
     CardModule,
     NgScrollbarModule,
-    HomeComponent
+    HttpClientModule,
   ],
   providers: [
     {
