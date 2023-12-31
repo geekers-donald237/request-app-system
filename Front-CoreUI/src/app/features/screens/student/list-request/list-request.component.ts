@@ -24,7 +24,6 @@ export class ListRequestComponent implements OnInit {
     this.getAllStudentsRequest(this.studentId);
   }
 
-
   getAllStudentsRequest(studentId: number): void {
     this.requestService.getRequestFromStudent(studentId).subscribe(
       (response) => {
