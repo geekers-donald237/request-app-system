@@ -7,6 +7,7 @@ import {AddIndividualRequestComponent} from "./student/add-individual-request/ad
 import {AddGroupRequestComponent} from "./student/add-group-request/add-group-request.component";
 import {EditRequestComponent} from "./student/edit-request/edit-request.component";
 import {DeadlinesComponent} from "./student/deadlines/deadlines.component";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {DeadlinesComponent} from "./student/deadlines/deadlines.component";
   ],
   imports: [
     CommonModule,
-    ScreensRoutingModule
+    ScreensRoutingModule,
+    HttpClientModule
   ]
 })
 export class ScreensModule { }
