@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {UserRoleConstants} from "../../constant/constant";
+import {UserRoleConstants} from "../../../constant/constant";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
