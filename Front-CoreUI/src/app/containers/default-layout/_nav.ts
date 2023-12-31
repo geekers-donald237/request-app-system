@@ -12,9 +12,33 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Etudiant'
+    name: 'Étudiant'
   },
   {
+    name: 'Gestion des requêtes',
+    url: '/app',
+    iconComponent: { name: 'cil-puzzle' },
+    children: [
+      {
+        name: 'Mes Requêtes',
+        url: '/app/requests'
+      },
+      {
+        name: 'Requête Individuelle',
+        url: '/app/add-individual-request'
+      },
+      {
+        name: 'Requête de groupe',
+        url: '/app/add-group-request'
+      },
+      {
+        name: 'Echéances de requêtes',
+        url: '/app/calendar'
+      }
+    ]
+  },
+
+  /*{
     name: 'Colors',
     url: '/theme/colors',
     iconComponent: { name: 'cil-drop' }
@@ -24,9 +48,9 @@ export const navItems: INavData[] = [
     url: '/theme/typography',
     linkProps: { fragment: 'someAnchor' },
     iconComponent: { name: 'cil-pencil' }
-  },
+  }*/
   {
-    name: 'Components',
+    name: 'Secrétaire',
     title: true
   },
   {
@@ -216,7 +240,7 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Extras'
+    name: 'Personnel'
   },
   {
     name: 'Pages',
