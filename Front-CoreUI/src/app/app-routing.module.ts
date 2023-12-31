@@ -70,6 +70,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/pages/pages.module').then((m) => m.PagesModule)
       },
+      {
+        path: 'app',
+        loadChildren: () =>
+          import('./features/screens/screens.module').then((m) => m.ScreensModule)
+      }
     ]
   },
   {
