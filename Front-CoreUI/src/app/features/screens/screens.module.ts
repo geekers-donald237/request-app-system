@@ -15,6 +15,7 @@ import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.comp
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
+import {ButtonDirective} from "@coreui/angular";
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {ShowRequestComponent} from "./staff/show-request/show-request.component"
     ScreensRoutingModule,
     HttpClientModule,
     DateFormatPipe,
+    ButtonDirective,
   ]
 })
 export class ScreensModule {

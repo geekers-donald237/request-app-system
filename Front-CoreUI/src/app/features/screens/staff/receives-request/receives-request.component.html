@@ -17,6 +17,7 @@
                     <th>Motif</th>
                     <th>Intitule</th>
                     <th>Matricule</th>
+                    <th>Pieces</th>
                     <th>Date d'envoie</th>
                     <th>Options</th>
                   </tr>
@@ -28,9 +29,11 @@
                     <td>{{ request.title }}</td>
                     <td>{{ request.content }}</td>
                     <td>{{ request.sender.matricule }}</td>
+                    <td>{{ request.attachments.length }}</td>
                     <td>{{ request.created_at | dateFormat }}</td>
                     <td>
-                      <button type="button" class="btn btn-primary">Détails</button>
+                      <button cButton class="me-1" color="primary" (click)="showRequest(request.id)">Details</button>
+
                     </td>
                   </tr>
                   </tbody>

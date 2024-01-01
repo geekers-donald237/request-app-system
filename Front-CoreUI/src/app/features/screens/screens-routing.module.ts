@@ -9,6 +9,7 @@ import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.c
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
+import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 
 const routes: Routes = [
   {
@@ -74,6 +75,14 @@ const routes: Routes = [
     component: AddDeadlineComponent,
     data: {
       title: 'ajouter deadline'
+    }
+  },
+
+  {
+    path: 'show-request',
+    component: ShowRequestComponent,
+    data: {
+      title: 'voir requete'
     }
   },
 

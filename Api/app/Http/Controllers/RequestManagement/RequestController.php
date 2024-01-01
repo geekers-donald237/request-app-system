@@ -67,6 +67,30 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+    public function getRequest(
+        string     $requestId,
+        RequestService $handler
+
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+        try {
+            $response = $handler->handleGetRequest($requestId);
+
+            $httpJson = [
+                'status' => 201,
+                'request' => $response->request,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
     public function getStudentRequests(
         string         $studentId,
         RequestService $handler

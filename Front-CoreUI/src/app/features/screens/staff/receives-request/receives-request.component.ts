@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppComponent} from "../../../../app.component";
 import {StaffService} from "../../../services/staff/staff.service";
 import {IStaffRequest} from "../../../models/staffrequest.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-receives-request',
@@ -14,7 +15,7 @@ export class ReceivesRequestComponent implements OnInit {
   requests: IStaffRequest[] = [];
 
 
-  constructor(private staffService: StaffService) {
+  constructor(private staffService: StaffService , private router:Router) {
 
   }
 
@@ -34,5 +35,11 @@ export class ReceivesRequestComponent implements OnInit {
         console.log('An error occurred. Please try again later.');
       }
     );
+  }
+
+  showRequest(requestId: number): void {
+    localStorage.setItem('requestId', requestId.toString());
+
+    this.router.navigate(['/app/show-request']);
   }
 }

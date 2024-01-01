@@ -16,6 +16,7 @@ use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Responses\DeleteRequestActionResponse;
+use App\Responses\GetRequestActionResponse;
 use App\Responses\GetSecretaryRequestActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
@@ -511,6 +512,21 @@ class RequestService
         if (!in_array($newRequestStatut, RequestStateEnum::values())) {
             throw new Exception('Statut Inexistant');
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleGetRequest(string $requestId): GetRequestActionResponse
+    {
+        $response = new GetRequestActionResponse();
+        $request = $this->getRequestIfExistOrThrowException($requestId);
+
+        $response->request = Request::with('attachments')->find($requestId);
+        $response->message = 'Request Successfully getted';
+
+        return $response;
+
     }
 
 

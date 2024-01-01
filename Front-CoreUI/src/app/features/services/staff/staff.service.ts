@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {IGetStaffRequestsResponse} from "../../models/staffrequest.model";
+import {IGetStaffRequestsResponse, IStaffRequest} from "../../models/staffrequest.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +22,9 @@ export class StaffService {
   getRequestFromStudent(staffId: number): Observable<IGetStaffRequestsResponse> {
     return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
   }
+
+  getDetailsRequest(requestId: number): Observable<IStaffRequest> {
+    return this.http.get<IStaffRequest>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
+  }
+
 }

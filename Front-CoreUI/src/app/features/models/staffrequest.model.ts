@@ -21,10 +21,6 @@ export interface IStaffRequest {
   handwritten_piece_present_disc: number;
   created_at: string;
   updated_at: string;
-  pivot: {
-    receiver_id: number;
-    request_id: number;
-  };
   attachments: IAttachment[];
   sender: ISender;
 }
