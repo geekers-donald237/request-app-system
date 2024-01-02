@@ -1,1 +1,106 @@
-<p>add-individual-request works!</p>
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Ecrire votre Requête individuelle</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >UE</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <input type="text" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Motif</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric">
+                <option>Absence de notes</option>
+                <option>Erreur de note</option>
+                <option>autres</option>
+              </select>
+            </div>
+          </div>
+          <br />
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Intitulé</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <input type="text" class="form-control" />
+            </div>
+          </div>
+         <br>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Saisir le contenu de votre Requete</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <textarea class="summernote-simple"></textarea>
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Piece manuscrite</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <div id="image-preview" class="image-preview">
+                <label for="image-upload" id="image-label"
+                  >Choose File</label
+                >
+                <input type="file" name="image" id="image-upload" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Pieces jointes</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  id="customFile"
+                />
+                <label class="custom-file-label" for="customFile"
+                  >Choose file</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+              >Destinataire</label
+            >
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric">
+                <option>Mr Fomekong</option>
+                <option>Mr Moyou</option>
+                <option>Mr Aboubakar</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label
+              class="col-form-label text-md-right col-12 col-md-3 col-lg-3"
+            ></label>
+            <div class="col-sm-12 col-md-7">
+              <button class="btn btn-primary">Soumettre</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
