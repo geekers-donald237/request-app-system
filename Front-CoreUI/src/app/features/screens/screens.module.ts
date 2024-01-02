@@ -16,6 +16,7 @@ import {ReceivesRequestComponent} from "./staff/receives-request/receives-reques
 import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {ButtonDirective} from "@coreui/angular";
+import{DetailRequestComponent} from "./staff/detail-request/detail-request.component";
 
 
 @NgModule({
@@ -29,8 +30,8 @@ import {ButtonDirective} from "@coreui/angular";
     ReceivesRequestComponent,
     StaffDashboardComponent,
     ViewDeadlinesComponent,
-    ShowRequestComponent
-
+    ShowRequestComponent,
+    DetailRequestComponent
   ],
   imports: [
     CommonModule,
