@@ -10,13 +10,14 @@ import {ReceivesRequestComponent} from "./staff/receives-request/receives-reques
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
+import{DetailRequestComponent} from "./staff/detail-request/detail-request.component";
 
 const routes: Routes = [
   {
-    path: 'student/requests',
+    path: 'list-requests',
     component: ListRequestComponent,
     data: {
-      title: 'Mes requêtes'
+      title: 'Ma liste des requêtes'
     }
   },
   {
@@ -85,6 +86,17 @@ const routes: Routes = [
       title: 'voir requete'
     }
   },
+  {
+    path: 'detail',
+    component: DetailRequestComponent,
+    data: {
+      title: 'detail de la requete'
+    }
+  },
+
+
+ 
+ 
 
 ];
 
