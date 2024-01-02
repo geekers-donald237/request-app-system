@@ -51,7 +51,7 @@ const routes: Routes = [
   // staff
   {
     path: 'requests',
-    component: StaffDashboardComponent,
+    component: ListRequestComponent,
     data: {
       title: 'Statitiques Staff'
     }
