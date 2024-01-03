@@ -36,7 +36,8 @@ class HelpersFunction
 
     private static function isFileTypeValid(UploadedFile $file): bool
     {
-        $allowedFileTypes = ['pdf', 'png', 'jpeg', 'jpg'];
+        $allowedFileTypes = ['pdf', 'png', 'jpeg', 'jpg'
+    ];
 
         $extension = $file->getClientOriginalExtension();
 

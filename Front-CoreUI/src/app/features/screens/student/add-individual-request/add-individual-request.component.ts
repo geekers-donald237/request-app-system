@@ -1,13 +1,19 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {RequestService} from "../../../services/student/request.service";
+import {IGetStaffResponse, IStaffMember} from "../../../models/staffmember.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-individual-request',
   templateUrl: './add-individual-request.component.html',
   styleUrls: ['./add-individual-request.component.scss']
 })
-export class AddIndividualRequestComponent {
+export class AddIndividualRequestComponent implements OnInit {
+
+  requestPatterns: any[] = [];
+  staffList: IStaffMember[] = [];
+
   requestForm = this.fb.group({
     requestPatternId: ['', Validators.required],
     title: ['', Validators.required],
@@ -17,7 +23,7 @@ export class AddIndividualRequestComponent {
     receiver_id: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private requestService: RequestService) {
+  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService) {
   }
 
   get requestPatternId() {
@@ -44,6 +50,30 @@ export class AddIndividualRequestComponent {
     return this.requestForm.controls['receiver_id'];
   }
 
+  ngOnInit() {
+    this.requestService.getRequestPatterns().subscribe(
+      (response) => {
+        this.requestPatterns = response.patterns;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des motifs de requête:', error);
+      }
+    );
+
+    this.requestService.getAllStaff().subscribe(
+      (response: IGetStaffResponse) => {
+        if (response.status === 200) {
+          this.staffList = response.staff;
+        } else {
+          console.error('Erreur lors de la récupération de la liste des enseignants. Statut:', response.status);
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de la liste des enseignants:', error);
+      }
+    );
+  }
+
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -67,20 +97,20 @@ export class AddIndividualRequestComponent {
     if (this.requestForm.valid) {
       const formData = new FormData();
 
-      // Ajouter le fichier pour fileHandWritten
       const fileHandWritten = this.requestForm.get('fileHandWritten')?.value;
       if (fileHandWritten !== null && fileHandWritten !== undefined) {
         formData.append('fileHandWritten', fileHandWritten);
       }
 
-      // Ajouter les fichiers pour FilesAttachments
-      // const filesAttachments = this.requestForm.get('fileAttachments[]')?.value;
-      // if (filesAttachments !== null && filesAttachments !== undefined) {
-      //   for (let i = 0; i < filesAttachments.length; i++) {
-      //     const file = filesAttachments[i];
-      //     formData.append('fileAttachments[]', file);
-      //   }
-      // }
+      const filesAttachments = this.requestForm.get('fileAttachments[]')?.value;
+      if (filesAttachments !== null && filesAttachments !== undefined) {
+        const filesArray = filesAttachments as unknown as File[];
+
+        for (let i = 0; i < filesArray.length; i++) {
+          const file = filesArray[i];
+          formData.append('fileAttachments[]', file);
+        }
+      }
 
       // Ajouter les autres champs au FormData
       Object.entries(this.requestForm.value).forEach(([key, value]) => {
@@ -88,10 +118,36 @@ export class AddIndividualRequestComponent {
           formData.append(key, value !== null ? value : '');
         }
       });
+      const receiverId = this.requestForm.get('receiver_id')?.value;
+
 
       this.requestService.sendRequest(formData).subscribe(
         (response) => {
           console.log('Requête envoyée avec succès:', response);
+
+          if (response.isSaved) {
+            const requestId = response.requestId;
+
+            const receiverId = this.requestForm.get('receiver_id')?.value;
+
+            if (receiverId !== null && receiverId !== undefined) {
+              // Convertir la chaîne de caractères en nombre
+              const receiverIds = [parseInt(receiverId, 10)];
+
+              this.requestService.saveRequestDetails(requestId, receiverIds).subscribe(
+                (saveResponse) => {
+                  console.log('Détails de la requête enregistrés avec succès:', saveResponse);
+                  this.router.navigate(['/app/list-requests']);
+                },
+                (saveError) => {
+                  console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
+                }
+              );
+            } else {
+              console.error('Destinataire non sélectionné.');
+            }
+
+          }
         },
         (error) => {
           console.error('Erreur lors de l\'envoi de la requête:', error);

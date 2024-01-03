@@ -4,27 +4,30 @@
       <div class="card-header">
         <h5>Ecrire votre Requête individuelle</h5>
       </div>
-      <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data" (ngSubmit)="sendRequest()">
+      <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data"
+            (ngSubmit)="sendRequest()">
         <div class="card-body">
           <div class="form-group row mb-4">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Motif</label>
             <div class="col-sm-12 col-md-7">
               <select class="form-control selectric" pInputText formControlName="requestPatternId" id="requestPatternId"
                       name="requestPatternId">
-                <option value="1">Absence de notes</option>
-                <option value="2">Erreur de note</option>
-                <option value="3">Autres</option>
+                <option value="" disabled selected>Motif Requete</option>
+                <option *ngFor="let pattern of requestPatterns" [value]="pattern.id">{{ pattern.pattern_description }}
+                </option>
               </select>
               <div *ngIf="requestPatternId.invalid && requestPatternId.touched" class="text-danger">
                 <div *ngIf="requestPatternId.errors?.['required']">Motif est requis</div>
               </div>
             </div>
+
           </div>
           <br/>
           <div class="form-group row mb-4">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intitulé</label>
             <div class="col-sm-12 col-md-7">
-              <input type="text" id="title" name="title" pInputText formControlName="title" class="form-control"/>
+              <input type="text" id="title" name="title" pInputText placeholder="Saisissez l'intitulé de votre requête"
+                     formControlName="title" class="form-control"/>
               <div *ngIf="title.invalid && title.touched" class="text-danger">
                 <div *ngIf="title.errors?.['required']">Intitulé est requis</div>
               </div>
@@ -32,21 +35,24 @@
           </div>
           <br>
           <div class="form-group row mb-4">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Saisir le contenu de votre
+            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">Saisir le contenu de votre
               Requete</label>
             <div class="col-sm-12 col-md-7">
-              <textarea class="summernote-simple" id="content" pInputTextarea formControlName="content"></textarea>
+              <textarea class="summernote-simple  form-control" id="content" pInputTextarea formControlName="content"
+                        placeholder="Saisissez le contenu de votre requête" rows="8" cols="75"></textarea>
               <div *ngIf="content.invalid && content.touched" class="text-danger">
                 <div *ngIf="content.errors?.['required']">Contenu de la requête est requis</div>
               </div>
             </div>
           </div>
+
           <div class="form-group row mb-4">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Piece manuscrite</label>
             <div class="col-sm-12 col-md-7">
               <div id="image-preview" class="image-preview">
                 <label for="image-upload" id="image-label">Choose File</label>
-                <input type="file"  (change)="onFileChange($event)"  name="fileHandWritten" formControlName="fileHandWritten" id="image-upload"/>
+                <input type="file" (change)="onFileChange($event)" name="fileHandWritten"
+                       formControlName="fileHandWritten" id="image-upload"/>
               </div>
               <div *ngIf="fileHandWritten.invalid && fileHandWritten.touched" class="text-danger">
                 <div *ngIf="fileHandWritten.errors?.['required']">Pièce manuscrite est requise</div>
@@ -57,7 +63,8 @@
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes</label>
             <div class="col-sm-12 col-md-7">
               <div class="custom-file">
-                <input type="file" multiple (change)="onFileAttachmentsChange($event)" class="custom-file-input" id="customFile" formControlName="fileAttachments[]"
+                <input type="file" multiple (change)="onFileAttachmentsChange($event)" class="custom-file-input"
+                       id="customFile" formControlName="fileAttachments[]"
                        name="fileAttachments[]"/>
                 <label class="custom-file-label" for="customFile">Choose file</label>
               </div>
@@ -70,15 +77,15 @@
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Destinataire</label>
             <div class="col-sm-12 col-md-7">
               <select class="form-control selectric" name="receiver_id" formControlName="receiver_id" id="receiver_id">
-                <option value="1">Mr Fomekong</option>
-                <option value="1">Mr Moyou</option>
-                <option value="1"> Mr Aboubakar</option>
+                <option value="" disabled selected>Sélectionnez un destinataire</option>
+                <option *ngFor="let teacher of staffList" [value]="teacher.id">{{ teacher.name }}</option>
               </select>
               <div *ngIf="receiver_id.invalid && receiver_id.touched" class="text-danger">
                 <div *ngIf="receiver_id.errors?.['required']">Destinataire est requis</div>
               </div>
             </div>
           </div>
+
           <div class="form-group row mb-4">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
             <div class="col-sm-12 col-md-7">

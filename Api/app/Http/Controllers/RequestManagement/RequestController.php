@@ -241,4 +241,18 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+    public function getAllStaff(
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200
+        ];
+
+        $response = $handler->handleGetStaff();
+
+        $httpJson['staff'] = $response->staff;
+        return response()->json($httpJson);
+    }
+
 }

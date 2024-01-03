@@ -12,12 +12,15 @@ use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
 use App\Models\RequestPattern;
+use App\Models\Rule;
 use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
+use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetRequestActionResponse;
 use App\Responses\GetSecretaryRequestActionResponse;
+use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -399,7 +402,7 @@ class RequestService
      */
     private function getStaffIfExistOrThrowException(string $staffId): Staff
     {
-        $staff = Staff::whereUserId($staffId)->whereIsDeleted(false)->first();
+        $staff = Staff::whereId($staffId)->whereIsDeleted(false)->first();
 
         if (is_null($staff)) {
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');
@@ -528,6 +531,23 @@ class RequestService
         return $response;
 
     }
+
+    public function handleGetStaff(): GetStaffMemberActionResponse
+    {
+        $response = new GetStaffMemberActionResponse();
+
+        $staffRoleId = Rule::where('name', RuleEnum::STAFF->value)->value('id');
+
+        if (!$staffRoleId) {
+            return $response;
+        }
+        $response->staff = User::whereHas('rules', function ($query) use ($staffRoleId) {
+            $query->where('rule_id', $staffRoleId);
+        })->get();
+
+        return $response;
+    }
+
 
 
 }

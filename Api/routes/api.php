@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
+    Route::get('/staff', [RequestController::class, 'getAllStaff'])->name('staff');
     Route::post('/request', [RequestController::class, 'save'])->name('request');
     Route::post('/request/send', [RequestController::class, 'sendRequest'])->name('/request/send');
     Route::get('/student/{studentId}/requests', [RequestController::class, 'getStudentRequests'])->name('/student/{studentId}/requests');

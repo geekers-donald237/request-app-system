@@ -10,6 +10,8 @@ import {IRequest} from "../../../models/studentrequest.model";
 export class ListRequestComponent implements OnInit {
   studentId: number | null = null;
   requests: IRequest[] = [];
+  requestPatterns: any[] = [];
+
 
 
   constructor(private requestService: RequestService) {
@@ -22,6 +24,15 @@ export class ListRequestComponent implements OnInit {
     this.studentId = userData ? parseInt(userData.id) : 0;
 
     this.getAllStudentsRequest(this.studentId);
+
+    this.requestService.getRequestPatterns().subscribe(
+      (response) => {
+        this.requestPatterns = response.patterns;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des motifs de requête:', error);
+      }
+    );
   }
 
   getAllStudentsRequest(studentId: number): void {
@@ -35,4 +46,10 @@ export class ListRequestComponent implements OnInit {
       }
     );
   }
+
+  getPatternDescriptionById(patternId: number): string {
+    const pattern = this.requestPatterns.find((p) => p.id === patternId);
+    return pattern ? pattern.pattern_description : 'Non défini';
+  }
+
 }
