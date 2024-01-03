@@ -12,6 +12,9 @@ import {AppRoutingModule} from './app-routing.module';
 // Import app component
 import {AppComponent} from './app.component';
 
+//Import primeNG package
+import {ToastModule} from "primeng/toast";
+
 // Import containers
 import {DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent} from './containers';
 
@@ -75,13 +78,15 @@ const APP_CONTAINERS = [
     ListGroupModule,
     CardModule,
     NgScrollbarModule,
-    ScreensModule
+    ScreensModule,
+    ToastModule
   ],
   providers: [
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
+
     IconSetService,
     Title
   ],

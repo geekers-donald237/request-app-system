@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Router} from "@angular/router";
 import {IGetAllStudentRequestResponse} from "../../models/studentrequest.model";
 import {Observable} from "rxjs";
 
@@ -17,7 +16,7 @@ export class RequestService {
     'Authorization': `Bearer ${this.token}`
   });
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   getRequestFromStudent(studentId: number): Observable<IGetAllStudentRequestResponse> {
@@ -28,7 +27,7 @@ export class RequestService {
     return this.http.get<any>('/request/patterns', {headers: this.headers});
   }
 
-  sendRequest(requestData: any): Observable<any>{
+  sendRequest(requestData: any): Observable<any> {
     const url = `${this.baseUrl}/request`;
     return this.http.post(url, requestData, {headers: this.headers});
   }
