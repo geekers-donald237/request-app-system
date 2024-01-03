@@ -17,9 +17,9 @@
             </tr>
             <tr>
               <td>Danielle Mckeny</td>
-              <td>21Q2301</td>
-              <td>Erreur de note</td>
-              <td>19-04-2023</td>
+              <td>{{request.sender_id}}</td>
+              <td>{{request.request_pattern_id}}</td>
+              <td>{{ request.created_at | dateFormat }}</td>
             </tr>
           </table>
         </div>
@@ -55,15 +55,21 @@
   <div class="row mt-4">
     <div class="col-md-12">
       <h3>objet de la requête</h3>
-      <p class="section-lead">corps de la requetes</p>
-
+      <p class="section-lead">{{request.content}}</p>
       <div class="row mt-4">
         <div class="col-lg-8">
-          <h3>pieces jointes</h3>
-          <p class="section-lead"><a href="">piece1</a></p>
-          <p class="section-lead"><a href="">piece2</a></p>
+          <h3>Pièces jointes</h3>
+          <ng-container *ngIf="request.attachments && request.attachments.length > 0; else noAttachments">
+            <p class="section-lead" *ngFor="let attachment of request.attachments">
+              <a [href]="getAttachmentUrl(attachment.file_path)" target="_blank">{{ getAttachmentFileName(attachment.file_path) }}</a>
+            </p>
+          </ng-container>
+          <ng-template #noAttachments>
+            <p class="section-lead">Aucune pièce jointe disponible.</p>
+          </ng-template>
         </div>
       </div>
+
       <div class="float-lg-left mb-lg-0 mb-3">
         <button class="btn btn-success" (click)="validateRequest()">
           Valider

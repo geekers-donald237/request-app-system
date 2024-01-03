@@ -23,8 +23,8 @@ export class StaffService {
     return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
   }
 
-  getDetailsRequest(requestId: number): Observable<IStaffRequest> {
-    return this.http.get<IStaffRequest>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
+  getDetailsRequest(requestId: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
   }
 
   updateRequestStatus(requestId: number, statut: string): Observable<any> {
