@@ -33,7 +33,7 @@ export class AuthService {
 
   gotoSpecificDashboard(userRule: string) {
     if (userRule === UserRoleConstants.STUDENT) {
-      // this.router.navigate(['/liste_requete'])
+      this.router.navigate(['dashboard'])
       console.log('redirection ici student');
 
     } else if (userRule === UserRoleConstants.STAFF) {

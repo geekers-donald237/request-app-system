@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../features/services/shared/auth/auth.service";
-import {ToastersComponent} from "../../notifications/toasters/toasters.component";
 
 @Component({
   selector: 'app-login',
@@ -32,7 +31,6 @@ export class LoginComponent {
 
   login() {
     const {email, password} = this.loginForm.value;
-    // this.showToast();
     this.authService.loginUser(email, password).subscribe(
       (response) => {
         if (response.isLogged) {
@@ -52,6 +50,7 @@ export class LoginComponent {
       }
     );
   }
+
 
 
 }

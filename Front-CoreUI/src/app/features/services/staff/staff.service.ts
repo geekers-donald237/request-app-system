@@ -27,4 +27,9 @@ export class StaffService {
     return this.http.get<IStaffRequest>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
   }
 
+  updateRequestStatus(requestId: number, statut: string): Observable<any> {
+    const url = `${this.baseUrl}/request/${requestId}/statut/${statut}`;
+    return this.http.patch(url, {},{headers: this.headers});
+  }
+
 }

@@ -16,7 +16,9 @@ import {ReceivesRequestComponent} from "./staff/receives-request/receives-reques
 import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {ButtonDirective} from "@coreui/angular";
-import{DetailRequestComponent} from "./staff/detail-request/detail-request.component";
+import {InputTextModule} from "primeng/inputtext";
+import {ReactiveFormsModule} from "@angular/forms";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 
 @NgModule({
@@ -31,7 +33,6 @@ import{DetailRequestComponent} from "./staff/detail-request/detail-request.compo
     StaffDashboardComponent,
     ViewDeadlinesComponent,
     ShowRequestComponent,
-    DetailRequestComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +40,9 @@ import{DetailRequestComponent} from "./staff/detail-request/detail-request.compo
     HttpClientModule,
     DateFormatPipe,
     ButtonDirective,
+    InputTextModule,
+    ReactiveFormsModule,
+    InputTextareaModule,
   ]
 })
 export class ScreensModule {

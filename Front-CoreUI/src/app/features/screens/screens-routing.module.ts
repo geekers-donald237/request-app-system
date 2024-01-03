@@ -5,12 +5,10 @@ import {AddIndividualRequestComponent} from "./student/add-individual-request/ad
 import {AddGroupRequestComponent} from "./student/add-group-request/add-group-request.component";
 import {EditRequestComponent} from "./student/edit-request/edit-request.component";
 import {DeadlinesComponent} from "./student/deadlines/deadlines.component";
-import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
-import{DetailRequestComponent} from "./staff/detail-request/detail-request.component";
 
 const routes: Routes = [
   {
@@ -86,17 +84,7 @@ const routes: Routes = [
       title: 'voir requete'
     }
   },
-  {
-    path: 'detail',
-    component: DetailRequestComponent,
-    data: {
-      title: 'detail de la requete'
-    }
-  },
 
-
- 
- 
 
 ];
 
