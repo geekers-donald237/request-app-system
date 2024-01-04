@@ -382,7 +382,7 @@ class RequestService
         $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
         $response = new GetStaffRequestActionResponse();
         $staff = $this->getStaffIfExistOrThrowException($staffId);
-        $response->requests = $staff->receiveRequests()->with('attachments')->with('sender')->get();
+        $response->requests = $staff->receiveRequests()->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value)->with('attachments')->with('sender')->get();
         $response->message = 'Requests receive by ' . $staff->user()->first()->name();
         return $response;
     }

@@ -27,6 +27,7 @@ export class ReceivesRequestComponent implements OnInit {
   getAllStaffRequest(staffId: number): void {
     this.staffService.getRequestFromStudent(staffId).subscribe(
       (response) => {
+        console.log(response);
         this.requests = response.requests;
       },
       (error) => {

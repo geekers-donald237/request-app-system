@@ -6,6 +6,8 @@ import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
 import {IStudentResponse} from "../../models/student.information.model";
+import {IRequestDetailsResponse} from "../../models/request.model";
+import {IUpdateStatusResponse} from "../../models/request.status.model";
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +51,17 @@ export class RequestService {
 
   getStudentInformation(senderId: number): Observable<IStudentResponse> {
     const url = `${this.baseUrl}/student/${senderId}`;
-    return this.http.get<IStudentResponse>(url,{headers: this.headers});
+    return this.http.get<IStudentResponse>(url, {headers: this.headers});
+  }
+
+
+  getDetailsRequest(requestId: number): Observable<IRequestDetailsResponse> {
+    return this.http.get<IRequestDetailsResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
+  }
+
+  updateRequestStatus(requestId: number, statut: string): Observable<IUpdateStatusResponse> {
+    const url = `${this.baseUrl}/request/${requestId}/statut/${statut}`;
+    return this.http.patch<IUpdateStatusResponse>(url, {}, {headers: this.headers});
   }
 
 }

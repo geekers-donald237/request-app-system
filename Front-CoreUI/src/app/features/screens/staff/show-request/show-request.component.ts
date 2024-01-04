@@ -1,71 +1,86 @@
 import {Component, OnInit} from '@angular/core';
-import {StaffService} from "../../../services/staff/staff.service";
-import {RequestStateConstants} from "../../../constant/constant";
-import {Router} from "@angular/router";
-import {RequestService} from "../../../services/request/request.service";
-import {IStudentData, IStudentResponse} from "../../../models/student.information.model";
+import {Router} from '@angular/router';
+import {RequestService} from '../../../services/request/request.service';
+import {StaffService} from '../../../services/staff/staff.service';
+import {RequestStateConstants} from '../../../constant/constant';
+import {IStudentData, IStudentResponse} from '../../../models/student.information.model';
+import {IRequestPattern} from '../../../models/request.patterns.model';
 
 @Component({
   selector: 'app-show-request',
-
   templateUrl: './show-request.component.html',
-  styleUrl: './show-request.component.scss'
+  styleUrls: ['./show-request.component.scss'],
 })
 export class ShowRequestComponent implements OnInit {
-  request: any = [];
+  request: any | undefined;
   userData: IStudentData | undefined;
-  requestPatterns: any[] = [];
-  requestId = Number(localStorage.getItem('requestId'));
+  requestPatterns: IRequestPattern[] = [];
+  requestId: number;
 
   constructor(
     private staffService: StaffService,
     private router: Router,
     private requestService: RequestService
   ) {
+    this.requestId = Number(localStorage.getItem('requestId')) || 0;
   }
 
   ngOnInit(): void {
-    this.getDetails(this.requestId);
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.getRequestDetails();
+    this.getRequestPatterns();
+  }
+
+  getRequestDetails(): void {
+    this.requestService.getDetailsRequest(this.requestId).subscribe(
+      (response) => {
+        console.log(response);
+        this.request = response.request;
+        if (this.request?.sender_id) {
+          this.loadStudentInformation(this.request.sender_id);
+        }
+      },
+      (error) => {
+        this.handleError('An error occurred while fetching request details:', error);
+      }
+    );
+  }
+
+  getRequestPatterns(): void {
     this.requestService.getRequestPatterns().subscribe(
       (response) => {
         this.requestPatterns = response.patterns;
       },
       (error) => {
-        console.error('Erreur lors de la récupération des motifs de requête:', error);
+        this.handleError('Error retrieving request patterns:', error);
       }
     );
   }
 
-  getDetails(requestId: number): void {
-    this.staffService.getDetailsRequest(requestId).subscribe(
-      (response) => {
-        this.request = response.request;
-        this.requestService.getStudentInformation(response.request.sender_id).subscribe(
-          (response: IStudentResponse) => {
-            this.userData = response.data;
-          },
-          error => {
-            console.error('Une erreur s\'est produite :', error);
-          }
-        );
+  loadStudentInformation(senderId: number): void {
+    this.requestService.getStudentInformation(senderId).subscribe(
+      (response: IStudentResponse) => {
+        this.userData = response.data;
       },
       (error) => {
-        console.log('An error occurred. Please try again later.');
+        this.handleError('An error occurred while fetching student information:', error);
       }
     );
   }
 
-  validateRequest() {
+  validateRequest(): void {
     this.updateRequestStatus(RequestStateConstants.ACCEPTEE);
   }
 
-  putOnHoldRequest() {
+  putOnHoldRequest(): void {
     this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
   }
 
-  rejectRequest() {
-    this.updateRequestStatus(RequestStateConstants.REFUSEE
-    );
+  rejectRequest(): void {
+    this.updateRequestStatus(RequestStateConstants.REFUSEE);
   }
 
   getAttachmentUrl(filePath: string): string {
@@ -73,27 +88,25 @@ export class ShowRequestComponent implements OnInit {
     return `${laravelBaseUrl}/${filePath}`;
   }
 
-  getAttachmentFileName(filePath: string): string {
-    const parts = filePath.split('/');
-    return parts[parts.length - 1];
-  }
-
-  getPatternDescriptionById(patternId: number): string {
+  getPatternDescriptionById(patternId: number | undefined): string {
     const pattern = this.requestPatterns.find((p) => p.id === patternId);
     return pattern ? pattern.pattern_description : 'Non défini';
   }
 
-  private updateRequestStatus(statut: string) {
-    this.staffService.updateRequestStatus(this.requestId, statut)
-      .subscribe(
-        () => {
-          console.log('status update')
-          this.router.navigate(['/app/request']);
-        },
-        error => {
-          // Gérer l'échec, afficher un message d'erreur, etc.
-          console.error(error);
-        }
-      );
+  private updateRequestStatus(statut: string): void {
+    this.requestService.updateRequestStatus(this.requestId, statut).subscribe(
+      () => {
+        console.log('Status update');
+        this.router.navigate(['/app/receive-request']);
+      },
+      (error) => {
+        this.handleError('An error occurred while updating request status:', error);
+      }
+    );
+  }
+
+  private handleError(message: string, error: any): void {
+    console.error(`${message} ${error}`);
+    // Ajoutez ici la logique pour gérer les erreurs (par exemple, afficher un message à l'utilisateur)
   }
 }

@@ -53,10 +53,11 @@
         <div class="col-lg-8">
           <h3>Pièces jointes</h3>
           <ng-container *ngIf="request.attachments && request.attachments.length > 0; else noAttachments">
-            <p class="section-lead" *ngFor="let attachment of request.attachments">
-              <a [href]="getAttachmentUrl(attachment.file_path)" target="_blank">{{ getAttachmentFileName(attachment.file_path) }}</a>
+            <p class="section-lead" *ngFor="let attachment of request.attachments; let i = index">
+              <a [href]="getAttachmentUrl(attachment.file_path)" target="_blank">Pièce {{ i + 1 }}</a>
             </p>
           </ng-container>
+
           <ng-template #noAttachments>
             <p class="section-lead">Aucune pièce jointe disponible.</p>
           </ng-template>
