@@ -9,9 +9,17 @@ import {ReceivesRequestComponent} from "./staff/receives-request/receives-reques
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
+import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
+import {StudentDashboardComponent} from "./student/student-dashboard/student-dashboard.component";
 
 const routes: Routes = [
   {
+    path: 'student-dashboard',
+    component: StudentDashboardComponent,
+    data: {
+      title: 'Ma liste des requêtes'
+    }
+  },{
     path: 'list-requests',
     component: ListRequestComponent,
     data: {
@@ -50,7 +58,7 @@ const routes: Routes = [
   // staff
   {
     path: 'requests',
-    component: ListRequestComponent,
+    component: StaffDashboardComponent,
     data: {
       title: 'Statitiques Staff'
     }

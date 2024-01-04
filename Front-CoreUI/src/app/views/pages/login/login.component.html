@@ -9,8 +9,7 @@
 
               <form action="liste_requete3" method="post" [formGroup]="loginForm" (ngSubmit)="login()"
                     class="form-box">
-                <h3 class="h4 text-black mb-4 ">Se Connecter</h3>
-
+                <h3 class="h4 text-black mb-4 ">Connexion</h3>
                 <div class="form-group form-floating mt-3 d-flex flex-column">
                   <input type="email" pInputText formControlName="email" class="form-control custom-input"
                          placeholder="Adresse email" id="floatingInput" name="email" autocomplete="email">
@@ -35,7 +34,7 @@
 
                 <div class="form-group  mt-3 ">
                   <button cButton type="submit" class="btn btn-primary px-4 btn-pill btn-block"
-                          [disabled]="!loginForm.valid">Login
+                          [disabled]="!loginForm.valid">Se Connecter
                   </button>
                 </div>
               </form>
