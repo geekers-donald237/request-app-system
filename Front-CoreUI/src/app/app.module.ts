@@ -42,6 +42,7 @@ import {
 import {IconModule, IconSetService} from '@coreui/icons-angular';
 
 import {ScreensModule} from "./features/screens/screens.module";
+import {Utils} from "./features/services/shared/utils/utils";
 
 const APP_CONTAINERS = [
   DefaultFooterComponent,
@@ -86,7 +87,7 @@ const APP_CONTAINERS = [
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
-
+    Utils,
     IconSetService,
     Title
   ],
