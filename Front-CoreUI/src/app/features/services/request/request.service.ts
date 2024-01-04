@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
+import {IStudentResponse} from "../../models/student.information.model";
 
 @Injectable({
   providedIn: 'root'
@@ -45,4 +46,10 @@ export class RequestService {
     };
     return this.http.post<ISendRequestResponse>(url, data, {headers: this.headers});
   }
+
+  getStudentInformation(senderId: number): Observable<IStudentResponse> {
+    const url = `${this.baseUrl}/student/${senderId}`;
+    return this.http.get<IStudentResponse>(url,{headers: this.headers});
+  }
+
 }

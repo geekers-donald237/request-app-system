@@ -18,7 +18,6 @@ export class Utils {
   }
 
   public gotoSpecificDashboard(userRule: string) {
-    console.log(userRule)
     switch (userRule) {
       case UserRoleConstants.STUDENT:
         this.router.navigate(['/app/list-requests']);
@@ -42,4 +41,12 @@ export class Utils {
     localStorage.setItem('user', JSON.stringify(data.user));
     localStorage.setItem('token', data.token);
   }
+
+  public getUserIdFromLocalStorage(): number {
+    const userDataString = localStorage.getItem('user');
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    return userData ? parseInt(userData.id) : 0;
+  }
+
+
 }

@@ -16,9 +16,9 @@
               <th>date de soumission</th>
             </tr>
             <tr>
-              <td>Danielle Mckeny</td>
-              <td>{{request.sender_id}}</td>
-              <td>{{request.request_pattern_id}}</td>
+              <td>{{userData?.nom}}</td>
+              <td>{{userData?.matricule}}</td>
+              <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
               <td>{{ request.created_at | dateFormat }}</td>
             </tr>
           </table>
@@ -27,9 +27,8 @@
         <div class="row">
           <div class="col-md-6">
             <address>
-              <strong>Nyadjou</strong><br />
-              lucie Danielle<br />
-              21Q2301,<br />
+              <strong>{{userData?.nom}}</strong><br />
+              {{userData?.matricule}},<br />
               ICT4D<br />
             </address>
           </div>
@@ -37,12 +36,6 @@
             <address>
               <strong>Order Date:</strong><br />
               Yaounde June 26, 2023<br /><br />
-            </address>
-          </div>
-          <div class="col-md-6 text-md-right">
-            <address>
-              <strong>A monsieur:</strong><br />
-              nom du prof....<br /><br />
             </address>
           </div>
         </div>
@@ -55,7 +48,7 @@
   <div class="row mt-4">
     <div class="col-md-12">
       <h3>objet de la requête</h3>
-      <p class="section-lead">{{request.content}}</p>
+      <p class="section-lead"> {{ request?.title }} {{ request?.content }}</p>
       <div class="row mt-4">
         <div class="col-lg-8">
           <h3>Pièces jointes</h3>

@@ -3,6 +3,7 @@ import {AppComponent} from "../../../../app.component";
 import {StaffService} from "../../../services/staff/staff.service";
 import {IStaffRequest} from "../../../models/staffrequest.model";
 import {Router} from "@angular/router";
+import {Utils} from "../../../services/shared/utils/utils";
 
 @Component({
   selector: 'app-receives-request',
@@ -15,12 +16,11 @@ export class ReceivesRequestComponent implements OnInit {
   requests: IStaffRequest[] = [];
 
 
-  constructor(private staffService: StaffService , private router:Router) {
-
+  constructor(private staffService: StaffService , private router:Router ,private utils: Utils) {
   }
 
   ngOnInit(): void {
-    this.staffId = AppComponent.getUserIdFromLocalStorage();
+    this.staffId = this.utils.getUserIdFromLocalStorage();
 
     this.getAllStaffRequest(this.staffId);
   }
@@ -39,7 +39,6 @@ export class ReceivesRequestComponent implements OnInit {
 
   showRequest(requestId: number): void {
     localStorage.setItem('requestId', requestId.toString());
-
     this.router.navigate(['/app/show-request']);
   }
 }

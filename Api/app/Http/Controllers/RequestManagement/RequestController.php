@@ -142,6 +142,31 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+
+    public function getStudentInformation(
+        string         $senderId,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => '',
+            'data' => []
+        ];
+
+        try {
+            $response = $handler->getStudentInfoByRequestId($senderId);
+            $httpJson = [
+                'status' => 200,
+                'data' => $response->data,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
     public function deleteRequest(
         string         $requestId,
         RequestService $handler
@@ -254,5 +279,7 @@ class RequestController extends Controller
         $httpJson['staff'] = $response->staff;
         return response()->json($httpJson);
     }
+
+
 
 }

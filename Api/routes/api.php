@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/request/{requestId}', [RequestController::class, 'deleteRequest'])->name('/request/delete');
     Route::post('/requests/{requestId}', [RequestController::class, 'updateRequest'])->name('/requests/{requestId}');
     Route::get('/requests/{requestId}', [RequestController::class, 'getRequest'])->name('/requests/{requestId}');
+    Route::get('/student/{senderId}', [RequestController::class, 'getStudentInformation'])->name('/student/{sendId}');
 
     Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
     Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');

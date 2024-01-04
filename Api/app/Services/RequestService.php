@@ -22,6 +22,7 @@ use App\Responses\GetRequestActionResponse;
 use App\Responses\GetSecretaryRequestActionResponse;
 use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
+use App\Responses\GetStudentInformationActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
 use App\Responses\SendRequestActionResponse;
@@ -402,7 +403,7 @@ class RequestService
      */
     private function getStaffIfExistOrThrowException(string $staffId): Staff
     {
-        $staff = Staff::whereId($staffId)->whereIsDeleted(false)->first();
+        $staff = Staff::whereUserId($staffId)->whereIsDeleted(false)->first();
 
         if (is_null($staff)) {
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');
@@ -548,7 +549,23 @@ class RequestService
         return $response;
     }
 
+    public function getStudentInfoByRequestId($requestId): GetStudentInformationActionResponse
+    {
+        $response = new GetStudentInformationActionResponse();
+        $request = Request::with('sender.user')->find($requestId);
 
-
+        if (!$request) {
+            $response->message = 'Demande introuvable';
+            return $response;
+        }
+        $studentInfo = [
+            'matricule' => $request->sender->matricule,
+            'nom' => $request->sender->user->name,
+            'email' => $request->sender->user->email,
+        ];
+        $response->data = $studentInfo;
+        $response->message = 'User Details';
+        return $response;
+    }
 }
 
