@@ -12,6 +12,7 @@ import {ShowRequestComponent} from "./staff/show-request/show-request.component"
 import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
 import {StudentDashboardComponent} from "./student/student-dashboard/student-dashboard.component";
 
+
 const routes: Routes = [
   {
     path: 'student-dashboard',
@@ -19,7 +20,7 @@ const routes: Routes = [
     data: {
       title: 'Ma liste des requêtes'
     }
-  },{
+  }, {
     path: 'list-requests',
     component: ListRequestComponent,
     data: {
@@ -92,8 +93,6 @@ const routes: Routes = [
       title: 'voir requete'
     }
   },
-
-
 ];
 
 @NgModule({

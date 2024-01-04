@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {IGetStaffRequestsResponse, IStaffRequest} from "../../models/staffrequest.model";
+import {IGetStaffRequestsResponse, IStaffRequest} from "../../models/staff.request.model";
 import {IGetStaffResponse} from "../../models/staff.member.model";
 
 @Injectable({
@@ -37,8 +37,5 @@ export class StaffService {
     const url = `${this.baseUrl}/request/${requestId}/statut/${statut}`;
     return this.http.patch(url, {},{headers: this.headers});
   }
-
-
-
 
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from "../../../../app.component";
 import {StaffService} from "../../../services/staff/staff.service";
-import {IStaffRequest} from "../../../models/staffrequest.model";
+import {IStaffRequest} from "../../../models/staff.request.model";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 
@@ -21,14 +21,12 @@ export class ReceivesRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.staffId = this.utils.getUserIdFromLocalStorage();
-
     this.getAllStaffRequest(this.staffId);
   }
 
   getAllStaffRequest(staffId: number): void {
     this.staffService.getRequestFromStudent(staffId).subscribe(
       (response) => {
-        console.log(response);
         this.requests = response.requests;
       },
       (error) => {

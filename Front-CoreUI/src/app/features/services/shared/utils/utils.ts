@@ -4,7 +4,7 @@ import {Injectable} from "@angular/core";
 import {ILoginResponse, IUserRole} from "../../../models/login.response.model";
 
 @Injectable({
-  providedIn: 'root', // This makes Utils available throughout the application
+  providedIn: 'root',
 })
 export class Utils {
   constructor(private router: Router) {
@@ -47,6 +47,4 @@ export class Utils {
     const userData = userDataString ? JSON.parse(userDataString) : null;
     return userData ? parseInt(userData.id) : 0;
   }
-
-
 }

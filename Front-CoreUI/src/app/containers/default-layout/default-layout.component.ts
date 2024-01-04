@@ -26,12 +26,19 @@ export class DefaultLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.generateNavItems();
+  }
 
-    // Étudiant
-    this.studentNavItems = [
+  private generateNavItems(): void {
+    this.studentNavItems = this.generateUserSection('Étudiant', UserRoleConstants.STUDENT);
+    this.staffNavItems = this.generateUserSection('Staff', UserRoleConstants.STAFF);
+  }
+
+  private generateUserSection(title: string, role: string): INavData[] {
+    return [
       {
         title: true,
-        name: 'Étudiant',
+        name: title,
       },
       {
         name: 'Gestion des requêtes',
@@ -40,11 +47,11 @@ export class DefaultLayoutComponent implements OnInit {
         children: [
           {
             name: 'Dashboard',
-            url: '/app/student-dashboard',
+            url: role === UserRoleConstants.STUDENT ? '/app/student-dashboard' : '/app/requests',
           },
           {
-            name: 'Mes Requetes',
-            url: '/app/list-requests',
+            name: role === UserRoleConstants.STUDENT ? 'Mes Requetes' : 'Traitement des requetes',
+            url: role === UserRoleConstants.STUDENT ? '/app/list-requests' : '/app/receive-request',
           },
           {
             name: 'Requête Individuelle',
@@ -61,42 +68,6 @@ export class DefaultLayoutComponent implements OnInit {
         ]
       },
     ];
-
-    // Personnel
-    this.staffNavItems = [
-      {
-        title: true,
-        name: 'Staff',
-      },
-      {
-        name: 'Gestion des requêtes',
-        url: '/app',
-        iconComponent: {name: 'cil-puzzle'},
-        children: [
-          {
-            name: ' Dashboard',
-            url: '/app/requests',
-
-          },
-          {
-            name: 'Traitement des requetes',
-            url: '/app/receive-request',
-
-          },
-          {
-            name: 'Echeance requetes',
-            url: '/app/show-program',
-
-          },
-          {
-            name: 'Ajouter une echeance',
-            url: '/app/add-program',
-
-          }
-        ]
-      },
-    ];
   }
-
   protected readonly UserRoleConstants = UserRoleConstants;
 }
