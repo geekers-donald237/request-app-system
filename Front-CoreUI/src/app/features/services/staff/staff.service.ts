@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {IGetStaffRequestsResponse, IStaffRequest} from "../../models/staffrequest.model";
+import {IGetStaffResponse} from "../../models/staff.member.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,11 @@ export class StaffService {
   constructor(private http: HttpClient, private router: Router) {
   }
 
+  getStaffMembers(): Observable<IGetStaffResponse> {
+    const url = `${this.baseUrl}/staff`;
+    return this.http.get<IGetStaffResponse>(url , {headers: this.headers});
+  }
+
   getRequestFromStudent(staffId: number): Observable<IGetStaffRequestsResponse> {
     return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
   }
@@ -31,5 +37,8 @@ export class StaffService {
     const url = `${this.baseUrl}/request/${requestId}/statut/${statut}`;
     return this.http.patch(url, {},{headers: this.headers});
   }
+
+
+
 
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {RequestService} from "../../../services/student/request.service";
-import {IRequest} from "../../../models/studentrequest.model";
+import {RequestService} from "../../../services/request/request.service";
+import {IRequest} from "../../../models/student.request.model";
 
 @Component({
   selector: 'app-list-request',

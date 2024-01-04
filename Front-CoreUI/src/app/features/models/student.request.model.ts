@@ -34,7 +34,7 @@ export interface IRequest {
   receivers: IReceiver[];
 }
 
-export interface IGetAllStudentRequestResponse {
+export interface IGetStudentRequestResponse {
   status: number;
   requests: IRequest[];
   message: string;

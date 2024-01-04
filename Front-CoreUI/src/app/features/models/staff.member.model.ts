@@ -4,6 +4,7 @@ export interface IStaffMember {
   email: string;
   job_title: string;
   address: string;
+  staff_id: number;
 }
 export interface IGetStaffResponse {
   status: number;

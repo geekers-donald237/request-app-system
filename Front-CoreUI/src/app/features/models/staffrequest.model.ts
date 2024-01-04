@@ -1,4 +1,4 @@
-import {IAttachment} from "./studentrequest.model";
+import {IAttachment} from "./student.request.model";
 
 export interface ISender {
   id: number;

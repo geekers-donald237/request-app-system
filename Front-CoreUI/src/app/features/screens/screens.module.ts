@@ -15,7 +15,7 @@ import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.comp
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
-import {ButtonDirective} from "@coreui/angular";
+import {ButtonDirective, InputGroupComponent} from "@coreui/angular";
 import {InputTextModule} from "primeng/inputtext";
 import {ReactiveFormsModule} from "@angular/forms";
 import {InputTextareaModule} from "primeng/inputtextarea";
@@ -34,16 +34,17 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     ViewDeadlinesComponent,
     ShowRequestComponent,
   ],
-  imports: [
-    CommonModule,
-    ScreensRoutingModule,
-    HttpClientModule,
-    DateFormatPipe,
-    ButtonDirective,
-    InputTextModule,
-    ReactiveFormsModule,
-    InputTextareaModule,
-  ]
+    imports: [
+        CommonModule,
+        ScreensRoutingModule,
+        HttpClientModule,
+        DateFormatPipe,
+        ButtonDirective,
+        InputTextModule,
+        ReactiveFormsModule,
+        InputTextareaModule,
+        InputGroupComponent,
+    ]
 })
 export class ScreensModule {
 }

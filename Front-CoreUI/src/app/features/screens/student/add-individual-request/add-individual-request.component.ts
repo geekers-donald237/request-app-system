@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {RequestService} from "../../../services/student/request.service";
-import {IGetStaffResponse, IStaffMember} from "../../../models/staffmember.model";
+import {RequestService} from "../../../services/request/request.service";
+import {IGetStaffResponse, IStaffMember} from "../../../models/staff.member.model";
 import {Router} from "@angular/router";
+import {IRequestPattern, IRequestPatternsResponse} from "../../../models/request.patterns.model";
+import {StaffService} from "../../../services/staff/staff.service";
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-add-individual-request',
@@ -11,8 +14,9 @@ import {Router} from "@angular/router";
 })
 export class AddIndividualRequestComponent implements OnInit {
 
-  requestPatterns: any[] = [];
+  requestPatterns: IRequestPattern[] = [];
   staffList: IStaffMember[] = [];
+
 
   requestForm = this.fb.group({
     requestPatternId: ['', Validators.required],
@@ -23,7 +27,7 @@ export class AddIndividualRequestComponent implements OnInit {
     receiver_id: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService) {
+  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private staffService: StaffService) {
   }
 
   get requestPatternId() {
@@ -50,28 +54,9 @@ export class AddIndividualRequestComponent implements OnInit {
     return this.requestForm.controls['receiver_id'];
   }
 
-  ngOnInit() {
-    this.requestService.getRequestPatterns().subscribe(
-      (response) => {
-        this.requestPatterns = response.patterns;
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des motifs de requête:', error);
-      }
-    );
 
-    this.requestService.getAllStaff().subscribe(
-      (response: IGetStaffResponse) => {
-        if (response.status === 200) {
-          this.staffList = response.staff;
-        } else {
-          console.error('Erreur lors de la récupération de la liste des enseignants. Statut:', response.status);
-        }
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération de la liste des enseignants:', error);
-      }
-    );
+  ngOnInit() {
+    this.fetchData();
   }
 
   onFileChange(event: any) {
@@ -79,7 +64,6 @@ export class AddIndividualRequestComponent implements OnInit {
       const file = event.target.files[0];
       this.requestForm.patchValue({
         fileHandWritten: file
-
       });
     }
   }
@@ -94,67 +78,94 @@ export class AddIndividualRequestComponent implements OnInit {
   }
 
   sendRequest() {
-    if (this.requestForm.valid) {
-      const formData = new FormData();
-
-      const fileHandWritten = this.requestForm.get('fileHandWritten')?.value;
-      if (fileHandWritten !== null && fileHandWritten !== undefined) {
-        formData.append('fileHandWritten', fileHandWritten);
-      }
-
-      const filesAttachments = this.requestForm.get('fileAttachments[]')?.value;
-      if (filesAttachments !== null && filesAttachments !== undefined) {
-        const filesArray = filesAttachments as unknown as File[];
-
-        for (let i = 0; i < filesArray.length; i++) {
-          const file = filesArray[i];
-          formData.append('fileAttachments[]', file);
-        }
-      }
-
-      // Ajouter les autres champs au FormData
-      Object.entries(this.requestForm.value).forEach(([key, value]) => {
-        if (!['fileHandWritten', 'fileAttachments[]'].includes(key)) {
-          formData.append(key, value !== null ? value : '');
-        }
-      });
-      const receiverId = this.requestForm.get('receiver_id')?.value;
-
-
-      this.requestService.sendRequest(formData).subscribe(
-        (response) => {
-          console.log('Requête envoyée avec succès:', response);
-
-          if (response.isSaved) {
-            const requestId = response.requestId;
-
-            const receiverId = this.requestForm.get('receiver_id')?.value;
-
-            if (receiverId !== null && receiverId !== undefined) {
-              // Convertir la chaîne de caractères en nombre
-              const receiverIds = [parseInt(receiverId, 10)];
-
-              this.requestService.saveRequestDetails(requestId, receiverIds).subscribe(
-                (saveResponse) => {
-                  console.log('Détails de la requête enregistrés avec succès:', saveResponse);
-                  this.router.navigate(['/app/list-requests']);
-                },
-                (saveError) => {
-                  console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
-                }
-              );
-            } else {
-              console.error('Destinataire non sélectionné.');
-            }
-
-          }
-        },
-        (error) => {
-          console.error('Erreur lors de l\'envoi de la requête:', error);
-        }
-      );
-    } else {
+    if (!this.requestForm.valid) {
       console.error('Le formulaire n\'est pas valide.');
+      return;
+    }
+
+    const formData = this.createFormData();
+    // const receiverId = this.requestForm.get('receiver_id')?.value;
+    const receiverId = 1;
+    this.requestService.saveRequest(formData).subscribe(
+      (response) => {
+        console.log('Requête envoyée avec succès:', response);
+        if (response.isSaved) {
+          this.sendRequestDetails(response.requestId, receiverId);
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de l\'envoi de la requête:', error);
+      }
+    );
+  }
+
+  private createFormData(): FormData {
+    const formData = new FormData();
+
+    // Ajoute les fichiers
+    this.appendFile('fileHandWritten', this.requestForm.get('fileHandWritten')?.value, formData);
+    const filesAttachments = this.requestForm.get('fileAttachments[]')?.value;
+    this.appendFiles('fileAttachments[]', filesAttachments, formData);
+
+    // Ajoute les autres champs au FormData
+    Object.entries(this.requestForm.value)
+      .filter(([key]) => !['fileHandWritten', 'fileAttachments[]'].includes(key))
+      .forEach(([key, value]) => formData.append(key, value !== null ? value : ''));
+
+    return formData;
+  }
+
+  private appendFile(key: string, file: any, formData: FormData): void {
+    if (file !== null && file !== undefined) {
+      formData.append(key, file);
+    }
+  }
+
+  private appendFiles(key: string, files: any, formData: FormData): void {
+    const filesArray = files as unknown as File[];
+    for (const file of filesArray) {
+      formData.append(key, file);
+    }
+  }
+
+  private sendRequestDetails(requestId: number, receiverId: number): void {
+    const receiverIds = [receiverId];
+    this.requestService.sendRequest(requestId, receiverIds).subscribe(
+      (saveResponse) => {
+        console.log('Détails de la requête enregistrés avec succès:', saveResponse);
+        this.router.navigate(['/app/list-requests']);
+      },
+      (saveError) => {
+        console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
+      }
+    );
+  }
+
+
+  private fetchData(): void {
+    forkJoin([
+      this.requestService.getRequestPatterns(),
+      this.staffService.getStaffMembers()
+    ]).subscribe(
+      ([requestPatternsResponse, staffMembersResponse]: [IRequestPatternsResponse, IGetStaffResponse]) => {
+        this.handleRequestPatternsResponse(requestPatternsResponse);
+        this.handleStaffMembersResponse(staffMembersResponse);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    );
+  }
+
+  private handleRequestPatternsResponse(response: IRequestPatternsResponse): void {
+    this.requestPatterns = response.patterns;
+  }
+
+  private handleStaffMembersResponse(response: IGetStaffResponse): void {
+    if (response.status === 200) {
+      this.staffList = response.staff;
+    } else {
+      console.error('Erreur lors de la récupération de la liste des enseignants. Statut:', response.status);
     }
   }
 }
