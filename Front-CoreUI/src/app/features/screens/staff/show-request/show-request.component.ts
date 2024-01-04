@@ -88,8 +88,7 @@ export class ShowRequestComponent implements OnInit {
       .subscribe(
         () => {
           console.log('status update')
-          this.router.navigate(['/app/show-request']);
-
+          this.router.navigate(['/app/request']);
         },
         error => {
           // Gérer l'échec, afficher un message d'erreur, etc.

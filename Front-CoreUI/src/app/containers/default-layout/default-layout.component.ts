@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {navItems} from './_nav';
-import {Utils} from "../../features/services/shared/utils/utils";
-import {IUser} from "../../features/models/login.response.model";
-import {UserRoleConstants} from "../../features/constant/constant";
-import {INavData} from "@coreui/angular";
+import { Utils } from "../../features/services/shared/utils/utils";
+import { IUser } from "../../features/models/login.response.model";
+import { UserRoleConstants } from "../../features/constant/constant";
+import { INavData } from "@coreui/angular";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,43 +12,99 @@ import {INavData} from "@coreui/angular";
 })
 export class DefaultLayoutComponent implements OnInit {
 
-  public navItems = navItems;
-  userRole: string | null = '';
-  studentNavItems: any[] = [];
-  staffNavItems: any[] = [];
-  user: IUser | undefined;
+  public navItems: INavData[] = [];
 
+  userRole: string | null = '';
+  studentNavItems: INavData[] = [];
+  staffNavItems: INavData[] = [];
+  user: IUser | undefined;
 
   constructor(private utils: Utils) {
     const userDataString = localStorage.getItem('user');
     const userData = userDataString ? JSON.parse(userDataString) : null;
-    this.userRole = this.utils.getUserRule(userData.userRole);
+    this.userRole = this.utils.getUserRule(userData.rules);
 
     console.log('User Role:', this.userRole);
   }
 
   ngOnInit(): void {
-    console.log('All nav items:', navItems);
 
-    this.studentNavItems = this.filterNavItemsByRole(navItems, UserRoleConstants.STUDENT);
-    console.log('Student nav items:', this.studentNavItems);
+    // Étudiant
+    this.studentNavItems = [
+      {
+        title: true,
+        name: 'Étudiant',
+        roles: [UserRoleConstants.STUDENT]
+      },
+      {
+        name: 'Gestion des requêtes',
+        url: '/app',
+        iconComponent: { name: 'cil-puzzle' },
+        children: [
+          {
+            name: 'Dashboard',
+            url: '/app/list-requests',
+            roles: [UserRoleConstants.STUDENT]
+          },
+          {
+            name: 'Requête Individuelle',
+            url: '/app/add-individual-request',
+            roles: [UserRoleConstants.STUDENT]
+          },
+          {
+            name: 'Requête de groupe',
+            url: '/app/add-group-request',
+            roles: [UserRoleConstants.STUDENT]
+          },
+          {
+            name: 'Echéances de requêtes',
+            url: '/app/calendar',
+            roles: [UserRoleConstants.STUDENT]
+          }
+        ]
+      },
+    ];
 
-    this.staffNavItems = this.filterNavItemsByRole(navItems, UserRoleConstants.STAFF);
-    console.log('Staff nav items:', this.staffNavItems);
+    // Personnel
+    this.staffNavItems = [
+      {
+        title: true,
+        name: 'Staff',
+        roles: [UserRoleConstants.STAFF]
+      },
+      {
+        name: 'Gestion des requêtes',
+        url: '/app',
+        iconComponent: {name: 'cil-puzzle'},
+        children: [
+          {
+            name: ' Dashboard',
+            url: '/app/requests',
+            roles: [UserRoleConstants.STAFF]
+
+          },
+          {
+            name: 'Traitement des requetes',
+            url: '/app/receive-request',
+            roles: [UserRoleConstants.STAFF]
+
+          },
+          {
+            name: 'Echeance requetes',
+            url: '/app/show-program',
+            roles: [UserRoleConstants.STAFF]
+
+          },
+          {
+            name: 'Ajouter une echeance',
+            url: '/app/add-program',
+            roles: [UserRoleConstants.STAFF]
+
+          }
+        ]
+      },
+    ];
   }
 
-  private filterNavItemsByRole(navItems: INavData[], role: string): INavData[] {
-    const filteredItems = navItems
-      .filter(item => item.roles?.includes(role))
-      .map(filteredItem => ({
-        ...filteredItem,
-        children: filteredItem.children?.filter(child => child.roles?.includes(role))
-      }));
-
-    console.log(`Filtered items for role ${role}:`, filteredItems);
-
-    return filteredItems;
-  }
-
-
+  protected readonly UserRoleConstants = UserRoleConstants;
 }
