@@ -35,39 +35,68 @@ export class DefaultLayoutComponent implements OnInit {
   }
 
   private generateUserSection(title: string, role: string): INavData[] {
-    return [
+    const userSection: INavData[] = [
       {
         title: true,
         name: title,
       },
-      {
-        name: 'Gestion des requêtes',
-        url: '/app',
-        iconComponent: { name: 'cil-puzzle' },
-        children: [
-          {
-            name: 'Dashboard',
-            url: role === UserRoleConstants.STUDENT ? '/app/student-dashboard' : '/app/requests',
-          },
-          {
-            name: role === UserRoleConstants.STUDENT ? 'Mes Requetes' : 'Traitement des requetes',
-            url: role === UserRoleConstants.STUDENT ? '/app/list-requests' : '/app/receive-request',
-          },
-          {
-            name: 'Requête Individuelle',
-            url: '/app/add-individual-request',
-          },
-          {
-            name: 'Requête de groupe',
-            url: '/app/add-group-request',
-          },
-          {
-            name: 'Echéances de requêtes',
-            url: '/app/calendar',
-          }
-        ]
-      },
     ];
+
+    const gestionDesRequetes: INavData = {
+      name: 'Gestion des requêtes',
+      url: '/app',
+      iconComponent: { name: 'cil-puzzle' },
+      children: [],
+    };
+
+    if (role === UserRoleConstants.STUDENT) {
+      gestionDesRequetes.children = [
+        {
+          name: 'Dashboard',
+          url: '/app/student-dashboard',
+        },
+        {
+          name: 'Mes Requetes',
+          url: '/app/list-requests',
+        },
+        {
+          name: 'Requête Individuelle',
+          url: '/app/add-individual-request',
+        },
+        {
+          name: 'Requête de groupe',
+          url: '/app/add-group-request',
+        },
+        {
+          name: 'Echéances de requêtes',
+          url: '/app/calendar',
+        },
+      ];
+    } else if (role === UserRoleConstants.STAFF) {
+      gestionDesRequetes.children = [
+        {
+          name: 'Dashboard',
+          url: '/app/requests',
+        },
+        {
+          name: 'Traitement des requetes',
+          url: '/app/receive-request',
+        },
+        {
+          name: 'Echeance requetes',
+          url: '/app/show-program',
+        },
+        {
+          name: 'Ajouter une echeance',
+          url: '/app/add-program',
+        },
+      ];
+    }
+
+    userSection.push(gestionDesRequetes);
+
+    return userSection;
   }
+
   protected readonly UserRoleConstants = UserRoleConstants;
 }
