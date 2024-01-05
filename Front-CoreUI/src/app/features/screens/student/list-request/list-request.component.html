@@ -28,7 +28,7 @@
               <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
               <td>{{ request.created_at | date: 'dd/MM/yyyy' }}</td>
               <td>
-                <div [ngClass]="{'btn btn-success': request.statut === 'Validé', 'btn btn-danger': request.statut === 'Rejetée', 'btn btn-warning': request.statut === 'en_attente'}">
+                <div [ngClass]="{'btn btn-success': request.statut === 'Valider', 'btn btn-danger': request.statut === 'Rejeter', 'btn btn-warning': request.statut === ' En attente'}">
                   {{ request.statut }}
                 </div>                        
               </td>
@@ -37,7 +37,7 @@
                   Voir plus
                 </a>
               </td>
-             <td>
+             <td style="display: flex; justify-content: space-between;">
                <a class="btn btn-warning btn-action mr-1" style="font-size: 12px;">
                  Editer
                </a>
