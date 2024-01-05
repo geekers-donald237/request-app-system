@@ -11,10 +11,10 @@ export const navItems: INavData[] = [
     url: '/app/student-dashboard',
     iconComponent: {name: 'cil-puzzle'},
     children: [
-      {
-        name: 'Dashboard',
-        url: '/app/student-dashboard',
-      },
+      // {
+      //   name: 'Dashboard',
+      //   url: '/app/student-dashboard',
+      // },
       {
         name: 'Mes Requetes',
         url: '/app/list-requests',
