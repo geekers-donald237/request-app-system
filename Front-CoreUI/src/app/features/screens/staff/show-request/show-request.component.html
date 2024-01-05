@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="invoice-title">
-          <h3>Traiter la Requête</h3>
+          <h5>Traiter la Requête</h5>
           <div class="invoice-number">#1</div>
         </div>
         <hr />
@@ -47,7 +47,7 @@
   </div>
   <div class="row mt-4">
     <div class="col-md-12">
-      <h3>objet de la requête</h3>
+      <h5>objet de la requête</h5>
       <p class="section-lead"> {{ request?.title }} {{ request?.content }}</p>
       <div class="row mt-4">
         <div class="col-lg-8">
@@ -65,13 +65,13 @@
       </div>
 
       <div class="float-lg-left mb-lg-0 mb-3">
-        <button class="btn btn-success" (click)="validateRequest()">
+        <button class="btn btn-success" (click)="validateRequest()" style="font-size: 12px;">
           Valider
         </button>&nbsp;&nbsp;
-        <button class="btn btn-warning" (click)="putOnHoldRequest()">
+        <button class="btn btn-warning" (click)="putOnHoldRequest()" style="font-size: 12px;">
           Mettre en attente
         </button>&nbsp;&nbsp;
-        <button class="btn btn-danger" (click)="rejectRequest()">
+        <button class="btn btn-danger" (click)="rejectRequest()" style="font-size: 12px;">
           Rejeter
         </button>
       </div>
