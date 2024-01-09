@@ -28,9 +28,17 @@
               <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
               <td>{{ request.created_at | date: 'dd/MM/yyyy' }}</td>
               <td>
-                <div [ngClass]="{'btn btn-success': request.statut === 'Valider', 'btn btn-danger': request.statut === 'Rejeter', 'btn btn-warning': request.statut === ' En attente'}">
+                <div [ngClass]="{
+                  'badge': true,
+                  'badge-success': request.statut === 'Accepter',
+                  'badge-danger': request.statut === 'Refuser',
+                  'badge-warning': request.statut === 'attente_validation',
+                  'badge-info': request.statut === 'en_cours',
+                }">
                   {{ request.statut }}
-                </div>                        
+                </div>
+                
+                   
               </td>
               <td>
                 <a [routerLink]="['/voir_requete', request.id]" class="btn btn-primary" style="font-size: 12px;">
