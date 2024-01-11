@@ -6,7 +6,6 @@ import {Router} from "@angular/router";
 import {IRequestPattern, IRequestPatternsResponse} from "../../../models/request.patterns.model";
 import {StaffService} from "../../../services/staff/staff.service";
 import {forkJoin} from "rxjs";
-
 @Component({
   selector: 'app-add-individual-request',
   templateUrl: './add-individual-request.component.html',
@@ -16,8 +15,7 @@ export class AddIndividualRequestComponent implements OnInit {
 
   requestPatterns: IRequestPattern[] = [];
   staffList: IStaffMember[] = [];
-
-
+  afficherAlerte: boolean = false;
   requestForm = this.fb.group({
     requestPatternId: ['', Validators.required],
     title: ['', Validators.required],
@@ -92,11 +90,19 @@ export class AddIndividualRequestComponent implements OnInit {
         if (response.isSaved) {
           this.sendRequestDetails(response.requestId, receiverId);
         }
+      
       },
       (error) => {
         console.error('Erreur lors de l\'envoi de la requête:', error);
       }
     );
+    this.afficherAlerte = true;
+    setTimeout(() => {
+      this.fermerAlerte();
+    }, 3000);
+  }
+  fermerAlerte() {
+    this.afficherAlerte = false;
   }
 
   private createFormData(): FormData {

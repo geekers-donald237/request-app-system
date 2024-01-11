@@ -1,3 +1,4 @@
+
 <div class="row">
   <div class="col-12">
     <div class="card">
@@ -35,8 +36,8 @@
           </div>
           <br>
           <div class="form-group row mb-4">
-            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">Saisir le contenu de votre
-              Requete</label>
+            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">commentaire
+             de la Requete</label>
             <div class="col-sm-12 col-md-7">
               <textarea class="summernote-simple  form-control" id="content" pInputTextarea formControlName="content"
                         placeholder="Saisissez le contenu de votre requête" rows="8" cols="75"></textarea>
@@ -91,12 +92,16 @@
               </div>
             </div>
           </div>
+          <div  *ngIf="afficherAlerte" class="alert alert-primary">
+            Votre requête a éte soumis avec succes
+           </div>   
           <div class="form-group row mb-4">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
             <div class="col-sm-12 col-md-7">
               <button type="submit" class="btn btn-primary" style="font-size: 12px;">Soumettre</button>
             </div>
-          </div>
+          </div>        
+         
         </div>
       </form>
 

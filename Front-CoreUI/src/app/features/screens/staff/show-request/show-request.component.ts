@@ -16,6 +16,7 @@ export class ShowRequestComponent implements OnInit {
   userData: IStudentData | undefined;
   requestPatterns: IRequestPattern[] = [];
   requestId: number;
+  afficherAlerte: boolean = false;
 
   constructor(
     private staffService: StaffService,
@@ -73,16 +74,29 @@ export class ShowRequestComponent implements OnInit {
 
   validateRequest(): void {
     this.updateRequestStatus(RequestStateConstants.ACCEPTEE);
+    this.afficherAlerte = true;
+    setTimeout(() => {
+      this.fermerAlerte();
+    }, 3000);
   }
-
   putOnHoldRequest(): void {
     this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
+    this.afficherAlerte = true;
+    setTimeout(() => {
+      this.fermerAlerte();
+    }, 3000);
   }
 
   rejectRequest(): void {
     this.updateRequestStatus(RequestStateConstants.REFUSEE);
+    this.afficherAlerte = true;
+    setTimeout(() => {
+      this.fermerAlerte();
+    }, 3000);
   }
-
+  fermerAlerte() {
+    this.afficherAlerte = false;
+  }
   getAttachmentUrl(filePath: string): string {
     const laravelBaseUrl = 'http://127.0.0.1:8000/storage';
     return `${laravelBaseUrl}/${filePath}`;
@@ -97,7 +111,9 @@ export class ShowRequestComponent implements OnInit {
     this.requestService.updateRequestStatus(this.requestId, statut).subscribe(
       () => {
         console.log('Status update');
+        setTimeout(() => {
         this.router.navigate(['/app/receive-request']);
+        },3000);
       },
       (error) => {
         this.handleError('An error occurred while updating request status:', error);
