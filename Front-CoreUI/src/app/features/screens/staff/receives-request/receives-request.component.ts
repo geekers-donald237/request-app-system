@@ -40,4 +40,5 @@ export class ReceivesRequestComponent implements OnInit {
     localStorage.setItem('requestId', requestId.toString());
     this.router.navigate(['/app/show-request']);
   }
+
 }
