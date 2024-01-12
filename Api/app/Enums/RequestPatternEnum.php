@@ -4,10 +4,10 @@ namespace App\Enums;
 
 enum RequestPatternEnum: string
 {
-    case MARK_ERROR = 'erreur_de_note';
-    case MARK_ABSENCE = 'absence_de_note';
-    case EXAMINATION_EXEMPTION = 'demande_dexemption_evaluation';
-    case EXAMINATION_NOTE_REVISION = 'demande_revision_notes';
+    case MARK_ERROR = 'erreur de note';
+    case MARK_ABSENCE = 'absence de note';
+    case EXAMINATION_EXEMPTION = 'demande d\'exemption evaluation';
+    case EXAMINATION_NOTE_REVISION = 'demande revision notes';
     case MARK_ERROR_DESCRIPTION = 'Correction d\'une erreur de note';
 
     case MARK_ABSENCE_DESCRIPTION = 'Absence de note';

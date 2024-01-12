@@ -90,7 +90,7 @@ export class AddIndividualRequestComponent implements OnInit {
         if (response.isSaved) {
           this.sendRequestDetails(response.requestId, receiverId);
         }
-      
+
       },
       (error) => {
         console.error('Erreur lors de l\'envoi de la requête:', error);
