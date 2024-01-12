@@ -4,20 +4,20 @@
       <div class="col-lg-12">
         <div class="invoice-title">
           <h4 style="font-weight: bold;">Traiter la Requête</h4>
-          <div class="invoice-number">#1</div>
+          <div class="invoice-number">#Detail</div>
         </div>
         <hr/>
         <div class="table-responsive">
           <table class="table table-striped table-hover table-md">
             <tr>
-              <th>Nom de l'etudiant</th>
-              <th>Matricule</th>
+              <!-- <th>Nom de l'etudiant</th>
+              <th>Matricule</th> -->
               <th>Motif</th>
               <th>date de soumission</th>
             </tr>
             <tr>
-              <td>{{ userData?.nom }}</td>
-              <td>{{ userData?.matricule }}</td>
+              <!-- <td>{{ userData?.nom }}</td>
+              <td>{{ userData?.matricule }}</td> -->
               <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
               <td>{{ request.created_at | dateFormat }}</td>
             </tr>
@@ -26,11 +26,11 @@
         <br/><br/>
         <div class="row">
           <div class="col-md-6">
-            <address>
+            <!-- <address>
               <strong>{{ userData?.nom }}</strong><br/>
               {{ userData?.matricule }},<br>
               ICT4D<br/>
-            </address>
+            </address> -->
           </div>
           <div class="col-md-6 text-md-right">
             <address>
@@ -39,16 +39,13 @@
             </address>
           </div>
         </div>
-        <div class="col-md-6 text-md-right">
-          <address></address>
-        </div>
       </div>
     </div>
   </div>
   <div class="row mt-4">
     <div class="col-md-12">
       <p class="section-lead"><span
-        style="font-weight: bold;">objet et commentaire de la requête :</span> {{ request?.content }}</p><br>
+        style="font-weight: bold;">Objet et commentaire de la requête :</span> {{ request?.content }}</p><br>
       <p class="section-lead"><span style="font-weight: bold;">Intitulé : </span> {{ request?.title }} <br></p>
       <div class="row mt-4">
         <div class="col-lg-8">

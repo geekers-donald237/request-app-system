@@ -16,6 +16,7 @@ import {requestModel} from "../../../constant/constant";
 export class AddIndividualRequestComponent implements OnInit {
   visible = false;
   dismissible = true;
+  afficherAlerte: boolean = false;
   errorMessage: string | undefined;
   color: string | undefined;
   requestPatterns: IRequestPattern[] = [];
@@ -102,8 +103,14 @@ export class AddIndividualRequestComponent implements OnInit {
         this.handleFailedRequest();
       }
     );
+    this.afficherAlerte = true;
+    setTimeout(() => {
+      this.fermerAlerte();
+    }, 3000);
   }
-
+  fermerAlerte() {
+    this.afficherAlerte = false;
+  }
   private handleSuccessfulRequest(response: any, receiverId: number): void {
     this.sendRequestDetails(response.requestId, receiverId);
     this.color = 'success';
@@ -111,7 +118,7 @@ export class AddIndividualRequestComponent implements OnInit {
 
     setTimeout(() => {
       this.visible = true;
-    }, 3000);
+    }, 3500);
 
   }
 
