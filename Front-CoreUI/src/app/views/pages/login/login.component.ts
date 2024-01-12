@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {AuthService} from "../../../features/services/shared/auth/auth.service";
-import {Router} from "@angular/router";
-import {MessageService} from "primeng/api";
-import {Utils} from "../../../features/services/shared/utils/utils";
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from "@angular/forms";
+import { AuthService } from "../../../features/services/shared/auth/auth.service";
+import { Router } from "@angular/router";
+import { MessageService } from "primeng/api";
+import { Utils } from "../../../features/services/shared/utils/utils";
 
 @Component({
   selector: 'app-login',
@@ -12,6 +12,9 @@ import {Utils} from "../../../features/services/shared/utils/utils";
   providers: [MessageService]
 })
 export class LoginComponent {
+  visible = false;
+  dismissible = true;
+  errorMessage: string | undefined;
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -20,7 +23,6 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private messageService: MessageService,
     private authService: AuthService,
     private router: Router,
     private utils: Utils
@@ -36,7 +38,7 @@ export class LoginComponent {
   }
 
   login() {
-    const {email, password} = this.loginForm.value;
+    const { email, password } = this.loginForm.value;
     this.authService.login(email!, password!).subscribe(
       (response) => {
         if (response.isLogged) {
@@ -46,11 +48,14 @@ export class LoginComponent {
           this.utils.setUserData(response);
           this.utils.gotoSpecificDashboard(userRule!);
         } else {
-          console.error(response.message);
+          this.errorMessage = response.message; // Stocke le message d'erreur
+          this.visible = true;
         }
       },
       (error) => {
-        console.log('An error occurred. Please try again later.');
+        console.log('An error occurred. ' + error);
+        this.errorMessage = 'An error occurred. Please try again later.'; // Message d'erreur générique
+        this.visible = true;
       }
     );
   }

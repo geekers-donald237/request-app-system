@@ -18,7 +18,6 @@ import {ShowRequestComponent} from "./staff/show-request/show-request.component"
 import {ButtonDirective, FormControlDirective, FormLabelDirective, InputGroupComponent} from "@coreui/angular";
 import {InputTextModule} from "primeng/inputtext";
 import {ReactiveFormsModule} from "@angular/forms";
-import {InputTextareaModule} from "primeng/inputtextarea";
 
 
 @NgModule({
@@ -43,7 +42,6 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     ButtonDirective,
     InputTextModule,
     ReactiveFormsModule,
-    InputTextareaModule,
     InputGroupComponent,
     FormLabelDirective,
     FormControlDirective,

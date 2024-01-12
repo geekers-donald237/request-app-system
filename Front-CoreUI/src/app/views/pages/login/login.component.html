@@ -6,7 +6,13 @@
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-lg-12 text-center mb-4">
-
+              <c-alert [(visible)]="visible"
+                       [dismissible]="dismissible"
+                       color="danger"
+                       fade
+                       *ngIf="visible">
+                <strong>{{ errorMessage }}</strong>
+              </c-alert>
               <form action="liste_requete3" method="post" [formGroup]="loginForm" (ngSubmit)="login()"
                     class="form-box">
                 <h3 class="h4 text-black mb-4 ">Connexion</h3>

@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { Utils } from "../../features/services/shared/utils/utils";
-import { IUser } from "../../features/models/login.response.model";
-import { UserRoleConstants } from "../../features/constant/constant";
-import { INavData } from "@coreui/angular";
+import {Utils} from "../../features/services/shared/utils/utils";
+import {IUser} from "../../features/models/login.response.model";
+import {UserRoleConstants} from "../../features/constant/constant";
+import {INavData} from "@coreui/angular";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss'],
+  providers: [MessageService]
 })
 export class DefaultLayoutComponent implements OnInit {
 
@@ -19,7 +21,9 @@ export class DefaultLayoutComponent implements OnInit {
   staffNavItems: INavData[] = [];
   user: IUser | undefined;
 
-  constructor(private utils: Utils) {
+  constructor(private utils: Utils
+    , private messageService: MessageService
+  ) {
     const userDataString = localStorage.getItem('user');
     const userData = userDataString ? JSON.parse(userDataString) : null;
     this.userRole = this.utils.getUserRule(userData.rules);
@@ -45,7 +49,7 @@ export class DefaultLayoutComponent implements OnInit {
     const gestionDesRequetes: INavData = {
       name: 'Gestion des requêtes',
       url: '/app',
-      iconComponent: { name: 'cil-puzzle' },
+      iconComponent: {name: 'cil-puzzle'},
       children: [],
     };
 
@@ -99,4 +103,5 @@ export class DefaultLayoutComponent implements OnInit {
   }
 
   protected readonly UserRoleConstants = UserRoleConstants;
+
 }
