@@ -6,16 +6,20 @@ import {Router} from "@angular/router";
 import {IRequestPattern, IRequestPatternsResponse} from "../../../models/request.patterns.model";
 import {StaffService} from "../../../services/staff/staff.service";
 import {forkJoin} from "rxjs";
+import {requestModel} from "../../../constant/constant";
+
 @Component({
   selector: 'app-add-individual-request',
   templateUrl: './add-individual-request.component.html',
   styleUrls: ['./add-individual-request.component.scss']
 })
 export class AddIndividualRequestComponent implements OnInit {
-
+  visible = false;
+  dismissible = true;
+  errorMessage: string | undefined;
+  color: string | undefined;
   requestPatterns: IRequestPattern[] = [];
   staffList: IStaffMember[] = [];
-  afficherAlerte: boolean = false;
   requestForm = this.fb.group({
     requestPatternId: ['', Validators.required],
     title: ['', Validators.required],
@@ -77,33 +81,45 @@ export class AddIndividualRequestComponent implements OnInit {
 
   sendRequest() {
     if (!this.requestForm.valid) {
-      console.error('Le formulaire n\'est pas valide.');
+      this.errorMessage = 'Le formulaire n\'est pas valide.';
       return;
     }
 
     const formData = this.createFormData();
-    // const receiverId = this.requestForm.get('receiver_id')?.value;
-    const receiverId = 1;
+    const receiverId = 1; // Remplacez ceci par la logique appropriée pour obtenir l'ID du destinataire
+
     this.requestService.saveRequest(formData).subscribe(
       (response) => {
         console.log('Requête envoyée avec succès:', response);
+
         if (response.isSaved) {
-          this.sendRequestDetails(response.requestId, receiverId);
+          this.handleSuccessfulRequest(response, receiverId);
         }
 
       },
       (error) => {
         console.error('Erreur lors de l\'envoi de la requête:', error);
+        this.handleFailedRequest();
       }
     );
-    this.afficherAlerte = true;
+  }
+
+  private handleSuccessfulRequest(response: any, receiverId: number): void {
+    this.sendRequestDetails(response.requestId, receiverId);
+    this.color = 'success';
+    this.errorMessage = 'Requête envoyée avec succès.';
+
     setTimeout(() => {
-      this.fermerAlerte();
+      this.visible = true;
     }, 3000);
+
   }
-  fermerAlerte() {
-    this.afficherAlerte = false;
+
+  private handleFailedRequest(): void {
+    this.color = 'danger';
+    this.errorMessage = 'Erreur lors de l\'envoi de la requête.';
   }
+
 
   private createFormData(): FormData {
     const formData = new FormData();
@@ -174,4 +190,6 @@ export class AddIndividualRequestComponent implements OnInit {
       console.error('Erreur lors de la récupération de la liste des enseignants. Statut:', response.status);
     }
   }
+
+  protected requestModel = requestModel;
 }

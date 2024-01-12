@@ -15,7 +15,13 @@ import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.comp
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
-import {ButtonDirective, FormControlDirective, FormLabelDirective, InputGroupComponent} from "@coreui/angular";
+import {
+  AlertComponent,
+  ButtonDirective,
+  FormControlDirective,
+  FormLabelDirective,
+  InputGroupComponent
+} from "@coreui/angular";
 import {InputTextModule} from "primeng/inputtext";
 import {ReactiveFormsModule} from "@angular/forms";
 
@@ -45,6 +51,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     InputGroupComponent,
     FormLabelDirective,
     FormControlDirective,
+    AlertComponent,
   ]
 })
 export class ScreensModule {

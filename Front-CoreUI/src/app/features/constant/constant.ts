@@ -16,3 +16,11 @@ export class RequestStateConstants {
   static readonly TERMINEE = 'Terminer';
   static readonly EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT = 'reponse_etudiant';
 }
+
+export const requestModel = 'Monsieur (ou Madame),\n' +
+  '\n' +
+  'J\'ai l\'honneur de venir très respectueusement auprès de votre haute bienveillance solliciter votre soutien dans le cadre de ma démarche académique.\n' +
+  '\n' +
+  'En effet, je suis étudiant(e) en [nom de votre filière ou programme d\'études] et je me permets de solliciter votre bienveillance pour [expliquer brièvement la nature de votre demande, que ce soit une demande d\'information, d\'assistance, ou autre].\n' +
+  '\n' +
+  'Dans l\'attente d\'une suite favorable, veuillez agréer, Monsieur (ou Madame), mes expressions les plus chaleureuses !'

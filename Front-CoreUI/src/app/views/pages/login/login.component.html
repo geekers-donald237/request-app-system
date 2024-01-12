@@ -19,7 +19,7 @@
                 <div class="form-group form-floating mt-3 d-flex flex-column">
                   <input type="email" pInputText formControlName="email" class="form-control custom-input"
                          placeholder="Adresse email" id="floatingInput" name="email" autocomplete="email">
-                  <label for="floatingInput">Email address</label>
+                  <label for="floatingInput">Email address<span class="text-danger">*</span></label>
 
 
                   <div *ngIf="email.invalid && email.touched" class="d-flex align-content-start text-danger">
@@ -31,7 +31,7 @@
                 <div class="form-group form-floating mt-3 d-flex flex-column">
                   <input type="password" pInputText formControlName="password" class="form-control"
                          placeholder="Mot de passe" id="floatingPassword" name="password">
-                  <label for="floatingPassword">Password</label>
+                  <label for="floatingPassword">Password<span class="text-danger">*</span></label>
 
                   <div *ngIf="password.invalid && password.touched" class="d-flex align-content-start text-danger">
                     <div *ngIf="password.errors?.['required']">Password is required</div>
