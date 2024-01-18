@@ -8,7 +8,10 @@ enum RequestPatternEnum: string
     case MARK_ABSENCE = 'absence de note';
     case EXAMINATION_EXEMPTION = 'demande d\'exemption evaluation';
     case EXAMINATION_NOTE_REVISION = 'demande revision notes';
-    case MARK_ERROR_DESCRIPTION = 'Correction d\'une erreur de note';
+
+
+    ## DESCRIPTION
+    case MARK_ERROR_DESCRIPTION = 'Erreur de note';
 
     case MARK_ABSENCE_DESCRIPTION = 'Absence de note';
 

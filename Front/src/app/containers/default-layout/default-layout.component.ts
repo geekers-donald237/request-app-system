@@ -60,21 +60,18 @@ export class DefaultLayoutComponent implements OnInit {
           url: '/app/student-dashboard',
         },
         {
-          name: 'Mes Requetes',
+          name: 'Suivi requetes',
           url: '/app/list-requests',
         },
         {
-          name: 'Requête Individuelle',
+          name: 'Creation Requete',
           url: '/app/add-individual-request',
         },
-        {
-          name: 'Requête de groupe',
-          url: '/app/add-group-request',
-        },
-        {
-          name: 'Echéances de requêtes',
-          url: '/app/calendar',
-        },
+        // {
+        //   name: 'Requête de groupe',
+        //   url: '/app/add-group-request',
+        // },
+
       ];
     } else if (role === UserRoleConstants.STAFF) {
       gestionDesRequetes.children = [
