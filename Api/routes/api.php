@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
     Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');
     Route::patch('/request/{requestId}/statut/{statut}/', [RequestController::class, 'updateSecretaryRequestStatus'])->name('/request/statut');
+    Route::get('/student/{studentId}/studentDetails', [RequestController::class, 'getStudentDetails'])->name('/student/{studentId}/studentDetails');
 });
 
 require __DIR__ . '/auth.php';

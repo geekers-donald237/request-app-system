@@ -69,7 +69,7 @@ class RequestController extends Controller
     }
 
     public function getRequest(
-        string     $requestId,
+        string         $requestId,
         RequestService $handler
 
     ): JsonResponse
@@ -254,7 +254,7 @@ class RequestController extends Controller
         ];
 
         try {
-            $response = $handler->handleUpdateSecretaryRequestStatus($requestId,$newRequestStatut);
+            $response = $handler->handleUpdateSecretaryRequestStatus($requestId, $newRequestStatut);
 
             $httpJson = [
                 'status' => 200,
@@ -280,6 +280,30 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+    public function getStudentDetails(
+        string         $studentId,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => '',
+            'data' => [],
+        ];
 
+        try {
+            $response = $handler->getStudentDetails($studentId);
+
+            $httpJson = [
+                'status' => $response->status,
+                'data' => $response->data,
+                'message' => $response->message,
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+
+        return response()->json($httpJson);
+    }
 
 }

@@ -20,9 +20,14 @@ class AuthService
     {
         $response = new LoginActionResponse();
         if (!Auth::attempt(['email' => $command->email, 'password' => $command->password])) {
-            throw new Exception('Email & Password does not match with our record.');
+            throw new Exception('Email & Password do not match with our records.');
         }
-        $user = User::whereEmail($command->email)->whereIsDeleted(false)->with('rules')->first();
+
+        // Utilisez le modèle User pour récupérer l'utilisateur avec les relations appropriées
+        $user = User::where('email', $command->email)
+            ->where('is_deleted', false)
+            ->with(['rules'])
+            ->first();
 
         if ($user) {
             $response->isLogged = true;
@@ -33,8 +38,8 @@ class AuthService
         }
 
         throw new Exception('User Not Found');
-
     }
+
 
     public function handleLogout(): LogoutActionResponse
     {

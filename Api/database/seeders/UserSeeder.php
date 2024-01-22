@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         Student::factory()->create(['user_id' => (User::whereEmail('bayidris@gmail.com')->first()->id),
             'matricule' => '21Q2915'
             , 'department_id' => '4'
-            , 'level_id' => rand(1, 8),
+            , 'level_id' => 2,
 
         ]);
 

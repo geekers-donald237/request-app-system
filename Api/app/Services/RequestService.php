@@ -16,12 +16,14 @@ use App\Models\Rule;
 use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
+use App\Models\UE;
 use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetRequestActionResponse;
 use App\Responses\GetSecretaryRequestActionResponse;
 use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
+use App\Responses\GetStudentDetailsResponse;
 use App\Responses\GetStudentInformationActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -30,7 +32,9 @@ use App\Responses\UpdateRequestActionResponse;
 use App\Responses\UpdateRequestStatutActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
@@ -566,6 +570,39 @@ class RequestService
         $response->data = $studentInfo;
         $response->message = 'User Details';
         return $response;
+    }
+
+
+    public function getStudentDetails($studentId): GetStudentDetailsResponse
+    {
+        $response = new GetStudentDetailsResponse();
+
+        try {
+            $student = $this->getStudentWithDetails($studentId);
+            if ($student) {
+                $response->data['department'] = $student->department;
+                $response->data['level'] = $student->level;
+                $response->data['courses'] = $this->getUERelatedToStudent($student);
+                $response->message = 'Student details retrieved successfully';
+            } else {
+                throw new Exception('Student not found');
+            }
+        } catch (Exception $e) {
+            $response->message = 'Error: ' . $e->getMessage();
+        }
+        return $response;
+    }
+
+    private function getStudentWithDetails($studentId): Model|Collection|Builder|array|null
+    {
+        return Student::with('department', 'level')->findOrFail($studentId);
+    }
+
+    private function getUERelatedToStudent($student)
+    {
+        return UE::whereLevelId($student->level->id)
+            ->whereDepartmentId($student->department->id)
+            ->get();
     }
 }
 

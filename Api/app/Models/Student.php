@@ -43,4 +43,5 @@ class Student extends Model
     {
         return $this->belongsTo(Level::class);
     }
+
 }

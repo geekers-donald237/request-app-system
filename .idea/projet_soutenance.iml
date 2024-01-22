@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Api/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Api/tests/Unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/Api/spec" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/serializable-closure" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/league/config" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/pint" />
@@ -115,7 +116,6 @@
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/dragonmantank/cron-expression" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/carbonphp/carbon-doctrine-types" />
-      <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/breeze" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/prompts" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/framework" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/nesbot/carbon" />

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -69,12 +70,6 @@ class User extends Authenticatable
     public function name(): string
     {
         return $this->name;
-    }
-
-    // Relation polymorphique
-    public function userable(): MorphTo
-    {
-        return $this->morphTo();
     }
 
 }

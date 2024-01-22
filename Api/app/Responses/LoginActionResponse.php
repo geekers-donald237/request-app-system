@@ -9,5 +9,5 @@ class LoginActionResponse
     public string $token = '';
     public string $message = '';
     public bool $isLogged = false;
-    public User $user;
+    public mixed $user;
 }

@@ -2,9 +2,9 @@
 
 namespace App\Responses;
 
-class GetStudentInformationActionResponse
+class GetStudentDetailsResponse
 {
+    public string $status = '';
     public string $message = '';
     public array $data = [];
-
 }
