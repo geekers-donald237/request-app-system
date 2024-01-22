@@ -25,4 +25,9 @@ class Secretary extends Model
             ->whereIsDeleted(false)->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value);
     }
 
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
 }

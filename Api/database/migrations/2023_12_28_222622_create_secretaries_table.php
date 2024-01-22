@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('secretaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('department_id')->constrained('departments');
             $table->string('job_title');
             $table->string('phone_number');
             $table->string('address');
             $table->boolean('is_deleted')->default(0);
-
             $table->timestamps();
         });
     }

@@ -22,4 +22,9 @@ class Staff extends Model
     {
         return $this->belongsToMany(Request::class, 'receiver_request', 'receiver_id', 'request_id');
     }
+
+    public function ue(): BelongsTo
+    {
+        return $this->belongsTo(UE::class);
+    }
 }
