@@ -8,7 +8,6 @@ enum RequestStateEnum: string
 
     case ATTENTE_DE_VALIDATION = 'attente_validation'; // la demande a été soumise mais doit encore être validée par le système.
 
-    case ATTENTE_DE_TRAITEMENT = 'attente_traitement'; // la demande a été validée et est en attente de traitement par l'équipe responsable.
 
     case EN_COURS_DE_TRAITEMENT = 'en_cours'; // la demande a été validée et est en attente de traitement par l'équipe responsable.
 

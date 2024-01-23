@@ -47,8 +47,6 @@ class UserSeeder extends Seeder
         User::factory()->create(['name' => 'Happi Nouwe Alban', 'email' => 'happi@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
         Student::factory()->create(['user_id' => (User::whereEmail('happi@gmail.com')->first()->id), 'matricule' => '21U2955', 'department_id' => '11', 'level_id' => rand(1, 7),
-
-
         ]);
 
 
@@ -76,7 +74,7 @@ class UserSeeder extends Seeder
         User::factory()->create(['name' => 'John doe',
             'email' => 'johndoe@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
 
-        Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525', 'ue_id' => 17]);
+        Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525']);
     }
 
     /**

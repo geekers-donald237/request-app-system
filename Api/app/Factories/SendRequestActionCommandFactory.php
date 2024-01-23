@@ -16,7 +16,7 @@ class SendRequestActionCommandFactory
     {
         return new SendRequestActionCommand(
             requestId: $request->get('requestId'),
-            receiverIds: $request->get('receiverIds')
+            ueId: $request->get('ueId')
         );
     }
 }

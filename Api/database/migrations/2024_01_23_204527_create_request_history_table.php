@@ -5,19 +5,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('request_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sender_id')->constrained('students');
-            $table->foreignId('request_pattern_id')->constrained('request_patterns');
-            $table->string('title');
-            $table->text('content');
-            $table->enum('statut', [
+            $table->foreignId('request_id')->constrained('requests');
+            $table->foreignId('modify_by')->constrained('users');
+            $table->enum('status', [
                 RequestStateEnum::ATTENTE_DE_SOUMISSION->value,
                 RequestStateEnum::ATTENTE_DE_VALIDATION->value,
                 RequestStateEnum::EN_COURS_DE_TRAITEMENT->value,
@@ -26,10 +25,7 @@ return new class extends Migration {
                 RequestStateEnum::REFUSEE->value,
                 RequestStateEnum::EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT->value,
                 RequestStateEnum::TERMINEE->value,
-            ])->default(RequestStateEnum::ATTENTE_DE_SOUMISSION->value,);
-            $table->boolean('in_draft')->default(1);
-            $table->boolean('is_deleted')->default(0);
-            $table->boolean('handwritten_piece_present_disc')->default(false);
+            ]);
             $table->timestamps();
         });
     }
@@ -39,6 +35,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('requests');
+        Schema::dropIfExists('request_history');
     }
 };

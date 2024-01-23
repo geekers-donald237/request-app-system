@@ -10,7 +10,7 @@ class SendRequestActionRequest extends HttpDataRequest
     {
         return [
             'requestId.required' => 'Veuillez renseigner la requête',
-            'receiverIds.required' => 'Veuillez renseigner le(s) destinataire(s)',
+            'ueId.required' => 'Veuillez renseigner le(s) destinataire(s)',
         ];
     }
 
@@ -18,7 +18,7 @@ class SendRequestActionRequest extends HttpDataRequest
     {
         return [
             'requestId' => 'required',
-            'receiverIds' => 'required'
+            'ueId' => 'required'
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Enums\StorageDirectoryEnum;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
+use App\Models\RequestHistory;
 use App\Models\RequestPattern;
 use App\Models\Rule;
 use App\Models\Secretary;
@@ -438,7 +439,6 @@ class RequestService
         if (in_array($request->statut(), $requestStatutPossibleToDeleted)) {
             throw new Exception('Impossible de modifier cette requete car en cours de traitement');
         }
-
     }
 
     /**
@@ -469,10 +469,9 @@ class RequestService
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $response = new SendRequestActionResponse();
         $request = $this->getRequestIfExistOrThrowException($command->requestId);
-        foreach ($command->receiverIds as $receiverId) {
-            $this->checkIfReceiverExistOrThrowException($receiverId);
-        }
-        $request->receivers()->attach($command->receiverIds);
+        $this->checkIfReceiverUeExistOrThrowException($command->ueId);
+
+        $request->ues()->attach($command->ueId);
         $this->updateRequestState($request, RequestStateEnum::ATTENTE_DE_VALIDATION);
 
         $response->isSent = true;
@@ -483,11 +482,11 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function checkIfReceiverExistOrThrowException(string $receiverId): void
+    private function checkIfReceiverUeExistOrThrowException(string $receiverId): void
     {
         $staff = Staff::whereId($receiverId)->whereIsDeleted(false)->first();
         if (is_null($staff)) {
-            throw new Exception('Ce personnel n\'existe pas!');
+            throw new Exception('Cette UE n\'existe pas!');
         }
     }
 
@@ -497,6 +496,18 @@ class RequestService
     public function updateRequestState(Request $request, RequestStateEnum $newRequestState): void
     {
         $request->fill(['statut' => $newRequestState->value])->save();
+
+        $this->createRequestHistory($request, $newRequestState);
+    }
+
+    private function createRequestHistory(Request $request, RequestStateEnum $newRequestState): void
+    {
+        $requestHistory = new RequestHistory();
+        $requestHistory->fill([
+            'request_id' => $request->id,
+            'modify_by' => Auth::user()->getAuthIdentifier(),
+            'status' => $newRequestState->value,
+        ])->save();
     }
 
     /**
@@ -577,7 +588,6 @@ class RequestService
     public function getStudentDetails($studentId): GetStudentDetailsResponse
     {
         $response = new GetStudentDetailsResponse();
-
         try {
             $student = Student::with('department', 'level')->findOrFail($studentId);
 

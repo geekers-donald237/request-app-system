@@ -6,7 +6,7 @@ class SendRequestActionCommand
 {
     public function __construct(
         public string $requestId,
-        public array  $receiverIds
+        public string  $ueId
     )
     {
     }

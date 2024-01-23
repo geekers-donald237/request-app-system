@@ -24,10 +24,13 @@ class Request extends Model
         return $this->hasMany(Attachment::class);
     }
 
-    public function receivers(): BelongsToMany
+
+    public function ues(): BelongsToMany
     {
-        return $this->belongsToMany(Staff::class, 'receiver_request', 'request_id', 'receiver_id');
+        return $this->belongsToMany(Ue::class, 'receiver_request', 'request_id', 'ue_id');
     }
+
+
 
     public function senderId(): int
     {
@@ -37,6 +40,11 @@ class Request extends Model
     public function statut(): string
     {
         return $this->statut;
+    }
+
+    public function history(): HasMany
+    {
+        return $this->hasMany(RequestHistory::class);
     }
 
 }

@@ -10,7 +10,7 @@ class SaveActionRequest extends HttpDataRequest
     {
         return [
             'title.required' => 'Le champ intitulé est obligatoire.',
-            'title.string' => 'Le champ title n\'est pas valide.',
+            'title.string' => 'Le champ intitule n\'est pas valide.',
             'requestPatternId.required' => 'Le champ motif de la requête est obligatoire.',
             'content.required' => 'Le champ contenu de la requête est obligatoire.',
             'fileHandWritten.required' => 'Veuillez fournir la pièce manuscrite.'

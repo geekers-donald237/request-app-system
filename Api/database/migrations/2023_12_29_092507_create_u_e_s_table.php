@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('level_id')->constrained('levels');
             $table->foreignId('department_id')->constrained('departments');
+            $table->foreignId('staff_id')->constrained('staff');
             $table->string('code_ue');
             $table->string('libelle');
             $table->timestamps();
