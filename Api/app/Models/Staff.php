@@ -23,8 +23,10 @@ class Staff extends Model
         return $this->belongsToMany(Request::class, 'receiver_request', 'receiver_id', 'request_id');
     }
 
-    public function ue(): BelongsTo
+
+
+    public function ues(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(UE::class);
+        return $this->hasMany(UE::class);
     }
 }

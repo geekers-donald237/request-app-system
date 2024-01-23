@@ -36,6 +36,7 @@ export class DefaultLayoutComponent implements OnInit {
   private generateNavItems(): void {
     this.studentNavItems = this.generateUserSection('Étudiant', UserRoleConstants.STUDENT);
     this.staffNavItems = this.generateUserSection('Staff', UserRoleConstants.STAFF);
+    this.staffNavItems = this.generateUserSection('Secretary', UserRoleConstants.SECRETARY);
   }
 
   private generateUserSection(title: string, role: string): INavData[] {
@@ -60,7 +61,7 @@ export class DefaultLayoutComponent implements OnInit {
           url: '/app/student-dashboard',
         },
         {
-          name: 'Suivi requetes',
+          name: 'Suivi Requetes',
           url: '/app/list-requests',
         },
         {
@@ -91,6 +92,17 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Ajouter une echeance',
           url: '/app/add-program',
         },
+      ];
+    } else if (role === UserRoleConstants.SECRETARY) {
+      gestionDesRequetes.children = [
+        {
+          name: 'Requets Recus',
+          url: '/app/secretary/requests',
+        },
+        // {
+        //   name: 'details requete',
+        //   url: '/app/receive-request',
+        // },
       ];
     }
 

@@ -28,6 +28,8 @@ export class AddIndividualRequestComponent implements OnInit {
     fileHandWritten: [null, Validators.required],
     'fileAttachments[]': [null, Validators.required],
     receiver_id: ['', Validators.required],
+    semester: ['', Validators.required],
+    ue: ['', Validators.required],
   });
 
   constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private staffService: StaffService) {
@@ -39,6 +41,14 @@ export class AddIndividualRequestComponent implements OnInit {
 
   get title() {
     return this.requestForm.controls['title'];
+  }
+
+  get ue() {
+    return this.requestForm.controls['ue'];
+  }
+
+  get semester() {
+    return this.requestForm.controls['semester'];
   }
 
   get content() {
@@ -108,9 +118,11 @@ export class AddIndividualRequestComponent implements OnInit {
       this.fermerAlerte();
     }, 3000);
   }
+
   fermerAlerte() {
     this.afficherAlerte = false;
   }
+
   private handleSuccessfulRequest(response: any, receiverId: number): void {
     this.sendRequestDetails(response.requestId, receiverId);
     this.color = 'success';

@@ -10,14 +10,50 @@
     <div class="card">
       <div class="card-header">
 
-        <h5>Ecrire votre Requête individuelle</h5>
+        <h5>Creation Requête</h5>
       </div>
 
       <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data"
             (ngSubmit)="sendRequest()">
         <div class="card-body">
           <div class="form-group row mb-2">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Motif<span class="text-danger">*</span></label>
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Semestre<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" formControlName="semester" value="s1">S1
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" formControlName="semester" value="s2">S2
+                </label>
+              </div>
+              <div *ngIf="semester.invalid && semester.touched" class="text-danger">
+                <div *ngIf="semester.errors?.['required']">Semestre est requis</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Unité  (ue)<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric" formControlName="ue" id="ue">
+                <option value="" disabled selected>Sélectionnez une UE</option>
+                <!-- Ajoutez les options dynamiquement depuis votre composant -->
+              </select>
+              <div *ngIf="ue.invalid && ue.touched" class="text-danger">
+                <div *ngIf="ue.errors?.['required']">UE est requise</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group row mb-2">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Objet<span class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
               <select class="form-control selectric" pInputText formControlName="requestPatternId" id="requestPatternId"
                       name="requestPatternId">
@@ -32,7 +68,8 @@
           </div>
           <br/>
           <div class="form-group row mb-2">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intitulé<span class="text-danger">*</span></label>
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intitulé<span
+              class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
               <input type="text" id="title" name="title" pInputText placeholder="Saisissez l'intitulé de votre requête"
                      formControlName="title" class="form-control"/>
@@ -43,10 +80,11 @@
           </div>
           <br>
           <div class="form-group row mb-2">
-            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">commentaire
-              de la Requete<span class="text-danger">*</span></label>
+            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">Contenu
+              <span class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
-              <textarea class="summernote-simple form-control" [(ngModel)]="requestModel" id="content" formControlName="content"
+              <textarea class="summernote-simple form-control" [(ngModel)]="requestModel" id="content"
+                        formControlName="content"
                         placeholder="Saisissez le contenu de votre requête" rows="12" cols="75"></textarea>
               <div *ngIf="content.invalid && content.touched" class="text-danger">
                 <div *ngIf="content.errors?.['required']">Contenu de la requête est requis</div>
@@ -72,7 +110,8 @@
 
 
           <div class="form-group row mb-3">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes<span class="text-danger">*</span><</label>
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes<span
+              class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
               <div class="custom-file">
                 <input cFormControl id="formFileMultiple" (change)="onFileAttachmentsChange($event)"
@@ -90,7 +129,8 @@
 
 
           <div class="form-group row mb-2">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Destinataire<span class="text-danger">*</span></label>
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Destinataire<span
+              class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
               <select class="form-control selectric" name="receiver_id" formControlName="receiver_id" id="receiver_id">
                 <option value="" disabled selected>Sélectionnez un destinataire</option>

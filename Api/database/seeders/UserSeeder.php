@@ -76,7 +76,7 @@ class UserSeeder extends Seeder
         User::factory()->create(['name' => 'John doe',
             'email' => 'johndoe@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
 
-        Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525',]);
+        Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525', 'ue_id' => 17]);
     }
 
     /**

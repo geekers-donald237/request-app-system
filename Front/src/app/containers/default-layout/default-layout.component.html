@@ -25,6 +25,7 @@
     <c-sidebar-nav *ngIf="userRole === UserRoleConstants.STUDENT" [navItems]="studentNavItems" dropdownMode="close"/>
 
     <c-sidebar-nav *ngIf="userRole === UserRoleConstants.STAFF" [navItems]="staffNavItems" dropdownMode="close"/>
+    <c-sidebar-nav *ngIf="userRole === UserRoleConstants.SECRETARY" [navItems]="staffNavItems" dropdownMode="close"/>
   </ng-scrollbar>
   <c-sidebar-toggler
     *ngIf="!sidebar.narrow"

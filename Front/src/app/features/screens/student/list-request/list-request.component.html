@@ -5,26 +5,23 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <!-- list-request.component.html -->
-
           <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
             <thead>
             <tr>
-              <th>#</th>
-              <th>Intitule</th>
-<!--              <th>Type</th>-->
-              <th>motif</th>
+              <th>Code dossier</th>
               <th>Date d'envoie</th>
+              <th>UE</th>
+              <th>Objet</th>
               <th>Etat</th>
+              <th>Detenteur</th>
+              <th>Date Validation</th>
               <th>Details</th>
-<!--              <th>Options</th>-->
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let request of requests; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ request.title }}</td>
-<!--              <td>Individuelle</td>-->
               <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
               <td>{{ request.created_at | date: 'dd/MM/yyyy' }}</td>
               <td>
@@ -37,8 +34,8 @@
                 }">
                   {{ request.statut }}
                 </div>
-                
-                   
+
+
               </td>
               <!-- <td>
                 <a [routerLink]="['/voir_requete', request.id]" class="btn btn-primary" style="font-size: 12px;">
@@ -46,9 +43,6 @@
                 </a>
               </td> -->
              <td style="display: flex; justify-content: space-between;">
-               <a class="btn btn-warning btn-action mr-1" style="font-size: 12px;">
-                 Editer
-               </a>
                <a class="btn btn-danger btn-action" style="font-size: 12px;color: white;">
                  Supprimer
                </a>

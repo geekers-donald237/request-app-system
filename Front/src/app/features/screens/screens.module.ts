@@ -4,7 +4,6 @@ import {CommonModule} from '@angular/common';
 import {ScreensRoutingModule} from './screens-routing.module';
 import {ListRequestComponent} from "./student/list-request/list-request.component";
 import {AddIndividualRequestComponent} from "./student/add-individual-request/add-individual-request.component";
-import {EditRequestComponent} from "./student/edit-request/edit-request.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 
@@ -28,7 +27,6 @@ import {ReactiveFormsModule} from "@angular/forms";
   declarations: [
     ListRequestComponent,
     AddIndividualRequestComponent,
-    EditRequestComponent,
     AddDeadlineComponent,
     ReceivesRequestComponent,
     StaffDashboardComponent,

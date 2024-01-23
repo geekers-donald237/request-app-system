@@ -26,7 +26,7 @@ export class Utils {
         this.router.navigate(['/app/requests']);
         break;
       case UserRoleConstants.SECRETARY:
-        console.log('redirection ici secretaire');
+        this.router.navigate(['/app/secretary/requests']);
         break;
       case UserRoleConstants.TECHNICAL_ADMIN:
         console.log('redirection ici admin');

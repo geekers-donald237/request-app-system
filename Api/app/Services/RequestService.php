@@ -573,16 +573,24 @@ class RequestService
     }
 
 
+    // VotreService.php
     public function getStudentDetails($studentId): GetStudentDetailsResponse
     {
         $response = new GetStudentDetailsResponse();
 
         try {
-            $student = $this->getStudentWithDetails($studentId);
+            $student = Student::with('department', 'level')->findOrFail($studentId);
+
             if ($student) {
                 $response->data['department'] = $student->department;
                 $response->data['level'] = $student->level;
-                $response->data['courses'] = $this->getUERelatedToStudent($student);
+
+                $ues = UE::with('staff')
+                    ->where('level_id', $student->level->id)
+                    ->where('department_id', $student->department->id)
+                    ->get();
+
+                $response->data['courses'] = $ues;
                 $response->message = 'Student details retrieved successfully';
             } else {
                 throw new Exception('Student not found');
@@ -590,8 +598,10 @@ class RequestService
         } catch (Exception $e) {
             $response->message = 'Error: ' . $e->getMessage();
         }
+
         return $response;
     }
+
 
     private function getStudentWithDetails($studentId): Model|Collection|Builder|array|null
     {
