@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './receive-request-secretary.component.scss'
 })
 export class ReceiveRequestSecretaryComponent {
-
+ 
 }

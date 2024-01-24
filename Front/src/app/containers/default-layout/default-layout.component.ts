@@ -93,7 +93,7 @@ export class DefaultLayoutComponent implements OnInit {
     } else if (role === UserRoleConstants.SECRETARY) {
       gestionDesRequetes.children = [
         {
-          name: 'Requets Recus',
+          name: 'Requêtes Reçus',
           url: '/app/secretary/requests',
         },
         // {
