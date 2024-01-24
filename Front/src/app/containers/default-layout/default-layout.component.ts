@@ -68,10 +68,7 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Creation Requete',
           url: '/app/add-individual-request',
         },
-        // {
-        //   name: 'Requête de groupe',
-        //   url: '/app/add-group-request',
-        // },
+
 
       ];
     } else if (role === UserRoleConstants.STAFF) {

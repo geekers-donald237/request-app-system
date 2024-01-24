@@ -10,7 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Api/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/Api/tests/Unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/Api/spec" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/serializable-closure" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/league/config" />
       <excludeFolder url="file://$MODULE_DIR$/Api/vendor/laravel/pint" />

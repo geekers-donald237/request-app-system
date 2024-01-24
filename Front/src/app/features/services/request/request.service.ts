@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {IGetStudentRequestResponse} from "../../models/student.request.model";
-import {Observable} from "rxjs";
-import {IRequestPatternsResponse} from "../../models/request.patterns.model";
-import {ISaveRequestResponse} from "../../models/save.request.model";
-import {ISendRequestResponse} from "../../models/send.request.model";
-import {IStudentResponse} from "../../models/student.information.model";
-import {IRequestDetailsResponse} from "../../models/request.model";
-import {IUpdateStatusResponse} from "../../models/request.status.model";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { IGetStudentRequestResponse } from "../../models/student.request.model";
+import { IRequestPatternsResponse } from "../../models/request.patterns.model";
+import { ISaveRequestResponse } from "../../models/save.request.model";
+import { ISendRequestResponse } from "../../models/send.request.model";
+import { IStudentResponse } from "../../models/student.information.model";
+import { IRequestDetailsResponse } from "../../models/request.model";
+import { IUpdateStatusResponse } from "../../models/request.status.model";
 
 @Injectable({
   providedIn: 'root'
@@ -34,17 +34,16 @@ export class RequestService {
     return this.http.get<IGetStudentRequestResponse>(`${this.baseUrl}/student/${studentId}/requests`, {headers: this.headers});
   }
 
-
   saveRequest(requestData: any): Observable<ISaveRequestResponse> {
     const url = `${this.baseUrl}/request`;
     return this.http.post<ISaveRequestResponse>(url, requestData, {headers: this.headers});
   }
 
-  sendRequest(requestId: number, receiverIds: number[]): Observable<ISendRequestResponse> {
+  sendRequest(requestId: number, ueId: number): Observable<ISendRequestResponse> {
     const url = `${this.baseUrl}/request/send`;
     const data = {
       requestId: requestId,
-      receiverIds: receiverIds
+      ueId: ueId
     };
     return this.http.post<ISendRequestResponse>(url, data, {headers: this.headers});
   }
@@ -53,7 +52,6 @@ export class RequestService {
     const url = `${this.baseUrl}/student/${senderId}`;
     return this.http.get<IStudentResponse>(url, {headers: this.headers});
   }
-
 
   getDetailsRequest(requestId: number): Observable<IRequestDetailsResponse> {
     return this.http.get<IRequestDetailsResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
@@ -64,4 +62,9 @@ export class RequestService {
     return this.http.patch<IUpdateStatusResponse>(url, {}, {headers: this.headers});
   }
 
+  // Nouvelle fonction pour supprimer une requête
+  deleteRequest(requestId: number): Observable<any> {
+    const url = `${this.baseUrl}/request/${requestId}`;
+    return this.http.delete<any>(url, {headers: this.headers});
+  }
 }

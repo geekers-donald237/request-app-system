@@ -33,10 +33,9 @@ use App\Responses\UpdateRequestActionResponse;
 use App\Responses\UpdateRequestStatutActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Nonstandard\Uuid;
 
 class RequestService
 {
@@ -113,6 +112,7 @@ class RequestService
     private function buildRequestData(SaveRequestActionCommand $command): array
     {
         return [
+            'request_code' => HelpersFunction::unique_str(),
             'sender_id' => Student::whereUserId(Auth::user()->getAuthIdentifier())->first()->id,
             'request_pattern_id' => $command->requestPatternId,
             'title' => $command->title,
@@ -318,7 +318,7 @@ class RequestService
         $response = new GetUserRequestsActionResponse();
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $student = $this->getStudentIfExistOrThrowException($studentId);
-        $response->requests = $student->requests()->whereIsDeleted(false)->with('attachments')->with('receivers')->get();
+        $response->requests = $student->requests()->whereIsDeleted(false)->with('attachments')->with('ues')->get();
         $response->message = 'Requests of ' . $student->user()->first()->name();
         return $response;
     }
@@ -584,7 +584,6 @@ class RequestService
     }
 
 
-    // VotreService.php
     public function getStudentDetails($studentId): GetStudentDetailsResponse
     {
         $response = new GetStudentDetailsResponse();
@@ -595,10 +594,16 @@ class RequestService
                 $response->data['department'] = $student->department;
                 $response->data['level'] = $student->level;
 
-                $ues = UE::with('staff')
-                    ->where('level_id', $student->level->id)
+//                $ues = UE::with('staff')
+//                    ->where('level_id', $student->level->id)
+//                    ->where('department_id', $student->department->id)
+//                    ->get();  getting ue with all Model staff
+
+                $ues = UE::with('staff.user:id,name') //  getting user
+                ->where('level_id', $student->level->id)
                     ->where('department_id', $student->department->id)
                     ->get();
+
 
                 $response->data['courses'] = $ues;
                 $response->message = 'Student details retrieved successfully';
@@ -612,17 +617,5 @@ class RequestService
         return $response;
     }
 
-
-    private function getStudentWithDetails($studentId): Model|Collection|Builder|array|null
-    {
-        return Student::with('department', 'level')->findOrFail($studentId);
-    }
-
-    private function getUERelatedToStudent($student)
-    {
-        return UE::whereLevelId($student->level->id)
-            ->whereDepartmentId($student->department->id)
-            ->get();
-    }
 }
 

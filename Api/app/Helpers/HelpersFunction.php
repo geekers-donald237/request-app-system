@@ -2,8 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Models\Request;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class HelpersFunction
 {
@@ -43,6 +45,16 @@ class HelpersFunction
 
         return in_array($extension, $allowedFileTypes, true);
     }
+
+  public static  function unique_str(): string
+  {
+        $uniqueStr = Str::random(8);
+        while(Request::where('request_code', $uniqueStr)->exists()) {
+            $uniqueStr = Str::random(8);
+        }
+        return $uniqueStr;
+    }
+
 
 
 }

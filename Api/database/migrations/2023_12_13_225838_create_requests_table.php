@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('sender_id')->constrained('students');
             $table->foreignId('request_pattern_id')->constrained('request_patterns');
+            $table->string('request_code');
             $table->string('title');
             $table->text('content');
             $table->enum('statut', [

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {AppComponent} from "../../../../app.component";
 import {StaffService} from "../../../services/staff/staff.service";
 import {IStaffRequest} from "../../../models/staff.request.model";
 import {Router} from "@angular/router";
@@ -16,7 +15,7 @@ export class ReceivesRequestComponent implements OnInit {
   requests: IStaffRequest[] = [];
 
 
-  constructor(private staffService: StaffService , private router:Router ,private utils: Utils) {
+  constructor(private staffService: StaffService, private router: Router, private utils: Utils) {
   }
 
   ngOnInit(): void {

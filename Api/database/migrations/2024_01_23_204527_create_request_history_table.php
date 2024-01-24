@@ -26,6 +26,8 @@ return new class extends Migration
                 RequestStateEnum::EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT->value,
                 RequestStateEnum::TERMINEE->value,
             ]);
+            $table->boolean('is_deleted')->default(0);
+
             $table->timestamps();
         });
     }

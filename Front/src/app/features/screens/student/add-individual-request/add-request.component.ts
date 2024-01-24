@@ -1,38 +1,40 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {RequestService} from "../../../services/request/request.service";
-import {IGetStaffResponse, IStaffMember} from "../../../models/staff.member.model";
 import {Router} from "@angular/router";
 import {IRequestPattern, IRequestPatternsResponse} from "../../../models/request.patterns.model";
-import {StaffService} from "../../../services/staff/staff.service";
 import {forkJoin} from "rxjs";
 import {requestModel} from "../../../constant/constant";
+import {UeService} from "../../../services/ue/ue.service";
+import {Utils} from "../../../services/shared/utils/utils";
+import {ICourse, IStudentSchoolDataResponse} from "../../../models/student.school.model";
 
 @Component({
-  selector: 'app-add-individual-request',
-  templateUrl: './add-individual-request.component.html',
-  styleUrls: ['./add-individual-request.component.scss']
+  selector: 'app-add-request',
+  templateUrl: './add-request.component.html',
+  styleUrls: ['./add-request.component.scss']
 })
-export class AddIndividualRequestComponent implements OnInit {
+export class AddRequestComponent implements OnInit {
   visible = false;
   dismissible = true;
+  courses: ICourse[] = [];
+  selectedUeId: null | number | undefined;
+
   afficherAlerte: boolean = false;
   errorMessage: string | undefined;
   color: string | undefined;
   requestPatterns: IRequestPattern[] = [];
-  staffList: IStaffMember[] = [];
   requestForm = this.fb.group({
     requestPatternId: ['', Validators.required],
     title: ['', Validators.required],
     content: ['', Validators.required],
     fileHandWritten: [null, Validators.required],
     'fileAttachments[]': [null, Validators.required],
-    receiver_id: ['', Validators.required],
-    semester: ['', Validators.required],
-    ue: ['', Validators.required],
+    ueId: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private staffService: StaffService) {
+  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private utils: Utils
+    , private ueService: UeService) {
   }
 
   get requestPatternId() {
@@ -44,11 +46,7 @@ export class AddIndividualRequestComponent implements OnInit {
   }
 
   get ue() {
-    return this.requestForm.controls['ue'];
-  }
-
-  get semester() {
-    return this.requestForm.controls['semester'];
+    return this.requestForm.controls['ueId'];
   }
 
   get content() {
@@ -62,11 +60,6 @@ export class AddIndividualRequestComponent implements OnInit {
   get fileAttachments() {
     return this.requestForm.controls['fileAttachments[]'];
   }
-
-  get receiver_id() {
-    return this.requestForm.controls['receiver_id'];
-  }
-
 
   ngOnInit() {
     this.fetchData();
@@ -90,6 +83,7 @@ export class AddIndividualRequestComponent implements OnInit {
     }
   }
 
+
   sendRequest() {
     if (!this.requestForm.valid) {
       this.errorMessage = 'Le formulaire n\'est pas valide.';
@@ -97,40 +91,36 @@ export class AddIndividualRequestComponent implements OnInit {
     }
 
     const formData = this.createFormData();
-    const receiverId = 1; // Remplacez ceci par la logique appropriée pour obtenir l'ID du destinataire
+    const ueId = 1; // Remplacez ceci par la logique appropriée pour obtenir l'ID du destinataire
 
     this.requestService.saveRequest(formData).subscribe(
       (response) => {
         console.log('Requête envoyée avec succès:', response);
 
         if (response.isSaved) {
-          this.handleSuccessfulRequest(response, receiverId);
+          this.handleSuccessfulRequest(response, ueId);
         }
-
       },
       (error) => {
         console.error('Erreur lors de l\'envoi de la requête:', error);
         this.handleFailedRequest();
       }
     );
-    this.afficherAlerte = true;
-    setTimeout(() => {
-      this.fermerAlerte();
-    }, 3000);
+
   }
 
   fermerAlerte() {
     this.afficherAlerte = false;
   }
 
-  private handleSuccessfulRequest(response: any, receiverId: number): void {
-    this.sendRequestDetails(response.requestId, receiverId);
+  private handleSuccessfulRequest(response: any, ueId: number): void {
+    this.sendRequestDetails(response.requestId, ueId);
     this.color = 'success';
     this.errorMessage = 'Requête envoyée avec succès.';
-
+    this.afficherAlerte = true;
     setTimeout(() => {
-      this.visible = true;
-    }, 3500);
+      this.fermerAlerte();
+    }, 3000);
 
   }
 
@@ -169,9 +159,8 @@ export class AddIndividualRequestComponent implements OnInit {
     }
   }
 
-  private sendRequestDetails(requestId: number, receiverId: number): void {
-    const receiverIds = [receiverId];
-    this.requestService.sendRequest(requestId, receiverIds).subscribe(
+  private sendRequestDetails(requestId: number, ueId: number): void {
+    this.requestService.sendRequest(requestId, ueId).subscribe(
       (saveResponse) => {
         console.log('Détails de la requête enregistrés avec succès:', saveResponse);
         this.router.navigate(['/app/list-requests']);
@@ -184,13 +173,16 @@ export class AddIndividualRequestComponent implements OnInit {
 
 
   private fetchData(): void {
+    const userId = this.utils.getUserIdFromLocalStorage();
+
+    // Modifiez la signature de la fonction de rappel dans votre subscribe
     forkJoin([
       this.requestService.getRequestPatterns(),
-      this.staffService.getStaffMembers()
+      this.ueService.getStudentInfo(userId)
     ]).subscribe(
-      ([requestPatternsResponse, staffMembersResponse]: [IRequestPatternsResponse, IGetStaffResponse]) => {
+      ([requestPatternsResponse, studentSchoolData]: [IRequestPatternsResponse, IStudentSchoolDataResponse]) => {
         this.handleRequestPatternsResponse(requestPatternsResponse);
-        this.handleStaffMembersResponse(staffMembersResponse);
+        this.courses = studentSchoolData.data.courses;
       },
       (error) => {
         console.error('Erreur lors de la récupération des données:', error);
@@ -198,16 +190,9 @@ export class AddIndividualRequestComponent implements OnInit {
     );
   }
 
+
   private handleRequestPatternsResponse(response: IRequestPatternsResponse): void {
     this.requestPatterns = response.patterns;
-  }
-
-  private handleStaffMembersResponse(response: IGetStaffResponse): void {
-    if (response.status === 200) {
-      this.staffList = response.staff;
-    } else {
-      console.error('Erreur lors de la récupération de la liste des enseignants. Statut:', response.status);
-    }
   }
 
   protected requestModel = requestModel;

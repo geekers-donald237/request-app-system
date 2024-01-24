@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->foreignId('staff_id')->constrained('staff');
             $table->string('code_ue');
             $table->string('libelle');
+            $table->boolean('is_deleted')->default(0);
+
             $table->timestamps();
         });
     }

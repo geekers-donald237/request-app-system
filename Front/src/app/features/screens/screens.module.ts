@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 
 import {ScreensRoutingModule} from './screens-routing.module';
 import {ListRequestComponent} from "./student/list-request/list-request.component";
-import {AddIndividualRequestComponent} from "./student/add-individual-request/add-individual-request.component";
 import {HttpClientModule} from "@angular/common/http";
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 
@@ -14,25 +13,34 @@ import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {
   AlertComponent,
-  ButtonDirective,
+  ButtonCloseDirective,
+  ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent,
   FormControlDirective,
   FormLabelDirective,
-  InputGroupComponent
+  InputGroupComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalTitleDirective, ModalToggleDirective, RowComponent
 } from "@coreui/angular";
 import {InputTextModule} from "primeng/inputtext";
 import {ReactiveFormsModule} from "@angular/forms";
+import {AddRequestComponent} from "./student/add-individual-request/add-request.component";
+import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
+import {DocsComponentsModule} from "@docs-components/docs-components.module";
 
 
 @NgModule({
   declarations: [
     ListRequestComponent,
-    AddIndividualRequestComponent,
+    AddRequestComponent,
     AddDeadlineComponent,
     ReceivesRequestComponent,
     StaffDashboardComponent,
     ViewDeadlinesComponent,
     ShowRequestComponent,
-
+    ShowRequestStudentComponent,
   ],
   imports: [
     CommonModule,
@@ -46,6 +54,19 @@ import {ReactiveFormsModule} from "@angular/forms";
     FormLabelDirective,
     FormControlDirective,
     AlertComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    ButtonCloseDirective,
+    ModalTitleDirective,
+    ModalToggleDirective,
+    RowComponent,
+    DocsComponentsModule,
+    ColComponent,
+    CardHeaderComponent,
+    CardComponent,
+    CardBodyComponent,
   ]
 })
 export class ScreensModule {

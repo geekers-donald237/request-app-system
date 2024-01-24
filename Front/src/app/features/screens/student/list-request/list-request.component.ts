@@ -10,6 +10,8 @@ import {IRequest} from "../../../models/student.request.model";
 export class ListRequestComponent implements OnInit {
   studentId: number | null = null;
   requests: IRequest[] = [];
+  public liveDemoVisible = false;
+
   requestPatterns: any[] = [];
 
 
@@ -38,8 +40,8 @@ export class ListRequestComponent implements OnInit {
   getAllStudentsRequest(studentId: number): void {
     this.requestService.getRequestFromStudent(studentId).subscribe(
       (response) => {
-        console.log(response);
         this.requests = response.requests;
+        console.log(response.requests);
       },
       (error) => {
         console.log('An error occurred. Please try again later.');
@@ -52,4 +54,19 @@ export class ListRequestComponent implements OnInit {
     return pattern ? pattern.pattern_description : 'Non défini';
   }
 
+  deleteRequest(requestId: number): void {
+    this.requestService.deleteRequest(requestId).subscribe(
+      (response) => {
+        // Actualiser la liste des requêtes après la suppression
+        // this.getAllStudentsRequest(this.studentId);
+        console.log('Requête supprimée avec succès:', response);
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression de la requête:', error);
+      }
+    );
+  }
+
+
+  protected readonly console = console;
 }

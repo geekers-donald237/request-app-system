@@ -20,10 +20,6 @@ export class StaffService {
   constructor(private http: HttpClient, private router: Router) {
   }
 
-  getStaffMembers(): Observable<IGetStaffResponse> {
-    const url = `${this.baseUrl}/staff`;
-    return this.http.get<IGetStaffResponse>(url, {headers: this.headers});
-  }
 
   getRequestFromStudent(staffId: number): Observable<IGetStaffRequestsResponse> {
     return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});

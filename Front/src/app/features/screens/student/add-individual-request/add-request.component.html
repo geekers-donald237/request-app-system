@@ -16,42 +16,21 @@
       <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data"
             (ngSubmit)="sendRequest()">
         <div class="card-body">
-          <div class="form-group row mb-2">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Semestre<span
-              class="text-danger">*</span></label>
-            <div class="col-sm-12 col-md-7">
-              <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" formControlName="semester" value="s1">S1
-                </label>
-              </div>
-              <div class="form-check-inline">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input" formControlName="semester" value="s2">S2
-                </label>
-              </div>
-              <div *ngIf="semester.invalid && semester.touched" class="text-danger">
-                <div *ngIf="semester.errors?.['required']">Semestre est requis</div>
-              </div>
-            </div>
-          </div>
-
-
           <div class="form-group row mb-4">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Unité  (ue)<span
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Unité (UE)<span
               class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
-              <select class="form-control selectric" formControlName="ue" id="ue">
+              <select class="form-control selectric" formControlName="ueId" id="ue">
                 <option value="" disabled selected>Sélectionnez une UE</option>
-                <!-- Ajoutez les options dynamiquement depuis votre composant -->
+                <option *ngFor="let course of courses"
+                        [value]="course.id">{{ course.code_ue + " - " + course.staff.user?.name }}
+                </option>
               </select>
               <div *ngIf="ue.invalid && ue.touched" class="text-danger">
                 <div *ngIf="ue.errors?.['required']">UE est requise</div>
               </div>
             </div>
           </div>
-
-
           <div class="form-group row mb-2">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Objet<span class="text-danger">*</span></label>
             <div class="col-sm-12 col-md-7">
@@ -107,8 +86,6 @@
               </div>
             </div>
           </div>
-
-
           <div class="form-group row mb-3">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes<span
               class="text-danger">*</span></label>
@@ -127,27 +104,10 @@
             </div>
           </div>
 
-
-          <div class="form-group row mb-2">
-            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Destinataire<span
-              class="text-danger">*</span></label>
-            <div class="col-sm-12 col-md-7">
-              <select class="form-control selectric" name="receiver_id" formControlName="receiver_id" id="receiver_id">
-                <option value="" disabled selected>Sélectionnez un destinataire</option>
-                <option *ngFor="let teacher of staffList" [value]="teacher.id">{{ teacher.name }}</option>
-              </select>
-              <div *ngIf="receiver_id.invalid && receiver_id.touched" class="text-danger">
-                <div *ngIf="receiver_id.errors?.['required']">Destinataire est requis</div>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="afficherAlerte" class="alert alert-primary">
-            Votre Traitement a éte effectué avec succes
-          </div>
           <div class="form-group row mb-2">
             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
             <div class="col-sm-12 col-md-7">
-              <button type="submit" class="btn btn-primary" style="font-size: 12px;">Soumettre</button>
+              <button type="submit" class="btn btn-primary"[disabled]="!requestForm.valid"  style="font-size: 12px;">Soumettre</button>
             </div>
           </div>
 

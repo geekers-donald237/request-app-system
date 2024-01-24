@@ -18,8 +18,25 @@ export interface IReceiver {
   updated_at: string;
 }
 
+export interface IUE {
+  code_ue: string;
+  created_at: string;
+  department_id: number;
+  id: number;
+  is_deleted: number;
+  level_id: number;
+  libelle: string;
+  pivot: {
+    request_id: number;
+    ue_id: number;
+  };
+  staff_id: number;
+  updated_at: string;
+}
+
 export interface IRequest {
   id: number;
+  request_code: string;
   sender_id: number;
   request_pattern_id: number;
   title: string;
@@ -32,6 +49,7 @@ export interface IRequest {
   updated_at: string;
   attachments: IAttachment[];
   receivers: IReceiver[];
+  ues: IUE[];
 }
 
 export interface IGetStudentRequestResponse {

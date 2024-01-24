@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ListRequestComponent} from "./student/list-request/list-request.component";
-import {AddIndividualRequestComponent} from "./student/add-individual-request/add-individual-request.component";
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
 import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
@@ -12,6 +11,8 @@ import {ShowRequestSecretaryComponent} from "./secretary/show-request-secretary/
 import {
   ReceiveRequestSecretaryComponent
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
+import {AddRequestComponent} from "./student/add-individual-request/add-request.component";
+import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
     data: {
       title: 'Ma liste des requêtes'
     }
-  }, {
+  },
+  {
     path: 'list-requests',
     component: ListRequestComponent,
     data: {
@@ -30,11 +32,20 @@ const routes: Routes = [
   },
   {
     path: 'add-individual-request',
-    component: AddIndividualRequestComponent,
+    component: AddRequestComponent,
     data: {
       title: 'Nouvelle requête'
     }
   },
+
+  {
+    path: 'show-request/:id',
+    component: ShowRequestStudentComponent,
+    data: {
+      title: 'voir ma requete'
+    }
+  },
+
 
   // staff
   {
@@ -70,9 +81,11 @@ const routes: Routes = [
     path: 'show-request',
     component: ShowRequestComponent,
     data: {
-      title: 'voir requete'
+      title: 'Voir  requête'
     }
   },
+
+
 
 
   // secretary

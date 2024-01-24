@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RequestManagement\RequestController;
 use App\Http\Controllers\RequestManagement\RequestPatternController;
+use App\Http\Controllers\UeManagement\UeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');
     Route::patch('/request/{requestId}/statut/{statut}/', [RequestController::class, 'updateSecretaryRequestStatus'])->name('/request/statut');
     Route::get('/student/{studentId}/studentDetails', [RequestController::class, 'getStudentDetails'])->name('/student/{studentId}/studentDetails');
+    Route::get('/ue', [UeController::class, 'getUes'])->name('/ue');
 });
 
 require __DIR__ . '/auth.php';
