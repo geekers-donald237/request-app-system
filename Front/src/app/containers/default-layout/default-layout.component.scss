@@ -5,3 +5,17 @@
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
   }
 }
+
+.sidebar {
+  background-color: #292929; 
+}
+
+
+.sidebar-nav .c-sidebar-nav-item.c-active {
+  background-color: #363636;
+}
+.sidebar-nav .c-sidebar-nav-item.c-active:hover {
+  background-color: #1f2b33;
+}
+
+

@@ -48,7 +48,7 @@ export class DefaultLayoutComponent implements OnInit {
     ];
 
     const gestionDesRequetes: INavData = {
-      name: 'Gestion des requêtes',
+      name: 'Gestion des Requêtes',
       url: '/app',
       iconComponent: {name: 'cil-puzzle'},
       children: [],
@@ -61,11 +61,11 @@ export class DefaultLayoutComponent implements OnInit {
           url: '/app/student-dashboard',
         },
         {
-          name: 'Suivi Requetes',
+          name: 'Suivis des Requêtes',
           url: '/app/list-requests',
         },
         {
-          name: 'Creation Requete',
+          name: 'Creation des Requêtes',
           url: '/app/add-individual-request',
         },
 
@@ -78,11 +78,11 @@ export class DefaultLayoutComponent implements OnInit {
           url: '/app/requests',
         },
         {
-          name: 'Traitement des requetes',
+          name: 'Traitement des Requêtes',
           url: '/app/receive-request',
         },
         {
-          name: 'Echeance requetes',
+          name: 'Echeance Requêtes',
           url: '/app/show-program',
         },
         {

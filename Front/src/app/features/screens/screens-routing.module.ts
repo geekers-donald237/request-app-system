@@ -11,8 +11,8 @@ import {ShowRequestSecretaryComponent} from "./secretary/show-request-secretary/
 import {
   ReceiveRequestSecretaryComponent
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
-import {AddRequestComponent} from "./student/add-individual-request/add-request.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
+import { AddRequestComponent } from './student/add-individual-request/add-request.component';
 
 
 const routes: Routes = [

@@ -1,5 +1,5 @@
 <ng-template #deleteRequestConfirmation>
-  <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="danger">Supprimer</button>
+  <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="danger" style="font-size: 12px;color: white;">Supprimer</button>
   <c-modal #deleteRequestConfirmationModal backdrop="static" id="deleteRequestConfirmationModal">
     <c-modal-header>
       <h5 cModalTitle>Confirmation de suppression</h5>
@@ -9,10 +9,10 @@
       Êtes-vous sûr de vouloir supprimer cette requête ?
     </c-modal-body>
     <c-modal-footer>
-      <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="secondary">
+      <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="secondary" style="font-size: 12px;">
         Annuler
       </button>
-      <button cButton color="danger" (click)="console.log('suppression reussie')">Supprimer</button>
+      <button cButton color="danger" (click)="console.log('suppression reussie')" style="font-size: 12px;">Supprimer</button>
     </c-modal-footer>
   </c-modal>
 </ng-template>
@@ -22,8 +22,6 @@
   <div class="card">
     <div class="card-header">
       <h5>liste des Requetes</h5>
-
-
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -61,7 +59,7 @@
                 Voir plus
               </a>
             </td>
-            <td style="display: flex; justify-content: space-between;">
+            <td style="display: flex; justify-content: space-between; ">
               <button  color="danger" *ngTemplateOutlet="deleteRequestConfirmation">
               </button>
             </td>
