@@ -9,7 +9,7 @@ export interface ISender {
   updated_at: string;
 }
 
-export interface IStaffRequest {
+export interface IPersonnalRequest {
   id: number;
   sender_id: number;
   request_pattern_id: number;
@@ -25,8 +25,8 @@ export interface IStaffRequest {
   sender: ISender;
 }
 
-export interface IGetStaffRequestsResponse {
+export interface IGetPersonnRequestsResponse {
   status: number;
-  requests: IStaffRequest[];
+  requests: IPersonnalRequest[];
   message: string;
 }

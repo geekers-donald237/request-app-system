@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {RequestService} from '../../../services/request/request.service';
-import {StaffService} from '../../../services/staff/staff.service';
 import {RequestStateConstants} from '../../../constant/constant';
 import {IStudentData, IStudentResponse} from '../../../models/student.information.model';
 import {IRequestPattern} from '../../../models/request.patterns.model';
@@ -19,7 +18,6 @@ export class ShowRequestComponent implements OnInit {
   afficherAlerte: boolean = false;
 
   constructor(
-    private staffService: StaffService,
     private router: Router,
     private requestService: RequestService
   ) {
@@ -73,7 +71,6 @@ export class ShowRequestComponent implements OnInit {
   }
 
 
-
   validateRequest(): void {
     this.updateRequestStatus(RequestStateConstants.ACCEPTEE);
     this.afficherAlerte = true;
@@ -81,6 +78,7 @@ export class ShowRequestComponent implements OnInit {
       this.fermerAlerte();
     }, 3000);
   }
+
   putOnHoldRequest(): void {
     this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
     this.afficherAlerte = true;
@@ -96,9 +94,11 @@ export class ShowRequestComponent implements OnInit {
       this.fermerAlerte();
     }, 3000);
   }
+
   fermerAlerte() {
     this.afficherAlerte = false;
   }
+
   getAttachmentUrl(filePath: string): string {
     const laravelBaseUrl = 'http://127.0.0.1:8000/storage';
     return `${laravelBaseUrl}/${filePath}`;
@@ -114,8 +114,8 @@ export class ShowRequestComponent implements OnInit {
       () => {
         console.log('Status update');
         setTimeout(() => {
-        this.router.navigate(['/app/receive-request']);
-        },3000);
+          this.router.navigate(['/app/receive-request']);
+        }, 3000);
       },
       (error) => {
         this.handleError('An error occurred while updating request status:', error);

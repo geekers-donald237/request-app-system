@@ -9,7 +9,7 @@ import { IStudentResponse } from "../../models/student.information.model";
 import { IRequestDetailsResponse } from "../../models/request.model";
 import { IUpdateStatusResponse } from "../../models/request.status.model";
 import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
-import {IGetStaffRequestsResponse} from "../../models/staff.request.model";
+import {IGetPersonnRequestsResponse} from "../../models/staff.request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -69,8 +69,12 @@ export class RequestService {
     return this.http.delete<IDeleteRequestApiResponse>(url, {headers: this.headers});
   }
 
-  getRequestReceiveByStaff(staffId: number): Observable<IGetStaffRequestsResponse> {
-    return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
+  getRequestReceiveByStaff(staffId: number): Observable<IGetPersonnRequestsResponse> {
+    return this.http.get<IGetPersonnRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
+  }
+
+  getRequestReceiveBySecretary(secretaryId: number): Observable<IGetPersonnRequestsResponse> {
+    return this.http.get<IGetPersonnRequestsResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
   }
 
 

@@ -96,10 +96,10 @@ const routes: Routes = [
       title: 'requete secetaire'
     }
   }, {
-    path: 'secretary/requests/details',
+    path: 'show-request-secretary',
     component: ShowRequestSecretaryComponent,
     data: {
-      title: 'requete secetaire details'
+      title: 'requete secretaire details'
     }
   }
 ];

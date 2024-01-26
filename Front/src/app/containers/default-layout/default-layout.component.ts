@@ -97,10 +97,6 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Requêtes Reçus',
           url: '/app/secretary/requests',
         },
-        // {
-        //   name: 'details requete',
-        //   url: '/app/receive-request',
-        // },
       ];
     }
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IStaffRequest} from "../../../models/staff.request.model";
+import {IPersonnalRequest} from "../../../models/staff.request.model";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {RequestService} from "../../../services/request/request.service";
@@ -12,7 +12,7 @@ import {RequestService} from "../../../services/request/request.service";
 })
 export class ReceivesRequestComponent implements OnInit {
   staffId: number | null = null;
-  requests: IStaffRequest[] = [];
+  requests: IPersonnalRequest[] = [];
 
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
