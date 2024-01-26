@@ -47,4 +47,6 @@ export class Utils {
     const userData = userDataString ? JSON.parse(userDataString) : null;
     return userData ? parseInt(userData.id) : 0;
   }
+
+
 }

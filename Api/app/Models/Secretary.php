@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\RequestStateEnum;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,9 +22,20 @@ class Secretary extends Model
 
     public function requests(): Builder
     {
-        return Request::with('attachments', 'receivers')
+        return Request::with('attachments')
             ->whereIsDeleted(false)->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value);
     }
+
+    public function getRequestsForUes(array $ueIds): Collection|array
+    {
+        return $this->requests()
+            ->whereHas('ues', function ($query) use ($ueIds) {
+                $query->whereIn('u_e_s.id', $ueIds);
+            })
+            ->get();
+    }
+
+
 
     public function department(): BelongsTo
     {

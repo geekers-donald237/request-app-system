@@ -33,7 +33,9 @@ use App\Responses\UpdateRequestActionResponse;
 use App\Responses\UpdateRequestStatutActionResponse;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class RequestService
@@ -342,18 +344,16 @@ class RequestService
         $response = new GetSecretaryRequestActionResponse();
         $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
         $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
+        $ueIds = $this->getSubjectsForSecretary($secretary);
 
-        $response->requests = $secretary->requests()->get();
+        // Utiliser la méthode personnalisée du modèle Secretary
+        $response->requests = $secretary->getRequestsForUes($ueIds);
+
         $response->message = 'Requetes envoyees ' . $secretary->user->name;
 
         return $response;
     }
 
-
-
-    /**
-     * @throws Exception
-     */
 
     /**
      * @throws Exception
@@ -366,16 +366,37 @@ class RequestService
         }
     }
 
+
+    /**
+     * @throws Exception
+     */
+
     /**
      * @throws Exception
      */
     private function getSecretaryIfExistOrThrowException(string $secretaryId): Secretary
     {
-        $secretary = Secretary::whereId($secretaryId)->whereIsDeleted(false)->first();
+        $secretary = Secretary::whereUserId($secretaryId)->whereIsDeleted(false)->first();
         if (is_null($secretary)) {
             throw new Exception('Ce secretaire n\'existe pas!');
         }
         return $secretary;
+    }
+
+    public function getSubjectsForSecretary($secretary): ?array
+    {
+        $ueIds = [];
+
+        $department = $secretary->department;
+        if ($department) {
+
+            foreach ($department->subjects as $subject) {
+                $ueIds[] = $subject['id'];
+            }
+            return $ueIds;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -386,8 +407,13 @@ class RequestService
         $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
         $response = new GetStaffRequestActionResponse();
         $staff = $this->getStaffIfExistOrThrowException($staffId);
-        $response->requests = $staff->receiveRequests()->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value)->with('attachments')->with('sender')->get();
-        $response->message = 'Requests receive by ' . $staff->user()->first()->name();
+
+        $staffWithUes = $this->loadStaffWithUes($staff);
+        $ue = $this->getFirstUeForStaff($staffWithUes);
+
+        $response->requests = $this->getRequestsForUe($ue);
+
+        $response->message = 'Requests received by ' . $staff->user()->first()->name();
         return $response;
     }
 
@@ -414,6 +440,28 @@ class RequestService
         }
         return $staff;
 
+    }
+
+    protected function loadStaffWithUes(Staff $staff): Builder|array|Collection|Model
+    {
+        return Staff::with('ues')->find($staff->id);
+    }
+
+    protected function getFirstUeForStaff(Staff $staff): UE
+    {
+        if (!$staff->ues || $staff->ues->isEmpty()) {
+            throw new Exception("Cet enseignant n'est associé à aucune UE.");
+        }
+        return $staff->ues->first();
+    }
+
+    protected function getRequestsForUe(UE $ue): Collection
+    {
+        return $ue->requests()
+            ->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value)
+            ->with('attachments')
+            ->with('sender')
+            ->get();
     }
 
     /**

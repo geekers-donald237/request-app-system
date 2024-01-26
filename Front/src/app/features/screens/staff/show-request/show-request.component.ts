@@ -72,6 +72,8 @@ export class ShowRequestComponent implements OnInit {
     );
   }
 
+
+
   validateRequest(): void {
     this.updateRequestStatus(RequestStateConstants.ACCEPTEE);
     this.afficherAlerte = true;
