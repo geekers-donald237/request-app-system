@@ -12,7 +12,7 @@ import {
   ReceiveRequestSecretaryComponent
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
-import { AddRequestComponent } from './student/add-individual-request/add-request.component';
+import {AddRequestComponent} from './student/add-individual-request/add-request.component';
 
 
 const routes: Routes = [
@@ -84,8 +84,6 @@ const routes: Routes = [
       title: 'Voir  requête'
     }
   },
-
-
 
 
   // secretary

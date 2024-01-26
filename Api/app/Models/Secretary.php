@@ -26,13 +26,13 @@ class Secretary extends Model
             ->whereIsDeleted(false)->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value);
     }
 
-    public function getRequestsForUes(array $ueIds): Collection|array
+    public function getRequestsForUes(array $ueIds): Builder
     {
         return $this->requests()
             ->whereHas('ues', function ($query) use ($ueIds) {
                 $query->whereIn('u_e_s.id', $ueIds);
             })
-            ->get();
+            ;
     }
 
 

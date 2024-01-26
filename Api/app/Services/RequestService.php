@@ -20,7 +20,9 @@ use App\Models\Student;
 use App\Models\UE;
 use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
+use App\Responses\GetAllUserActionResponse;
 use App\Responses\GetRequestActionResponse;
+use App\Responses\GetRequestHistoryActionResponse;
 use App\Responses\GetSecretaryRequestActionResponse;
 use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
@@ -50,6 +52,8 @@ class RequestService
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
 
         $request = $this->saveStudentRequest($command);
+        $this->createRequestHistory($request, RequestStateEnum::ATTENTE_DE_SOUMISSION->value);
+
         $response->isSaved = true;
         $response->requestId = $request->getAttributeValue('id');
         $response->message = 'Request Successfully saved';
@@ -176,6 +180,16 @@ class RequestService
         }
     }
 
+    private function createRequestHistory(Request $request, string $newRequestState): void
+    {
+        $requestHistory = new RequestHistory();
+        $requestHistory->fill([
+            'request_id' => $request->id,
+            'modify_by' => Auth::user()->getAuthIdentifier(),
+            'status' => $newRequestState,
+        ])->save();
+    }
+
     /**
      * @throws Exception
      */
@@ -184,7 +198,7 @@ class RequestService
         $requestId = $command->requestId;
         $response = new UpdateRequestActionResponse();
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $request = $this->checkIfRequesExistOrThrowException($requestId);
         $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
         $request = $this->updateStudentRequest($requestId, $command);
 
@@ -198,7 +212,7 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function getRequestIfExistOrThrowException(string $requestId): Request
+    private function checkIfRequesExistOrThrowException(string $requestId): Request
     {
         $request = Request::whereId($requestId)->whereIsDeleted(false)->first();
         if (is_null($request)) {
@@ -347,13 +361,17 @@ class RequestService
         $ueIds = $this->getSubjectsForSecretary($secretary);
 
         // Utiliser la méthode personnalisée du modèle Secretary
-        $response->requests = $secretary->getRequestsForUes($ueIds);
+        $response->requests = $secretary->getRequestsForUes($ueIds)->with('sender')->get();
 
         $response->message = 'Requetes envoyees ' . $secretary->user->name;
 
         return $response;
     }
 
+
+    /**
+     * @throws Exception
+     */
 
     /**
      * @throws Exception
@@ -365,11 +383,6 @@ class RequestService
             throw new Exception('This user is not a secretary, so he cannot get request ');
         }
     }
-
-
-    /**
-     * @throws Exception
-     */
 
     /**
      * @throws Exception
@@ -458,7 +471,7 @@ class RequestService
     protected function getRequestsForUe(UE $ue): Collection
     {
         return $ue->requests()
-            ->whereStatut(RequestStateEnum::ATTENTE_DE_VALIDATION->value)
+            ->whereStatut(RequestStateEnum::EN_COURS_DE_TRAITEMENT->value)
             ->with('attachments')
             ->with('sender')
             ->get();
@@ -470,7 +483,7 @@ class RequestService
     public function handleDeleteRequest(string $requestId): DeleteRequestActionResponse
     {
         $response = new DeleteRequestActionResponse();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $request = $this->checkIfRequesExistOrThrowException($requestId);
         $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
         $this->checkIfIsPossibleTodeleteRequest($request);
         $this->deleteRequestAndItsAttachments($request);
@@ -499,6 +512,10 @@ class RequestService
         $request->fill(['is_deleted' => true])->save();
     }
 
+    /**
+     * @throws Exception
+     */
+
     private function removeAttachmentsFromDisk(Collection $attachments): void
     {
         //TODO : implement disk attachments suppression
@@ -507,15 +524,11 @@ class RequestService
     /**
      * @throws Exception
      */
-
-    /**
-     * @throws Exception
-     */
     public function handleSendRequest(SendRequestActionCommand $command): SendRequestActionResponse
     {
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $response = new SendRequestActionResponse();
-        $request = $this->getRequestIfExistOrThrowException($command->requestId);
+        $request = $this->checkIfRequesExistOrThrowException($command->requestId);
         $this->checkIfReceiverUeExistOrThrowException($command->ueId);
 
         $request->ues()->attach($command->ueId);
@@ -537,35 +550,24 @@ class RequestService
         }
     }
 
-    /**
-     * @throws Exception
-     */
     public function updateRequestState(Request $request, RequestStateEnum $newRequestState): void
     {
         $request->fill(['statut' => $newRequestState->value])->save();
 
-        $this->createRequestHistory($request, $newRequestState);
-    }
-
-    private function createRequestHistory(Request $request, RequestStateEnum $newRequestState): void
-    {
-        $requestHistory = new RequestHistory();
-        $requestHistory->fill([
-            'request_id' => $request->id,
-            'modify_by' => Auth::user()->getAuthIdentifier(),
-            'status' => $newRequestState->value,
-        ])->save();
+        $this->createRequestHistory($request, $newRequestState->value);
     }
 
     /**
      * @throws Exception
      */
-    public function handleUpdateSecretaryRequestStatus(string $requestId, string $newRequestStatut): UpdateRequestStatutActionResponse
+    public function handleUpdateRequestStatus(string $requestId, string $newRequestStatut): UpdateRequestStatutActionResponse
     {
         $response = new UpdateRequestStatutActionResponse();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $request = $this->checkIfRequesExistOrThrowException($requestId);
         $this->checkIfNewStateRequestExistInRequestEnumStatut($newRequestStatut);
         $request->update(['statut' => $newRequestStatut]);
+        $this->createRequestHistory($request, $newRequestStatut);
+
         $response->message = 'Statut Updated succeffuly';
         return $response;
     }
@@ -580,13 +582,14 @@ class RequestService
         }
     }
 
+
     /**
      * @throws Exception
      */
     public function handleGetRequest(string $requestId): GetRequestActionResponse
     {
         $response = new GetRequestActionResponse();
-        $request = $this->getRequestIfExistOrThrowException($requestId);
+        $request = $this->checkIfRequesExistOrThrowException($requestId);
 
         $response->request = Request::with('attachments')->find($requestId);
         $response->message = 'Request Successfully getted';
@@ -660,6 +663,36 @@ class RequestService
         } catch (Exception $e) {
             $response->message = 'Error: ' . $e->getMessage();
         }
+
+        return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleGetRequestHistory(string $requestId): GetRequestHistoryActionResponse
+    {
+        $response = new GetRequestHistoryActionResponse();
+        $request = $this->checkIfRequesExistOrThrowException($requestId);
+        $history = RequestHistory::where('request_id', $requestId)->get();
+        $response->message = "request road  getting successfully";
+        $response->status = 200;
+        $response->history = $history;
+
+        return $response;
+
+    }
+
+    public function handleGetAllUser(): GetAllUserActionResponse
+    {
+        $response = new GetAllUserActionResponse();
+
+
+        $users = User::
+        whereIsDeleted(false)->with(['rules'])
+            ->get()->first();
+
+        $response->user = $users;
 
         return $response;
     }

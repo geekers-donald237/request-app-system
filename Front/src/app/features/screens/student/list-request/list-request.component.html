@@ -1,4 +1,3 @@
-
 <c-alert [(visible)]="visible"
          [dismissible]="dismissible"
          color="danger"
@@ -39,10 +38,12 @@
           <td>
             <div [ngClass]="{
                   'badge': true,
-                   'badge-success': request.statut === 'Accepter',
-                  'badge-danger': request.statut === 'Refuser',
+                   'badge-success': request.statut === 'accepter',
+                  'badge-danger': request.statut === 'refuser',
                   'badge-warning': request.statut === 'attente_validation',
                   'badge-info': request.statut === 'en_cours',
+                  'badge-primary': request.statut === 'attente_soumission',
+                  'badge-error': request.statut === 'terminer',
                 }">
               {{ request.statut }}
             </div>
@@ -50,16 +51,16 @@
           <td>{{ request.created_at | date: 'dd/MM/yyyy' }}</td>
 
           <td>
-            <a [routerLink]="['/show-request', request.id]" class="btn btn-primary" style="font-size: 12px;">
-              Voir plus
-            </a>
+            <button cButton class="me-1" color="primary" (click)="showRequest(request.id)" style="font-size: 12px;">Details</button>
           </td>
           <td style="display: flex; justify-content: space-between;">
             <button color="danger" *ngTemplateOutlet="deleteRequestConfirmation" (click)="deleteRequest(request.id)">
             </button>
           </td>
           <ng-template #deleteRequestConfirmation>
-            <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="danger" style="font-size: 12px;color: white;">Supprimer</button>
+            <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="danger"
+                    style="font-size: 12px;color: white;">Supprimer
+            </button>
             <c-modal #deleteRequestConfirmationModal backdrop="static" id="deleteRequestConfirmationModal">
               <c-modal-header>
                 <h5 cModalTitle>Confirmation de suppression</h5>
@@ -69,10 +70,12 @@
                 Êtes-vous sûr de vouloir supprimer cette requête ?
               </c-modal-body>
               <c-modal-footer>
-                <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="secondary" style="font-size: 12px;">
+                <button [cModalToggle]="deleteRequestConfirmationModal.id" cButton color="secondary"
+                        style="font-size: 12px;">
                   Annuler
                 </button>
-                <button cButton color="danger" (click)="deleteRequest(request.id)" style="font-size: 12px;">Supprimer</button>
+                <button cButton color="danger" (click)="deleteRequest(request.id)" style="font-size: 12px;">Supprimer
+                </button>
               </c-modal-footer>
             </c-modal>
           </ng-template>

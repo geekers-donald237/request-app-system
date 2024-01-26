@@ -242,7 +242,7 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
-    public function updateSecretaryRequestStatus(
+    public function updateRequestStatus(
         string         $requestId,
         string         $newRequestStatut,
         RequestService $handler
@@ -254,11 +254,35 @@ class RequestController extends Controller
         ];
 
         try {
-            $response = $handler->handleUpdateSecretaryRequestStatus($requestId, $newRequestStatut);
+            $response = $handler->handleUpdateRequestStatus($requestId, $newRequestStatut);
 
             $httpJson = [
                 'status' => 200,
                 'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
+    public function getRequestHistory(
+        string         $requestId,
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+
+        try {
+            $response = $handler->handleGetRequestHistory($requestId);
+
+            $httpJson = [
+                'status' => 200,
+                'message' => $response->message,
+                'history' => $response->history
             ];
         } catch (Exception $e) {
             $httpJson['message'] = $e->getMessage();
@@ -277,6 +301,18 @@ class RequestController extends Controller
         $response = $handler->handleGetStaff();
 
         $httpJson['staff'] = $response->staff;
+        return response()->json($httpJson);
+    }public function getAllUser(
+        RequestService $handler
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200
+        ];
+
+        $response = $handler->handleGetAllUser();
+
+        $httpJson['user'] = $response->user;
         return response()->json($httpJson);
     }
 

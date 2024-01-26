@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request/patterns', [RequestPatternController::class, 'getAllRequestPatterns'])->name('request/patterns');
     Route::get('/staff', [RequestController::class, 'getAllStaff'])->name('staff');
+    Route::get('/users', [RequestController::class, 'getAllUser'])->name('user');
     Route::post('/request', [RequestController::class, 'save'])->name('request');
     Route::post('/request/send', [RequestController::class, 'sendRequest'])->name('/request/send');
     Route::get('/student/{studentId}/requests', [RequestController::class, 'getStudentRequests'])->name('/student/{studentId}/requests');
@@ -36,9 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/staff/{staffId}/requests', [RequestController::class, 'getStaffRequests'])->name('/staff/{staffId}/requests');
     Route::get('/secretary/{secretary}/requests', [RequestController::class, 'getSecretaryRequests'])->name('/secretary/{secretary}/requests');
-    Route::patch('/request/{requestId}/statut/{statut}/', [RequestController::class, 'updateSecretaryRequestStatus'])->name('/request/statut');
+    Route::patch('/request/{requestId}/statut/{statut}/', [RequestController::class, 'updateRequestStatus'])->name('/request/statut');
     Route::get('/student/{studentId}/studentDetails', [RequestController::class, 'getStudentDetails'])->name('/student/{studentId}/studentDetails');
     Route::get('/ue', [UeController::class, 'getUes'])->name('/ue');
+    Route::get('requests/{requestId}/history', [RequestController::class, 'getRequestHistory'])->name('requests/{requestId}/history');
+
 });
 
 require __DIR__ . '/auth.php';

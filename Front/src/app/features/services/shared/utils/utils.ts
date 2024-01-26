@@ -2,6 +2,7 @@ import {Router} from '@angular/router';
 import {UserRoleConstants} from "../../../constant/constant";
 import {Injectable} from "@angular/core";
 import {ILoginResponse, IUserRole} from "../../../models/login.response.model";
+import {IUser} from "../../../models/staff.member.model";
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,15 @@ export class Utils {
     const userDataString = localStorage.getItem('user');
     const userData = userDataString ? JSON.parse(userDataString) : null;
     return userData ? parseInt(userData.id) : 0;
+  }
+
+  public getUserFromLocalStorage(): IUser {
+    const userDataString = localStorage.getItem('user');
+    return userDataString ? JSON.parse(userDataString) : null;
+  }
+
+  public clearLocalStorage(): void {
+    localStorage.clear();
   }
 
 

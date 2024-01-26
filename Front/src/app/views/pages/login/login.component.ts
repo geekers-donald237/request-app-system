@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from "@angular/forms";
-import { AuthService } from "../../../features/services/shared/auth/auth.service";
-import { Router } from "@angular/router";
-import { MessageService } from "primeng/api";
-import { Utils } from "../../../features/services/shared/utils/utils";
+import {Component} from '@angular/core';
+import {FormBuilder, Validators} from "@angular/forms";
+import {AuthService} from "../../../features/services/shared/auth/auth.service";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
+import {Utils} from "../../../features/services/shared/utils/utils";
 
 @Component({
   selector: 'app-login',
@@ -38,9 +38,10 @@ export class LoginComponent {
   }
 
   login() {
-    const { email, password } = this.loginForm.value;
+    const {email, password} = this.loginForm.value;
     this.authService.login(email!, password!).subscribe(
       (response) => {
+        this.utils.clearLocalStorage();
         if (response.isLogged) {
           const user = response.user;
           const token = response.token;

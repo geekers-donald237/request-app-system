@@ -91,7 +91,7 @@ export class AddRequestComponent implements OnInit {
     }
 
     const formData = this.createFormData();
-    const ueId = 1; // Remplacez ceci par la logique appropriée pour obtenir l'ID du destinataire
+    const ueId = 1;
 
     this.requestService.saveRequest(formData).subscribe(
       (response) => {
@@ -161,12 +161,15 @@ export class AddRequestComponent implements OnInit {
 
   private sendRequestDetails(requestId: number, ueId: number): void {
     this.requestService.sendRequest(requestId, ueId).subscribe(
+
       (saveResponse) => {
+
         console.log('Détails de la requête enregistrés avec succès:', saveResponse);
         this.router.navigate(['/app/list-requests']);
       },
       (saveError) => {
         console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
+
       }
     );
   }

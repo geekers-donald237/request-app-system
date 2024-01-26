@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { IGetStudentRequestResponse } from "../../models/student.request.model";
-import { IRequestPatternsResponse } from "../../models/request.patterns.model";
-import { ISaveRequestResponse } from "../../models/save.request.model";
-import { ISendRequestResponse } from "../../models/send.request.model";
-import { IStudentResponse } from "../../models/student.information.model";
-import { IRequestDetailsResponse } from "../../models/request.model";
-import { IUpdateStatusResponse } from "../../models/request.status.model";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {IGetStudentRequestResponse} from "../../models/student.request.model";
+import {IRequestPatternsResponse} from "../../models/request.patterns.model";
+import {ISaveRequestResponse} from "../../models/save.request.model";
+import {ISendRequestResponse} from "../../models/send.request.model";
+import {IStudentResponse} from "../../models/student.information.model";
+import {IRequestDetailsResponse} from "../../models/request.model";
+import {IUpdateStatusResponse} from "../../models/request.status.model";
 import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
 import {IGetPersonnRequestsResponse} from "../../models/staff.request.model";
+import {IRequestHistoryResponse} from "../../models/request.history.model";
+import {IGetStaffResponse, IUserResponse} from "../../models/staff.member.model";
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +77,15 @@ export class RequestService {
 
   getRequestReceiveBySecretary(secretaryId: number): Observable<IGetPersonnRequestsResponse> {
     return this.http.get<IGetPersonnRequestsResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
+  }
+
+  getRequestHistory(requestId: number): Observable<IRequestHistoryResponse> {
+    return this.http.get<IRequestHistoryResponse>(`${this.baseUrl}/requests/${requestId}/history`, {headers: this.headers});
+  }
+
+  getUsers(): Observable<IUserResponse> {
+    const url = `${this.baseUrl}/users`;
+    return this.http.get<IUserResponse>(url, {headers: this.headers});
   }
 
 

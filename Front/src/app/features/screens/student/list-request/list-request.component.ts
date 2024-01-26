@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
 import {IRequest} from "../../../models/student.request.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-list-request',
@@ -19,7 +20,7 @@ export class ListRequestComponent implements OnInit {
   requestPatterns: any[] = [];
 
 
-  constructor(private requestService: RequestService) {
+  constructor(private requestService: RequestService, private router: Router) {
 
   }
 
@@ -74,6 +75,11 @@ export class ListRequestComponent implements OnInit {
         console.error('Erreur lors de la suppression de la requête:', error);
       }
     );
+  }
+
+  showRequest(requestId: number): void {
+    localStorage.setItem('requestId', requestId.toString());
+    this.router.navigate(['/app/show-request/:'+requestId]);
   }
 
 
