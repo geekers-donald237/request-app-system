@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {StaffService} from "../../../services/staff/staff.service";
 import {IStaffRequest} from "../../../models/staff.request.model";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
+import {RequestService} from "../../../services/request/request.service";
 
 @Component({
   selector: 'app-receives-request',
@@ -15,7 +15,7 @@ export class ReceivesRequestComponent implements OnInit {
   requests: IStaffRequest[] = [];
 
 
-  constructor(private staffService: StaffService, private router: Router, private utils: Utils) {
+  constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
 
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class ReceivesRequestComponent implements OnInit {
   }
 
   getAllStaffRequest(staffId: number): void {
-    this.staffService.getRequestFromStudent(staffId).subscribe(
+    this.requestService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {
         console.log(response);
         this.requests = response.requests;

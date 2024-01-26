@@ -9,6 +9,7 @@ import { IStudentResponse } from "../../models/student.information.model";
 import { IRequestDetailsResponse } from "../../models/request.model";
 import { IUpdateStatusResponse } from "../../models/request.status.model";
 import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
+import {IGetStaffRequestsResponse} from "../../models/staff.request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -67,4 +68,10 @@ export class RequestService {
     const url = `${this.baseUrl}/request/${requestId}`;
     return this.http.delete<IDeleteRequestApiResponse>(url, {headers: this.headers});
   }
+
+  getRequestReceiveByStaff(staffId: number): Observable<IGetStaffRequestsResponse> {
+    return this.http.get<IGetStaffRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
+  }
+
+
 }
