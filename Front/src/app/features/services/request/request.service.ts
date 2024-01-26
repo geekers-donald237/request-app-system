@@ -8,6 +8,7 @@ import { ISendRequestResponse } from "../../models/send.request.model";
 import { IStudentResponse } from "../../models/student.information.model";
 import { IRequestDetailsResponse } from "../../models/request.model";
 import { IUpdateStatusResponse } from "../../models/request.status.model";
+import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -62,9 +63,8 @@ export class RequestService {
     return this.http.patch<IUpdateStatusResponse>(url, {}, {headers: this.headers});
   }
 
-  // Nouvelle fonction pour supprimer une requête
-  deleteRequest(requestId: number): Observable<any> {
+  deleteRequest(requestId: number): Observable<IDeleteRequestApiResponse> {
     const url = `${this.baseUrl}/request/${requestId}`;
-    return this.http.delete<any>(url, {headers: this.headers});
+    return this.http.delete<IDeleteRequestApiResponse>(url, {headers: this.headers});
   }
 }

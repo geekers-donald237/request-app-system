@@ -23,7 +23,7 @@ export class Utils {
         this.router.navigate(['/app/list-requests']);
         break;
       case UserRoleConstants.STAFF:
-        this.router.navigate(['/app/requests']);
+        this.router.navigate(['/app/staff/requests']);
         break;
       case UserRoleConstants.SECRETARY:
         this.router.navigate(['/app/secretary/requests']);

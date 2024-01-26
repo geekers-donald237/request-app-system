@@ -22,10 +22,8 @@ return new class extends Migration {
                 RequestStateEnum::ATTENTE_DE_SOUMISSION->value,
                 RequestStateEnum::ATTENTE_DE_VALIDATION->value,
                 RequestStateEnum::EN_COURS_DE_TRAITEMENT->value,
-                RequestStateEnum::ATTENTE_DE_DECISION->value,
                 RequestStateEnum::ACCEPTEE->value,
                 RequestStateEnum::REFUSEE->value,
-                RequestStateEnum::EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT->value,
                 RequestStateEnum::TERMINEE->value,
             ])->default(RequestStateEnum::ATTENTE_DE_SOUMISSION->value,);
             $table->boolean('in_draft')->default(1);

@@ -35,7 +35,6 @@ use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Ramsey\Uuid\Nonstandard\Uuid;
 
 class RequestService
 {
@@ -435,9 +434,9 @@ class RequestService
 
     private function checkIfIsPossibleTodeleteRequest(Request $request): void
     {
-        $requestStatutPossibleToDeleted = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value, RequestStateEnum::ACCEPTEE, RequestStateEnum::TERMINEE];
-        if (in_array($request->statut(), $requestStatutPossibleToDeleted)) {
-            throw new Exception('Impossible de modifier cette requete car en cours de traitement');
+        $requestStatutPossibleToDeleted = [RequestStateEnum::ACCEPTEE->value, RequestStateEnum::REFUSEE->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::TERMINEE->value];
+        if (!in_array($request->statut(), $requestStatutPossibleToDeleted)) {
+            throw new Exception('Impossible de supprimer cette requete car en cours de traitement');
         }
     }
 

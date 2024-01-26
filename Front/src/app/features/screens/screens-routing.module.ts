@@ -49,7 +49,7 @@ const routes: Routes = [
 
   // staff
   {
-    path: 'requests',
+    path: 'staff/requests',
     component: StaffDashboardComponent,
     data: {
       title: 'Statitiques Staff'

@@ -19,6 +19,7 @@ export class DefaultLayoutComponent implements OnInit {
   userRole: string | null = '';
   studentNavItems: INavData[] = [];
   staffNavItems: INavData[] = [];
+  secretaryNavItems: INavData[] = [];
   user: IUser | undefined;
 
   constructor(private utils: Utils
@@ -36,7 +37,7 @@ export class DefaultLayoutComponent implements OnInit {
   private generateNavItems(): void {
     this.studentNavItems = this.generateUserSection('Étudiant', UserRoleConstants.STUDENT);
     this.staffNavItems = this.generateUserSection('Staff', UserRoleConstants.STAFF);
-    this.staffNavItems = this.generateUserSection('Secretary', UserRoleConstants.SECRETARY);
+    this.secretaryNavItems = this.generateUserSection('Secretary', UserRoleConstants.SECRETARY);
   }
 
   private generateUserSection(title: string, role: string): INavData[] {
@@ -75,7 +76,7 @@ export class DefaultLayoutComponent implements OnInit {
       gestionDesRequetes.children = [
         {
           name: 'Dashboard',
-          url: '/app/requests',
+          url: '/app/staff/requests',
         },
         {
           name: 'Traitement des Requêtes',

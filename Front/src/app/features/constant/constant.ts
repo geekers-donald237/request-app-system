@@ -8,13 +8,10 @@ export class UserRoleConstants {
 export class RequestStateConstants {
   static readonly ATTENTE_DE_SOUMISSION = 'attente_soumission';
   static readonly ATTENTE_DE_VALIDATION = 'attente_validation';
-  static readonly ATTENTE_DE_TRAITEMENT = 'attente_traitement';
   static readonly EN_COURS_DE_TRAITEMENT = 'en_cours';
-  static readonly ATTENTE_DE_DECISION = 'attente_decision';
-  static readonly ACCEPTEE = 'Accepter';
-  static readonly REFUSEE = 'Refuser';
-  static readonly TERMINEE = 'Terminer';
-  static readonly EN_ATTENTE_DE_REPONSE_DE_L_ETUDIANT = 'reponse_etudiant';
+  static readonly ACCEPTEE = 'accepter';
+  static readonly REFUSEE = 'refuser';
+  static readonly TERMINEE = 'terminer';
 }
 
 export const requestModel = 'Monsieur (ou Madame),\n' +

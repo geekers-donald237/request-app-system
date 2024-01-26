@@ -9,11 +9,14 @@ import {IRequest} from "../../../models/student.request.model";
 })
 export class ListRequestComponent implements OnInit {
   studentId: number | null = null;
+  visible = false;
+  dismissible = true;
+  errorMessage: string | undefined;
+  successVisible = false;
   requests: IRequest[] = [];
   public liveDemoVisible = false;
 
   requestPatterns: any[] = [];
-
 
 
   constructor(private requestService: RequestService) {
@@ -57,9 +60,15 @@ export class ListRequestComponent implements OnInit {
   deleteRequest(requestId: number): void {
     this.requestService.deleteRequest(requestId).subscribe(
       (response) => {
-        // Actualiser la liste des requêtes après la suppression
-        // this.getAllStudentsRequest(this.studentId);
-        console.log('Requête supprimée avec succès:', response);
+        if (response.isDeleted) {
+          this.successVisible = true;
+          // Actualiser la liste des requêtes après la suppression
+          this.getAllStudentsRequest(this.studentId!);
+
+        } else {
+          this.errorMessage = response.message;
+          this.visible = true;
+        }
       },
       (error) => {
         console.error('Erreur lors de la suppression de la requête:', error);
