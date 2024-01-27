@@ -37,23 +37,6 @@ class UserSeeder extends Seeder
             , 'level_id' => 2,
 
         ]);
-
-
-        User::factory()->create(['name' => 'Fomekong evarice', 'email' => 'fomekong@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
-
-        Student::factory()->create(['user_id' => (User::whereEmail('fomekong@gmail.com')->first()->id), 'department_id' => '2', 'matricule' => '21Q2355', 'level_id' => rand(1, 7),
-        ]);
-
-        User::factory()->create(['name' => 'Happi Nouwe Alban', 'email' => 'happi@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
-
-        Student::factory()->create(['user_id' => (User::whereEmail('happi@gmail.com')->first()->id), 'matricule' => '21U2955', 'department_id' => '11', 'level_id' => rand(1, 7),
-        ]);
-
-
-        User::factory()->create(['name' => 'Nyadjou Lucie', 'email' => 'nyadjou@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
-
-        Student::factory()->create(['user_id' => (User::whereEmail('nyadjou@gmail.com')->first()->id), 'matricule' => '21Q5915', 'department_id' => '7', 'level_id' => rand(1, 7),
-        ]);
     }
 
     /**
