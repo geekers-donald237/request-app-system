@@ -11,6 +11,9 @@ class UE extends Model
 {
     use HasFactory;
 
+    /**
+     * @var mixed|string
+     */
     protected $table = 'u_e_s';
 
     public function staff(): BelongsTo

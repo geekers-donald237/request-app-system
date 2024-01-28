@@ -419,7 +419,7 @@ class RequestService
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $response = new SendRequestActionResponse();
         $request = $this->checkIfRequestExistOrThrowException($command->requestId);
-        $this->checkIfReceiverUeExistOrThrowException($command->ueId);
+        $this->checkIfUeExistOrThrowException($command->ueId);
         $this->checkDeadlineForUE($command->ueId, $request);
         $request->ues()->attach($command->ueId);
         $this->updateRequestState($request, RequestStateEnum::ATTENTE_DE_VALIDATION);
@@ -432,12 +432,13 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function checkIfReceiverUeExistOrThrowException(string $ueId): void
+    public static function checkIfUeExistOrThrowException(string $ueId)
     {
-        $staff = UE::whereId($ueId)->whereIsDeleted(false)->first();
-        if (is_null($staff)) {
+        $ue = UE::whereId($ueId)->whereIsDeleted(false)->first();
+        if (is_null($ue)) {
             throw new Exception('Cette UE n\'existe pas!');
         }
+        return $ue;
     }
 
     /**

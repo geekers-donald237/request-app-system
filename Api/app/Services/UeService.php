@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Commands\SaveDeadlineActionCommand;
+use App\Commands\UpdateDeadlineActionCommand;
 use App\Models\Department;
+use App\Models\UE;
 use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
 use App\Responses\SaveDeadlineActionResponse;
+use App\Responses\UpdateDeadlineActionResponse;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -102,4 +105,28 @@ class UeService
 
         return $subjects;
     }
+
+    /**
+     * @throws Exception
+     */
+    public function handleUpdateDeadline(UpdateDeadlineActionCommand $command, string $ueId): UpdateDeadlineActionResponse
+    {
+
+        $response = new UpdateDeadlineActionResponse();
+        RequestService::checkIfAuthenticateUserIsSecretaryOrThrowException();
+        $ue = RequestService::checkIfUeExistOrThrowException($ueId);
+        $this->updateUeInformation(ue: $ue, command: $command);
+        $response->isSaved = true;
+        $response->message = 'Deadline Successfully Updated';
+
+        return $response;
+    }
+
+    public function updateUeInformation(UE $ue, UpdateDeadlineActionCommand $command): void
+    {
+        $ue->publication_date = $command->newPublicationDate;
+        $ue->request_deadline = $command->newSendingRequestInterval;
+        $ue->save();
+    }
+
 }

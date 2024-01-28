@@ -19,10 +19,10 @@ class SaveDeadlineRequest extends HttpDataRequest
     public function rules(): array
     {
         return [
-            'levelId' => 'required',  // Remplacez 'level_id' par le nom réel du champ du niveau
-            'publicationDateS1' => 'required|date',  // Remplacez 'publication_date_s1' par le champ réel du S1
-            'publicationDateS2' => 'required|date',  // Remplacez 'publication_date_s2' par le champ réel du S2
-            'sendingRequestInterval' => 'required',  // Remplacez 'publication_date_s2' par le champ réel du S2
+            'levelId' => 'required',
+            'publicationDateS1' => 'required|date',
+            'publicationDateS2' => 'required|date',
+            'sendingRequestInterval' => 'required',
         ];
     }
 
