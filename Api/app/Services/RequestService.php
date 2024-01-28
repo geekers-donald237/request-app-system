@@ -716,16 +716,28 @@ class RequestService
         return $response;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getSubjectsForSecretaryWithLevel($secretary, $levelId)
     {
         $department = $secretary->department;
 
-        $subjects = $department->subjects;
+        if ($department) {
+            $subjects = $department->subjects;
 
-        return $subjects->filter(function ($subject) use ($levelId) {
-            return $subject->level_id == $levelId;
-        });
+            if ($subjects->isNotEmpty()) {
+                return $subjects->filter(function ($subject) use ($levelId) {
+                    return $subject->level_id == $levelId;
+                });
+            } else {
+                throw new Exception('Ce département ne contient pas de matières.');
+            }
+        } else {
+            throw new Exception('Secrétaire sans département associé.');
+        }
     }
+
 
     public function addPublicationDateForUEs(Collection $ues, SaveDeadlineActionCommand $command): void
     {
