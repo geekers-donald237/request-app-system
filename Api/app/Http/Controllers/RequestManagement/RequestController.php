@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\RequestManagement;
 
+use App\Factories\SaveDeadlineActionCommandFactory;
 use App\Factories\SaveRequestActionCommandFactory;
 use App\Factories\SendRequestActionCommandFactory;
 use App\Factories\UpdateRequestActionCommandFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveActionRequest;
+use App\Http\Requests\SaveDeadlineRequest;
 use App\Http\Requests\SendRequestActionRequest;
 use App\Http\Requests\UpdateActionRequest;
 use App\Services\RequestService;
@@ -339,6 +341,34 @@ class RequestController extends Controller
             $httpJson['message'] = $e->getMessage();
         }
 
+        return response()->json($httpJson);
+    }
+
+    public function addDeadline(
+        SaveDeadlineRequest $request,
+        RequestService    $handler,
+        string $secretaryId
+    ): JsonResponse
+    {
+
+        $httpJson = [
+            'status' => 200,
+            'message' => '',
+            'isSaved' => false
+        ];
+
+        try {
+            $command = SaveDeadlineActionCommandFactory::buildFromRequest($request);
+            $response = $handler->handleSaveDeadline($command , $secretaryId);
+
+            $httpJson = [
+                'status' => 201,
+                'isSaved' => $response->isSaved,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
         return response()->json($httpJson);
     }
 

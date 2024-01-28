@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/student/{studentId}/studentDetails', [RequestController::class, 'getStudentDetails'])->name('/student/{studentId}/studentDetails');
     Route::get('/ue', [UeController::class, 'getUes'])->name('/ue');
     Route::get('requests/{requestId}/history', [RequestController::class, 'getRequestHistory'])->name('requests/{requestId}/history');
+    Route::post('ues/{secretaryId}/deadline', [RequestController::class, 'addDeadline'])->name('ues/{secretaryId}/deadline');
+
 
 });
 

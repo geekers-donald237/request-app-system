@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Commands\SaveDeadlineActionCommand;
 use App\Commands\SaveRequestActionCommand;
 use App\Commands\SendRequestActionCommand;
 use App\Commands\UpdateRequestActionCommand;
@@ -29,10 +30,12 @@ use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetStudentDetailsResponse;
 use App\Responses\GetStudentInformationActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
+use App\Responses\SaveDeadlineActionResponse;
 use App\Responses\saveRequestActionResponse;
 use App\Responses\SendRequestActionResponse;
 use App\Responses\UpdateRequestActionResponse;
 use App\Responses\UpdateRequestStatutActionResponse;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -358,7 +361,8 @@ class RequestService
         $response = new GetSecretaryRequestActionResponse();
         $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
         $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
-        $ueIds = $this->getSubjectsForSecretary($secretary);
+
+        $ueIds = $this->getSubjectsIdForSecretary($secretary);
 
         // Utiliser la méthode personnalisée du modèle Secretary
         $response->requests = $secretary->getRequestsForUes($ueIds)->with('sender')->get();
@@ -396,7 +400,7 @@ class RequestService
         return $secretary;
     }
 
-    public function getSubjectsForSecretary($secretary): ?array
+    public function getSubjectsIdForSecretary($secretary): ?array
     {
         $ueIds = [];
 
@@ -583,7 +587,6 @@ class RequestService
         }
     }
 
-
     /**
      * @throws Exception
      */
@@ -633,7 +636,6 @@ class RequestService
         $response->message = 'User Details';
         return $response;
     }
-
 
     public function getStudentDetails($studentId): GetStudentDetailsResponse
     {
@@ -696,6 +698,56 @@ class RequestService
         $response->user = $users;
 
         return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleSaveDeadline(SaveDeadlineActionCommand $command, string $secretaryId): SaveDeadlineActionResponse
+    {
+        $response = new SaveDeadlineActionResponse();
+        $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
+        $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
+        $ues = $this->getSubjectsForSecretaryWithLevel($secretary, $command->levelId);
+        $this->addPublicationDateForUEs(ues: $ues , command: $command);
+
+        $response->isSaved = true;
+        $response->message = 'Deadline Successfully saved';
+        return $response;
+    }
+
+    public function getSubjectsForSecretaryWithLevel($secretary, $levelId)
+    {
+        $department = $secretary->department;
+
+        $subjects = $department->subjects;
+
+        return $subjects->filter(function ($subject) use ($levelId) {
+            return $subject->level_id == $levelId;
+        });
+    }
+
+    public function addPublicationDateForUEs(Collection $ues, SaveDeadlineActionCommand $command): void
+    {
+
+        foreach ($ues as $ue) {
+            $lastCharacter = substr($ue->code_ue, -1);
+            $isEven = intval($lastCharacter) % 2 == 0;
+
+            if ($isEven) {
+                $ue->publication_date = $command->publication_date_s2;
+            } else {
+                $ue->publication_date = $command->publication_date_s1;
+            }
+
+            // Calculer la request_deadline en ajoutant 72 heures à la date de publication
+            $requestDeadline = Carbon::parse($ue->publication_date)->addHours(72);
+            $ue->request_deadline = $requestDeadline;
+
+            // Enregistrer les modifications en base de données
+            $ue->save();
+        }
+
     }
 
 }
