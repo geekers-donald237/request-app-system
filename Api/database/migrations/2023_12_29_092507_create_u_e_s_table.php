@@ -18,7 +18,8 @@ return new class extends Migration {
             $table->string('code_ue');
             $table->string('libelle');
             $table->boolean('is_deleted')->default(0);
-
+            $table->date('publication_date')->nullable();
+            $table->timestamp('request_deadline')->nullable();
             $table->timestamps();
         });
     }

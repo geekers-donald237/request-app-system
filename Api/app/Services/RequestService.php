@@ -415,6 +415,7 @@ class RequestService
     /**
      * @throws Exception
      */
+
     public function handleGetStaffRequests(string $staffId): GetStaffRequestActionResponse
     {
         $this->checkIfAuthenticateUserIsStaffMemberOrThrowException();
