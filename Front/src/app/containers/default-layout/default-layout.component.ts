@@ -69,8 +69,6 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Creation des Requêtes',
           url: '/app/add-individual-request',
         },
-
-
       ];
     } else if (role === UserRoleConstants.STAFF) {
       gestionDesRequetes.children = [
@@ -86,16 +84,21 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Echeance Requêtes',
           url: '/app/show-program',
         },
-        {
-          name: 'Ajouter une echeance',
-          url: '/app/add-program',
-        },
+      
       ];
     } else if (role === UserRoleConstants.SECRETARY) {
       gestionDesRequetes.children = [
         {
           name: 'Requêtes Reçus',
           url: '/app/secretary/requests',
+        },
+        {
+          name: 'Echeance Requêtes',
+          url: '/app/show-program',
+        },
+        {
+          name: 'Ajouter une echeance',
+          url: '/app/add-program',
         },
       ];
     }
