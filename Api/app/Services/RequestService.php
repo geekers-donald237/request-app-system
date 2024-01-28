@@ -11,6 +11,7 @@ use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
+use App\Models\Department;
 use App\Models\Request;
 use App\Models\RequestHistory;
 use App\Models\RequestPattern;
@@ -29,6 +30,7 @@ use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetStudentDetailsResponse;
 use App\Responses\GetStudentInformationActionResponse;
+use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
 use App\Responses\SaveDeadlineActionResponse;
 use App\Responses\saveRequestActionResponse;
@@ -535,7 +537,7 @@ class RequestService
         $response = new SendRequestActionResponse();
         $request = $this->checkIfRequesExistOrThrowException($command->requestId);
         $this->checkIfReceiverUeExistOrThrowException($command->ueId);
-
+        $this->checkDeadlineForUE($command->ueId, $request);
         $request->ues()->attach($command->ueId);
         $this->updateRequestState($request, RequestStateEnum::ATTENTE_DE_VALIDATION);
 
@@ -547,12 +549,31 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function checkIfReceiverUeExistOrThrowException(string $receiverId): void
+    private function checkIfReceiverUeExistOrThrowException(string $ueId): void
     {
-        $staff = Staff::whereId($receiverId)->whereIsDeleted(false)->first();
+        $staff = UE::whereId($ueId)->whereIsDeleted(false)->first();
         if (is_null($staff)) {
             throw new Exception('Cette UE n\'existe pas!');
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function checkDeadlineForUE(string $ueId, Request $request)
+    {
+        $ue = UE::findOrFail($ueId);
+        $deadline = $ue->request_deadline;
+
+        $now = Carbon::now();
+        if ($now > $deadline) {
+            $this->updateRequestState($request, RequestStateEnum::TERMINEE);
+            $this->createRequestHistory($request, RequestStateEnum::TERMINEE->value);
+
+            throw new Exception('La date limite de depot de requete pour cette UE est déjà passée.');
+
+        }
+        return $deadline;
     }
 
     public function updateRequestState(Request $request, RequestStateEnum $newRequestState): void
@@ -709,7 +730,7 @@ class RequestService
         $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
         $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
         $ues = $this->getSubjectsForSecretaryWithLevel($secretary, $command->levelId);
-        $this->addPublicationDateForUEs(ues: $ues , command: $command);
+        $this->addPublicationDateForUEs(ues: $ues, command: $command);
 
         $response->isSaved = true;
         $response->message = 'Deadline Successfully saved';
@@ -741,26 +762,49 @@ class RequestService
 
     public function addPublicationDateForUEs(Collection $ues, SaveDeadlineActionCommand $command): void
     {
-
         foreach ($ues as $ue) {
             $lastCharacter = substr($ue->code_ue, -1);
             $isEven = intval($lastCharacter) % 2 == 0;
 
             if ($isEven) {
-                $ue->publication_date = $command->publication_date_s2;
+                $ue->publication_date = $command->publicationDateS2;
             } else {
-                $ue->publication_date = $command->publication_date_s1;
+                $ue->publication_date = $command->publicationDateS1;
             }
-
-            // Calculer la request_deadline en ajoutant 72 heures à la date de publication
-            $requestDeadline = Carbon::parse($ue->publication_date)->addHours(72);
+            $requestDeadline = Carbon::parse($ue->publication_date)->addHours(intval($command->sendingRequestInterval));
             $ue->request_deadline = $requestDeadline;
 
-            // Enregistrer les modifications en base de données
             $ue->save();
         }
 
     }
+    private function getSubjectsFromDepartment(Department $department): Collection
+    {
+        $subjects = $department->subjects;
+
+        if ($subjects->isEmpty()) {
+            throw new Exception('Le département ne contient pas de matières.');
+        }
+
+        return $subjects;
+    }
+    /**
+     * @throws Exception
+     */
+    public function handleGetUeFromDepartmentAndDeadline(string $secretaryId) : GetUeFromDepartmentWithDeadlineActionResponse
+    {
+        $response = new GetUeFromDepartmentWithDeadlineActionResponse();
+        $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
+        $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
+        $department = $secretary->department;
+        $subjects = $this->getSubjectsFromDepartment($department);
+
+        $response->ues = $subjects;
+        $response->message = "Ues récupérées avec succès";
+
+        return $response;
+    }
+
 
 }
 

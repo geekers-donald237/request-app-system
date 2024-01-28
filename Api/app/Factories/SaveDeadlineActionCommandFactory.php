@@ -11,8 +11,9 @@ class SaveDeadlineActionCommandFactory
     {
         return new SaveDeadlineActionCommand(
             levelId: $request->get('levelId'),
-            publication_date_s1: $request->get('publication_date_s1'),
-            publication_date_s2: $request->get('publication_date_s2'),
+            publicationDateS1: $request->get('publicationDateS1'),
+            publicationDateS2: $request->get('publicationDateS2'),
+            sendingRequestInterval: $request->get('sendingRequestInterval'),
         );
     }
 }

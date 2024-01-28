@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class UeController extends Controller
 {
-    public function getAllStaff(
+    public function getUeFromLevel(
         UeService $handler
     ): JsonResponse
     {

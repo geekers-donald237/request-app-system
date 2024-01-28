@@ -94,6 +94,30 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
+    public function getUeFromDepartmentAndDeadline(
+        string         $secretaryId,
+        RequestService $handler
+
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+        try {
+            $response = $handler->handleGetUeFromDepartmentAndDeadline($secretaryId);
+
+            $httpJson = [
+                'status' => 201,
+                'ues' => $response->ues,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
+
     public function getStudentRequests(
         string         $studentId,
         RequestService $handler
@@ -304,7 +328,9 @@ class RequestController extends Controller
 
         $httpJson['staff'] = $response->staff;
         return response()->json($httpJson);
-    }public function getAllUser(
+    }
+
+    public function getAllUser(
         RequestService $handler
     ): JsonResponse
     {
@@ -346,8 +372,8 @@ class RequestController extends Controller
 
     public function addDeadline(
         SaveDeadlineRequest $request,
-        RequestService    $handler,
-        string $secretaryId
+        RequestService      $handler,
+        string              $secretaryId
     ): JsonResponse
     {
 
@@ -359,7 +385,7 @@ class RequestController extends Controller
 
         try {
             $command = SaveDeadlineActionCommandFactory::buildFromRequest($request);
-            $response = $handler->handleSaveDeadline($command , $secretaryId);
+            $response = $handler->handleSaveDeadline($command, $secretaryId);
 
             $httpJson = [
                 'status' => 201,
