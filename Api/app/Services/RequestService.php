@@ -2,16 +2,13 @@
 
 namespace App\Services;
 
-use App\Commands\SaveDeadlineActionCommand;
 use App\Commands\SaveRequestActionCommand;
 use App\Commands\SendRequestActionCommand;
-use App\Commands\UpdateRequestActionCommand;
 use App\Enums\RequestStateEnum;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
-use App\Models\Department;
 use App\Models\Request;
 use App\Models\RequestHistory;
 use App\Models\RequestPattern;
@@ -30,12 +27,9 @@ use App\Responses\GetStaffMemberActionResponse;
 use App\Responses\GetStaffRequestActionResponse;
 use App\Responses\GetStudentDetailsResponse;
 use App\Responses\GetStudentInformationActionResponse;
-use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
 use App\Responses\GetUserRequestsActionResponse;
-use App\Responses\SaveDeadlineActionResponse;
 use App\Responses\saveRequestActionResponse;
 use App\Responses\SendRequestActionResponse;
-use App\Responses\UpdateRequestActionResponse;
 use App\Responses\UpdateRequestStatutActionResponse;
 use Carbon\Carbon;
 use Exception;
@@ -198,141 +192,6 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleUpdateRequest(UpdateRequestActionCommand $command): UpdateRequestActionResponse
-    {
-        $requestId = $command->requestId;
-        $response = new UpdateRequestActionResponse();
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-        $request = $this->checkIfRequesExistOrThrowException($requestId);
-        $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
-        $request = $this->updateStudentRequest($requestId, $command);
-
-
-        $response->request = $request;
-        $response->message = 'Request Successfully updated';
-
-        return $response;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfRequesExistOrThrowException(string $requestId): Request
-    {
-        $request = Request::whereId($requestId)->whereIsDeleted(false)->first();
-        if (is_null($request)) {
-            throw new Exception('Cette requête n\'existe pas !');
-        }
-
-        return $request;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
-    {
-        if ($request->senderId() == $user->getAuthIdentifier()) {
-            return;
-        }
-        throw new Exception('Vous n\êtes pas autorisé à effectuer une action sur cette requête');
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function updateStudentRequest(string $requestId, UpdateRequestActionCommand $command): Request
-    {
-
-        $request = $this->updateRequest($requestId, $command);
-
-        $this->UpdateFileHandWritten($command, $request);
-
-        $this->UpdateFileAttachments($command->fileAttachments, $request, $requestId);
-
-        return $request;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function updateRequest(string $requestId, UpdateRequestActionCommand $command): Request
-    {
-        $this->checkIfAuthenticateUserIsStudentOrThrowException();
-
-        $request = Request::findOrFail($requestId);
-
-        $this->checkIfIsPossibleToModifyRequest($request);
-
-        $dataToUpdate = $this->buildUpdateRequestData($command);
-        $request->update($dataToUpdate);
-
-        return $request;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfIsPossibleToModifyRequest(Request $request): void
-    {
-        $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
-        if (in_array($request->statut(), $requestStatutPossibleModified)) {
-            throw new Exception('Impossible de modifier cette requete car en cours de traitement');
-        }
-
-    }
-
-    private function buildUpdateRequestData(UpdateRequestActionCommand $command): array
-    {
-        return [
-            'title' => $command->title,
-            'content' => $command->content
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function updateFileHandWritten(UpdateRequestActionCommand $command, Request $request): void
-    {
-        $requestId = $command->requestId;
-
-        Attachment::where('request_id', $requestId)->whereIsHandwritten(true)->delete();
-
-        $attachment = new Attachment();
-        $filePath = HelpersFunction::handleFileUpload($command->fileHandWritten, StorageDirectoryEnum::FileHandWritten->value);
-        $handWrittenData = $this->buildAttachmentData($filePath, $request, true);
-
-        $attachment->fill($handWrittenData)->save();
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function updateFileAttachments(?array $attachments, Request $request, string $requestId): void
-    {
-        Attachment::where('request_id', $requestId)->whereIsHandwritten(false)->delete();
-
-        if (is_null($attachments)) {
-            return;
-        }
-
-        foreach ($attachments as $attachment) {
-            $attachmentModel = new Attachment();
-
-            $filePath = HelpersFunction::handleFileUpload(
-                $attachment,
-                StorageDirectoryEnum::FileAttachment->value
-            );
-
-            $attachmentData = $this->buildAttachmentData($filePath, $request, false);
-            $attachmentModel->fill($attachmentData)->save();
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
     public function handleGetStudentRequests(string $studentId): GetUserRequestsActionResponse
     {
         $response = new GetUserRequestsActionResponse();
@@ -374,15 +233,10 @@ class RequestService
         return $response;
     }
 
-
     /**
      * @throws Exception
      */
-
-    /**
-     * @throws Exception
-     */
-    private function checkIfAuthenticateUserIsSecretaryOrThrowException(): void
+    public static function checkIfAuthenticateUserIsSecretaryOrThrowException(): void
     {
         $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
         if (!in_array(RuleEnum::SECRETARY->value, $authUserRules)) {
@@ -393,7 +247,7 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function getSecretaryIfExistOrThrowException(string $secretaryId): Secretary
+    public static function getSecretaryIfExistOrThrowException(string $secretaryId): Secretary
     {
         $secretary = Secretary::whereUserId($secretaryId)->whereIsDeleted(false)->first();
         if (is_null($secretary)) {
@@ -417,6 +271,11 @@ class RequestService
             return null;
         }
     }
+
+
+    /**
+     * @throws Exception
+     */
 
     /**
      * @throws Exception
@@ -490,7 +349,7 @@ class RequestService
     public function handleDeleteRequest(string $requestId): DeleteRequestActionResponse
     {
         $response = new DeleteRequestActionResponse();
-        $request = $this->checkIfRequesExistOrThrowException($requestId);
+        $request = $this->checkIfRequestExistOrThrowException($requestId);
         $this->checkIfAuthUserIsOwnerRequestOrThrowException(Auth::user(), $request);
         $this->checkIfIsPossibleTodeleteRequest($request);
         $this->deleteRequestAndItsAttachments($request);
@@ -498,6 +357,30 @@ class RequestService
         $response->isDeleted = true;
         $response->message = 'Deleted Request and its attachments successful';
         return $response;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfRequestExistOrThrowException(string $requestId): Request
+    {
+        $request = Request::whereId($requestId)->whereIsDeleted(false)->first();
+        if (is_null($request)) {
+            throw new Exception('Cette requête n\'existe pas !');
+        }
+
+        return $request;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function checkIfAuthUserIsOwnerRequestOrThrowException(Authenticatable $user, Request $request): void
+    {
+        if ($request->senderId() == $user->getAuthIdentifier()) {
+            return;
+        }
+        throw new Exception('Vous n\êtes pas autorisé à effectuer une action sur cette requête');
     }
 
     private function checkIfIsPossibleTodeleteRequest(Request $request): void
@@ -535,7 +418,7 @@ class RequestService
     {
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $response = new SendRequestActionResponse();
-        $request = $this->checkIfRequesExistOrThrowException($command->requestId);
+        $request = $this->checkIfRequestExistOrThrowException($command->requestId);
         $this->checkIfReceiverUeExistOrThrowException($command->ueId);
         $this->checkDeadlineForUE($command->ueId, $request);
         $request->ues()->attach($command->ueId);
@@ -589,7 +472,7 @@ class RequestService
     public function handleUpdateRequestStatus(string $requestId, string $newRequestStatut): UpdateRequestStatutActionResponse
     {
         $response = new UpdateRequestStatutActionResponse();
-        $request = $this->checkIfRequesExistOrThrowException($requestId);
+        $request = $this->checkIfRequestExistOrThrowException($requestId);
         $this->checkIfNewStateRequestExistInRequestEnumStatut($newRequestStatut);
         $request->update(['statut' => $newRequestStatut]);
         $this->createRequestHistory($request, $newRequestStatut);
@@ -614,7 +497,7 @@ class RequestService
     public function handleGetRequest(string $requestId): GetRequestActionResponse
     {
         $response = new GetRequestActionResponse();
-        $request = $this->checkIfRequesExistOrThrowException($requestId);
+        $request = $this->checkIfRequestExistOrThrowException($requestId);
 
         $response->request = Request::with('attachments')->find($requestId);
         $response->message = 'Request Successfully getted';
@@ -697,7 +580,7 @@ class RequestService
     public function handleGetRequestHistory(string $requestId): GetRequestHistoryActionResponse
     {
         $response = new GetRequestHistoryActionResponse();
-        $request = $this->checkIfRequesExistOrThrowException($requestId);
+        $request = $this->checkIfRequestExistOrThrowException($requestId);
         $history = RequestHistory::where('request_id', $requestId)->get();
         $response->message = "request road  getting successfully";
         $response->status = 200;
@@ -724,87 +607,14 @@ class RequestService
     /**
      * @throws Exception
      */
-    public function handleSaveDeadline(SaveDeadlineActionCommand $command, string $secretaryId): SaveDeadlineActionResponse
+    private function checkIfIsPossibleToModifyRequest(Request $request): void
     {
-        $response = new SaveDeadlineActionResponse();
-        $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
-        $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
-        $ues = $this->getSubjectsForSecretaryWithLevel($secretary, $command->levelId);
-        $this->addPublicationDateForUEs(ues: $ues, command: $command);
-
-        $response->isSaved = true;
-        $response->message = 'Deadline Successfully saved';
-        return $response;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function getSubjectsForSecretaryWithLevel($secretary, $levelId)
-    {
-        $department = $secretary->department;
-
-        if ($department) {
-            $subjects = $department->subjects;
-
-            if ($subjects->isNotEmpty()) {
-                return $subjects->filter(function ($subject) use ($levelId) {
-                    return $subject->level_id == $levelId;
-                });
-            } else {
-                throw new Exception('Ce département ne contient pas de matières.');
-            }
-        } else {
-            throw new Exception('Secrétaire sans département associé.');
-        }
-    }
-
-
-    public function addPublicationDateForUEs(Collection $ues, SaveDeadlineActionCommand $command): void
-    {
-        foreach ($ues as $ue) {
-            $lastCharacter = substr($ue->code_ue, -1);
-            $isEven = intval($lastCharacter) % 2 == 0;
-
-            if ($isEven) {
-                $ue->publication_date = $command->publicationDateS2;
-            } else {
-                $ue->publication_date = $command->publicationDateS1;
-            }
-            $requestDeadline = Carbon::parse($ue->publication_date)->addHours(intval($command->sendingRequestInterval));
-            $ue->request_deadline = $requestDeadline;
-
-            $ue->save();
+        $requestStatutPossibleModified = [RequestStateEnum::ATTENTE_DE_SOUMISSION->value, RequestStateEnum::ATTENTE_DE_VALIDATION->value, RequestStateEnum::REFUSEE->value];
+        if (in_array($request->statut(), $requestStatutPossibleModified)) {
+            throw new Exception('Impossible de modifier cette requete car en cours de traitement');
         }
 
     }
-    private function getSubjectsFromDepartment(Department $department): Collection
-    {
-        $subjects = $department->subjects;
-
-        if ($subjects->isEmpty()) {
-            throw new Exception('Le département ne contient pas de matières.');
-        }
-
-        return $subjects;
-    }
-    /**
-     * @throws Exception
-     */
-    public function handleGetUeFromDepartmentAndDeadline(string $secretaryId) : GetUeFromDepartmentWithDeadlineActionResponse
-    {
-        $response = new GetUeFromDepartmentWithDeadlineActionResponse();
-        $this->checkIfAuthenticateUserIsSecretaryOrThrowException();
-        $secretary = $this->getSecretaryIfExistOrThrowException($secretaryId);
-        $department = $secretary->department;
-        $subjects = $this->getSubjectsFromDepartment($department);
-
-        $response->ues = $subjects;
-        $response->message = "Ues récupérées avec succès";
-
-        return $response;
-    }
-
 
 }
 
