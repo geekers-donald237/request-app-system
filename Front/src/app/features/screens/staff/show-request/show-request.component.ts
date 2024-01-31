@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {RequestService} from '../../../services/request/request.service';
 import {RequestStateConstants} from '../../../constant/constant';
-import {IStudentData, IStudentResponse} from '../../../models/student.information.model';
 import {IRequestPattern} from '../../../models/request.patterns.model';
+import {IStudent, IStudentResponse} from "../../../models/student.model";
 
 @Component({
   selector: 'app-show-request',
@@ -12,7 +12,7 @@ import {IRequestPattern} from '../../../models/request.patterns.model';
 })
 export class ShowRequestComponent implements OnInit {
   request: any | undefined;
-  userData: IStudentData | undefined;
+  userData: IStudent | undefined;
   requestPatterns: IRequestPattern[] = [];
   requestId: number;
   afficherAlerte: boolean = false;

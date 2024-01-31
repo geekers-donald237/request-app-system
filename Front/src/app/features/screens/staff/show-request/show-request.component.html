@@ -19,7 +19,7 @@
               <td>{{ userData?.nom }}</td>
               <td>{{ userData?.matricule }}</td>
               <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
-              <td>{{ request.created_at | dateFormat }}</td>
+              <td>{{ request.created_at | date: 'dd-MM-yyyy' }}</td>
             </tr>
           </table>
         </div>

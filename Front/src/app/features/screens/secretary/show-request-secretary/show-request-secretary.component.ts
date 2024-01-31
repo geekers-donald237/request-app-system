@@ -1,22 +1,22 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {DateFormatPipe} from "../../../services/shared/utils/date-format.pipe";
-import {IStudentData, IStudentResponse} from "../../../models/student.information.model";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {Router} from "@angular/router";
 import {RequestService} from "../../../services/request/request.service";
 import {RequestStateConstants} from "../../../constant/constant";
+import {IStudent, IStudentResponse} from "../../../models/student.model";
+import {IStudentInfoResponse} from "../../../models/student.info.model";
 
 @Component({
   selector: 'app-show-request-secretary',
   standalone: true,
-  imports: [CommonModule, DateFormatPipe],
+  imports: [CommonModule],
   templateUrl: './show-request-secretary.component.html',
   styleUrl: './show-request-secretary.component.scss'
 })
 export class ShowRequestSecretaryComponent {
   request: any | undefined;
-  userData: IStudentData | undefined;
+  userData: IStudent | undefined;
   requestPatterns: IRequestPattern[] = [];
   requestId: number;
   visible: boolean = false;

@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
-import {IUeWithDeadline} from "../../../models/get.ue.with.deadline.model";
 import {Utils} from "../../../services/shared/utils/utils";
+import {IUe} from "../../../models/ue.model";
+import {IUE} from "../../../models/student.request.model";
 
 @Component({
   selector: 'app-view-deadlines',
@@ -9,7 +10,7 @@ import {Utils} from "../../../services/shared/utils/utils";
   styleUrls: ['./view-deadlines.component.scss']
 })
 export class ViewDeadlinesComponent implements OnInit {
-  ues: IUeWithDeadline[] = [];
+  ues: IUe[] = [];
 
   constructor(private requestService: RequestService , private utils:Utils) {
   }

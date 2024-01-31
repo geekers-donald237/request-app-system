@@ -21,7 +21,7 @@ export class Utils {
   public gotoSpecificDashboard(userRule: string) {
     switch (userRule) {
       case UserRoleConstants.STUDENT:
-        this.router.navigate(['/app/list-requests']);
+        this.router.navigate(['/app/student-dashboard']);
         break;
       case UserRoleConstants.STAFF:
         this.router.navigate(['/app/staff/requests']);

@@ -7,8 +7,9 @@ import {forkJoin} from "rxjs";
 import {requestModel} from "../../../constant/constant";
 import {UeService} from "../../../services/ue/ue.service";
 import {Utils} from "../../../services/shared/utils/utils";
-import {ICourse, IStudentSchoolDataResponse} from "../../../models/student.school.model";
 import {CourseService} from "../../../services/shared/course/courses.service";
+import {IUe} from "../../../models/ue.model";
+import {IStudentInfo, IStudentInfoResponse} from "../../../models/student.info.model";
 
 @Component({
   selector: 'app-add-request',
@@ -18,7 +19,7 @@ import {CourseService} from "../../../services/shared/course/courses.service";
 export class AddRequestComponent implements OnInit {
   visible = false;
   dismissible = true;
-  courses: ICourse[] = [];
+  courses: IUe[] = [];
   selectedUeId: null | number | undefined;
 
   afficherAlerte: boolean = false;
@@ -163,7 +164,6 @@ export class AddRequestComponent implements OnInit {
 
   private sendRequestDetails(requestId: number, ueId: number): void {
     this.requestService.sendRequest(requestId, ueId).subscribe(
-
       (saveResponse) => {
 
         console.log('Détails de la requête enregistrés avec succès:', saveResponse);
@@ -185,9 +185,9 @@ export class AddRequestComponent implements OnInit {
       this.requestService.getRequestPatterns(),
       this.ueService.getStudentInfo(userId)
     ]).subscribe(
-      ([requestPatternsResponse, studentSchoolData]: [IRequestPatternsResponse, IStudentSchoolDataResponse]) => {
+      ([requestPatternsResponse, studentSchoolData]: [IRequestPatternsResponse, IStudentInfoResponse]) => {
         this.handleRequestPatternsResponse(requestPatternsResponse);
-        this.courses = studentSchoolData.data.courses;
+        this.courses = studentSchoolData.data.ue;
 
         this.courseService.setCourses(this.courses);
       },

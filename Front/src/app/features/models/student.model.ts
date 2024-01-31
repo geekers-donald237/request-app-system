@@ -1,4 +1,4 @@
-export interface IStudentData {
+export interface IStudent{
   matricule: string;
   nom: string;
   email: string;
@@ -6,6 +6,6 @@ export interface IStudentData {
 
 export interface IStudentResponse {
   status: number;
-  data: IStudentData;
+  data: IStudent;
   message: string;
 }

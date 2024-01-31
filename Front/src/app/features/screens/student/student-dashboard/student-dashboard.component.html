@@ -12,7 +12,7 @@
           <th>#</th>
           <th>UE</th>
           <th>Enseignant</th>
-          <th>Delai d'envois</th>
+          <th>Delai d'envoi</th>
           <th>Etat du Delai</th>
         </tr>
         </thead>
@@ -20,11 +20,11 @@
         <tr *ngFor="let course of courses; let i = index">
           <td>{{ i + 1 }}</td>
           <td>{{ course.code_ue }}</td>
-          <td>{{ course.staff.name }}</td>
+<!--          <td>{{ course.staff.name }}</td>-->
           <td>{{ course.request_deadline | date: 'dd-MM-yyyy' }}</td>
           <td>
-            <div [ngClass]="getStatusBadgeClass(course.publication_date!, course.request_deadline!)">
-              {{ getStatusLabel(course.publication_date!, course.request_deadline!) }}
+            <div [ngClass]="badgeStatus?.getStatusBadgeClass(course.publication_date!, course.request_deadline!)">
+              {{ badgeStatus?.getStatusLabel(course.publication_date!, course.request_deadline!) }}
             </div>
           </td>
         </tr>

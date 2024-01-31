@@ -7,7 +7,6 @@ import {HttpClientModule} from "@angular/common/http";
 
 import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
-import {DateFormatPipe} from "../services/shared/utils/date-format.pipe";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {
   AlertComponent,
@@ -35,6 +34,8 @@ import {ShowRequestStudentComponent} from "./student/show-request-student/show-r
 import {DocsComponentsModule} from "@docs-components/docs-components.module";
 import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.component";
 import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
+import {StudentDashboardComponent} from "./student/student-dashboard/student-dashboard.component";
+import {WidgetsModule} from "../../views/widgets/widgets.module";
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.compon
     AddDeadlineComponent,
     ReceivesRequestComponent,
     StaffDashboardComponent,
+    StudentDashboardComponent,
     ViewDeadlinesComponent,
     ShowRequestComponent,
     ShowRequestStudentComponent,
@@ -52,7 +54,6 @@ import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.compon
     CommonModule,
     ScreensRoutingModule,
     HttpClientModule,
-    DateFormatPipe,
     ButtonDirective,
     InputTextModule,
     ReactiveFormsModule,
@@ -73,6 +74,7 @@ import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.compon
     CardHeaderComponent,
     CardComponent,
     CardBodyComponent,
+    WidgetsModule,
   ]
 })
 export class ScreensModule {

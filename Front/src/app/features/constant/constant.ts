@@ -6,9 +6,9 @@ export class UserRoleConstants {
 }
 
 export class RequestStateConstants {
-  static readonly ATTENTE_DE_SOUMISSION = 'attente_soumission';
-  static readonly ATTENTE_DE_VALIDATION = 'attente_validation';
-  static readonly EN_COURS_DE_TRAITEMENT = 'en_cours';
+  static readonly ATTENTE_DE_SOUMISSION = 'attente soumission';
+  static readonly ATTENTE_DE_VALIDATION = 'attente validation';
+  static readonly EN_COURS_DE_TRAITEMENT = 'en cours';
   static readonly ACCEPTEE = 'accepter';
   static readonly REFUSEE = 'refuser';
   static readonly TERMINEE = 'terminer';

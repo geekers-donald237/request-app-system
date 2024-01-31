@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum RequestStateEnum: string
 {
-    case ATTENTE_DE_SOUMISSION = 'attente_soumission'; //  l'état initial d'une demande avant que l'étudiant ne la soumette.
+    case ATTENTE_DE_SOUMISSION = 'attente soumission'; //  l'état initial d'une demande avant que l'étudiant ne la soumette.
 
-    case ATTENTE_DE_VALIDATION = 'attente_validation'; // la demande a été soumise mais doit encore être validée par le système.
+    case ATTENTE_DE_VALIDATION = 'attente validation'; // la demande a été soumise mais doit encore être validée par le système.
 
-    case EN_COURS_DE_TRAITEMENT = 'en_cours'; // la demande a été validée et est en attente de traitement par l'équipe responsable.
+    case EN_COURS_DE_TRAITEMENT = 'en cours'; // la demande a été validée et est en attente de traitement par l'équipe responsable.
 
     case ACCEPTEE = 'accepter'; //  la demande a été approuvée.
 
