@@ -8,6 +8,7 @@ import {requestModel} from "../../../constant/constant";
 import {UeService} from "../../../services/ue/ue.service";
 import {Utils} from "../../../services/shared/utils/utils";
 import {ICourse, IStudentSchoolDataResponse} from "../../../models/student.school.model";
+import {CourseService} from "../../../services/shared/course/courses.service";
 
 @Component({
   selector: 'app-add-request',
@@ -33,8 +34,9 @@ export class AddRequestComponent implements OnInit {
     ueId: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private utils: Utils
-    , private ueService: UeService) {
+  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private utils: Utils,
+              private ueService: UeService, private courseService: CourseService) {
+
   }
 
   get requestPatternId() {
@@ -186,6 +188,8 @@ export class AddRequestComponent implements OnInit {
       ([requestPatternsResponse, studentSchoolData]: [IRequestPatternsResponse, IStudentSchoolDataResponse]) => {
         this.handleRequestPatternsResponse(requestPatternsResponse);
         this.courses = studentSchoolData.data.courses;
+
+        this.courseService.setCourses(this.courses);
       },
       (error) => {
         console.error('Erreur lors de la récupération des données:', error);

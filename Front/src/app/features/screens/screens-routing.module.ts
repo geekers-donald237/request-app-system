@@ -2,8 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ListRequestComponent} from "./student/list-request/list-request.component";
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
-import {AddDeadlineComponent} from "./staff/add-deadline/add-deadline.component";
-import {ViewDeadlinesComponent} from "./staff/view-deadlines/view-deadlines.component";
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
 import {StudentDashboardComponent} from "./student/student-dashboard/student-dashboard.component";
@@ -13,6 +11,8 @@ import {
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
 import {AddRequestComponent} from './student/add-individual-request/add-request.component';
+import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
+import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.component";
 
 
 const routes: Routes = [
@@ -62,20 +62,7 @@ const routes: Routes = [
       title: 'Requetes Staff'
     }
   },
-  {
-    path: 'show-program',
-    component: ViewDeadlinesComponent,
-    data: {
-      title: 'program '
-    }
-  },
-  {
-    path: 'add-program',
-    component: AddDeadlineComponent,
-    data: {
-      title: 'ajouter deadline'
-    }
-  },
+
 
   {
     path: 'show-request',
@@ -100,6 +87,21 @@ const routes: Routes = [
       title: 'requete secretaire details'
     }
   }
+
+  , {
+    path: 'show-program',
+    component: ViewDeadlinesComponent,
+    data: {
+      title: 'program '
+    }
+  },
+  {
+    path: 'add-program',
+    component: AddDeadlineComponent,
+    data: {
+      title: 'ajouter deadline'
+    }
+  },
 ];
 
 @NgModule({

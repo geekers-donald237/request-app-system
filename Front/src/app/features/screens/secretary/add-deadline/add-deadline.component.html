@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-12">
+    <c-alert [(visible)]="visible"
+             [dismissible]="dismissible"
+             color="{{color}}"
+             fade
+             *ngIf="visible">
+      <strong>{{ errorMessage }}</strong>
+    </c-alert>
+    <div class="card">
+      <div class="card-header">
+        <h5>Ajout d'une Deadline</h5>
+      </div>
+
+      <form action="add-deadline" method="post" [formGroup]="addDeadlineForm" (ngSubmit)="saveDeadline()">
+
+        <div class="card-body">
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Niveau<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric" formControlName="levelId" id="levelId">
+                <option value="" disabled selected>Sélectionnez le niveau</option>
+                <option *ngFor="let level of levels" [value]="level.id">{{ level.name }}</option>
+              </select>
+              <div *ngIf="levelId.invalid && levelId.touched" class="text-danger">
+                <div *ngIf="levelId.errors?.['required']">Niveau est requis</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intervalle d'envoi des requêtes<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <input type="text" id="sendingRequestInterval" name="sendingRequestInterval"
+                     placeholder="Saisissez l'intervalle d'envoi des requêtes"
+                     formControlName="sendingRequestInterval"  class="form-control" min="1" max="10"/>
+              <div *ngIf="sendingRequestInterval.invalid && sendingRequestInterval.touched" class="text-danger">
+                <div *ngIf="sendingRequestInterval.errors?.['required']">Intervalle d'envoi des requêtes est requis
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Date de Publication S1<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <input type="date" id="publicationDateS1" name="publicationDateS1" pInputText
+                     formControlName="publicationDateS1" class="form-control"/>
+              <div *ngIf="publicationDateS1.invalid && publicationDateS1.touched" class="text-danger">
+                <div *ngIf="publicationDateS1.errors?.['required']">Date de Publication S1 est requise</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Date de Publication S2<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <input type="date" id="publicationDateS2" name="publicationDateS2" pInputText
+                     formControlName="publicationDateS2" class="form-control"/>
+              <div *ngIf="publicationDateS2.invalid && publicationDateS2.touched" class="text-danger">
+                <div *ngIf="publicationDateS2.invalid && (publicationDateS2.dirty || publicationDateS2.touched)"
+                     class="text-danger">
+                  <div *ngIf="publicationDateS2.errors?.['required']">Date de Publication S2 est requise</div>
+                  <div *ngIf="publicationDateS2.errors?.['invalidDateRange']">La date de Publication S2 doit être
+                    postérieure à la date de Publication S1
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+            <div class="col-sm-12 col-md-7">
+              <button type="submit" class="btn btn-primary" [disabled]="!addDeadlineForm.valid"
+                      style="font-size: 12px;">
+                Ajouter
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Events\SendMailEvent;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
+
+
+Route::get('/test-email', function () {
+    $userData = [
+        'name' => 'John Doe',
+        'email' => 'bayonidris@gmail.com',
+    ];
+
+    event(new SendMailEvent($userData, 'status2'));
+
+    return 'E-mail sent successfully!';
+});
+

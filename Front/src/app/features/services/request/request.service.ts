@@ -11,7 +11,8 @@ import {IUpdateStatusResponse} from "../../models/request.status.model";
 import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
 import {IGetPersonnRequestsResponse} from "../../models/staff.request.model";
 import {IRequestHistoryResponse} from "../../models/request.history.model";
-import {IGetStaffResponse, IUserResponse} from "../../models/staff.member.model";
+import {IUserResponse} from "../../models/staff.member.model";
+import {IUesWithDeadlinesResponse} from "../../models/get.ue.with.deadline.model";
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +87,11 @@ export class RequestService {
   getUsers(): Observable<IUserResponse> {
     const url = `${this.baseUrl}/users`;
     return this.http.get<IUserResponse>(url, {headers: this.headers});
+  }
+
+  getUesWithDeadlines(secretaryId: number): Observable<IUesWithDeadlinesResponse> {
+    const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;
+    return this.http.get<IUesWithDeadlinesResponse>(url, {headers: this.headers});
   }
 
 

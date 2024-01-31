@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Events\SaveFileEvent;
+use App\Events\SendMailEvent;
 use App\Listeners\SaveFileListener;
+use App\Listeners\SendMailListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         SaveFileEvent::class => [
             SaveFileListener::class,
+        ],
+        SendMailEvent::class => [
+            SendMailListener::class,
         ]
+
     ];
 
     /**

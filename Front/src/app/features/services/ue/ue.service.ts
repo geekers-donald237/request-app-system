@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IStudentSchoolDataResponse} from "../../models/student.school.model";
+import {IAddDeadlineResponse} from "../../models/add.deadline.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,17 @@ export class UeService {
     'Accept': 'application/json',
     'Authorization': `Bearer ${this.token}`
   });
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) {
+  }
 
   getStudentInfo(studentId: number): Observable<IStudentSchoolDataResponse> {
     const url = `${this.baseUrl}/student/${studentId}/studentDetails`;
-    return this.http.get<IStudentSchoolDataResponse>(url, { headers: this.headers });
+    return this.http.get<IStudentSchoolDataResponse>(url, {headers: this.headers});
+  }
+
+  createDeadline(secretaryId: number, deadlineData: any): Observable<IAddDeadlineResponse> {
+    const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;
+    return this.http.post<IAddDeadlineResponse>(url, deadlineData, {headers: this.headers});
   }
 }
