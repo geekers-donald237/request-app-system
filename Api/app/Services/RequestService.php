@@ -449,8 +449,13 @@ class RequestService
         $ue = UE::findOrFail($ueId);
         $deadline = $ue->request_deadline;
 
+        if ($deadline === null) {
+            return null;
+        }
+
         $now = Carbon::now();
         if ($now > $deadline) {
+            $request->ues()->attach($ueId);
             $this->updateRequestState($request, RequestStateEnum::TERMINEE);
             $this->createRequestHistory($request, RequestStateEnum::TERMINEE->value);
 

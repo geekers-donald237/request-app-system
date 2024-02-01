@@ -38,12 +38,11 @@
           <td>
             <div [ngClass]="{
                   'badge': true,
-                   'badge-success': request.statut === 'accepter',
-                  'badge-danger': request.statut === 'refuser',
-                  'badge-warning': request.statut === 'attente_validation',
-                  'badge-info': request.statut === 'en_cours',
-                  'badge-primary': request.statut === 'attente_soumission',
-                  'badge-error': request.statut === 'terminer',
+                   'badge-success': request.statut === RequestStateConstants.ACCEPTEE,
+                  'badge-danger': request.statut === RequestStateConstants.REFUSEE || RequestStateConstants.TERMINEE,
+                  'badge-warning': request.statut === RequestStateConstants.ATTENTE_DE_VALIDATION,
+                  'badge-info': request.statut === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
+                  'badge-primary': request.statut === RequestStateConstants.ATTENTE_DE_SOUMISSION,
                 }">
               {{ request.statut }}
             </div>
@@ -51,7 +50,9 @@
           <td>{{ request.created_at | date: 'dd/MM/yyyy' }}</td>
 
           <td>
-            <button cButton class="me-1" color="primary" (click)="showRequest(request.id)" style="font-size: 12px;">Details</button>
+            <button cButton class="me-1" color="primary" (click)="showRequest(request.id)" style="font-size: 12px;">
+              Details
+            </button>
           </td>
           <td style="display: flex; justify-content: space-between;">
             <button color="danger" *ngTemplateOutlet="deleteRequestConfirmation" (click)="deleteRequest(request.id)">

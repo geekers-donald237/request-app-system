@@ -1,117 +1,117 @@
-<!--<div class="row">-->
-<!--  <div class="col-12">-->
-<!--    <c-alert [(visible)]="visible"-->
-<!--             [dismissible]="dismissible"-->
-<!--             color="{{color}}"-->
-<!--             fade-->
-<!--             *ngIf="visible">-->
-<!--      <strong>{{ errorMessage }}</strong>-->
-<!--    </c-alert>-->
-<!--    <div class="card">-->
-<!--      <div class="card-header">-->
+<div class="row">
+  <div class="col-12">
+    <c-alert [(visible)]="visible"
+             [dismissible]="dismissible"
+             color="{{color}}"
+             fade
+             *ngIf="visible">
+      <strong>{{ errorMessage }}</strong>
+    </c-alert>
+    <div class="card">
+      <div class="card-header">
 
-<!--        <h5>Creation Requête</h5>-->
-<!--      </div>-->
+        <h5>Creation Requête</h5>
+      </div>
 
-<!--      <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data"-->
-<!--            (ngSubmit)="sendRequest()">-->
-<!--        <div class="card-body">-->
-<!--          <div class="form-group row mb-4">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Unité (UE)<span-->
-<!--              class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <select class="form-control selectric" formControlName="ueId" id="ue">-->
-<!--                <option value="" disabled selected>Sélectionnez une UE</option>-->
-<!--                <option *ngFor="let course of courses"-->
-<!--                        [value]="course.id">{{ course.code_ue + " - " + course.staff.user?.name }}-->
-<!--                </option>-->
-<!--              </select>-->
-<!--              <div *ngIf="ue.invalid && ue.touched" class="text-danger">-->
-<!--                <div *ngIf="ue.errors?.['required']">UE est requise</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="form-group row mb-2">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Objet<span class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <select class="form-control selectric" pInputText formControlName="requestPatternId" id="requestPatternId"-->
-<!--                      name="requestPatternId">-->
-<!--                <option value="" disabled selected>Motif Requete</option>-->
-<!--                <option *ngFor="let pattern of requestPatterns" [value]="pattern.id">{{ pattern.pattern_description }}-->
-<!--                </option>-->
-<!--              </select>-->
-<!--              <div *ngIf="requestPatternId.invalid && requestPatternId.touched" class="text-danger">-->
-<!--                <div *ngIf="requestPatternId.errors?.['required']">Motif est requis</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <br/>-->
-<!--          <div class="form-group row mb-2">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intitulé<span-->
-<!--              class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <input type="text" id="title" name="title" pInputText placeholder="Saisissez l'intitulé de votre requête"-->
-<!--                     formControlName="title" class="form-control"/>-->
-<!--              <div *ngIf="title.invalid && title.touched" class="text-danger">-->
-<!--                <div *ngIf="title.errors?.['required']">Intitulé est requis</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <br>-->
-<!--          <div class="form-group row mb-2">-->
-<!--            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">Contenu-->
-<!--              <span class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <textarea class="summernote-simple form-control" [(ngModel)]="requestModel" id="content"-->
-<!--                        formControlName="content"-->
-<!--                        placeholder="Saisissez le contenu de votre requête" rows="12" cols="75"></textarea>-->
-<!--              <div *ngIf="content.invalid && content.touched" class="text-danger">-->
-<!--                <div *ngIf="content.errors?.['required']">Contenu de la requête est requis</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+      <form action="add-individual-request" method="post" [formGroup]="requestForm" enctype="multipart/form-data"
+            (ngSubmit)="sendRequest()">
+        <div class="card-body">
+          <div class="form-group row mb-4">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Unité (UE)<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric" formControlName="ueId" id="ue">
+                <option value="" disabled selected>Sélectionnez une UE</option>
+                <option *ngFor="let course of courses"
+                        [value]="course.id">{{ course.code_ue + " - " + course.staff.user?.name }}
+                </option>
+              </select>
+              <div *ngIf="ue.invalid && ue.touched" class="text-danger">
+                <div *ngIf="ue.errors?.['required']">UE est requise</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Objet<span class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <select class="form-control selectric" pInputText formControlName="requestPatternId" id="requestPatternId"
+                      name="requestPatternId">
+                <option value="" disabled selected>Motif Requete</option>
+                <option *ngFor="let pattern of requestPatterns" [value]="pattern.id">{{ pattern.pattern_description }}
+                </option>
+              </select>
+              <div *ngIf="requestPatternId.invalid && requestPatternId.touched" class="text-danger">
+                <div *ngIf="requestPatternId.errors?.['required']">Motif est requis</div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <div class="form-group row mb-2">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Intitulé<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <input type="text" id="title" name="title" pInputText placeholder="Saisissez l'intitulé de votre requête"
+                     formControlName="title" class="form-control"/>
+              <div *ngIf="title.invalid && title.touched" class="text-danger">
+                <div *ngIf="title.errors?.['required']">Intitulé est requis</div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="form-group row mb-2">
+            <label class="col-form-label  text-md-right col-12 col-md-3 col-lg-3">Contenu
+              <span class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <textarea class="summernote-simple form-control" [(ngModel)]="requestModel" id="content"
+                        formControlName="content"
+                        placeholder="Saisissez le contenu de votre requête" rows="12" cols="75"></textarea>
+              <div *ngIf="content.invalid && content.touched" class="text-danger">
+                <div *ngIf="content.errors?.['required']">Contenu de la requête est requis</div>
+              </div>
+            </div>
+          </div>
 
-<!--          <div class="form-group row mb-3">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="formFile" cLabel>Piece-->
-<!--              manuscrite<span class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <div class="custom-file">-->
+          <div class="form-group row mb-3">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="formFile" cLabel>Piece
+              manuscrite<span class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <div class="custom-file">
 
-<!--                <input cFormControl id="formFile" (change)="onFileChange($event)" type="file"-->
-<!--                       accept=".png, .jpeg, .jpg, .pdf"-->
-<!--                       formControlName="fileHandWritten" name="fileHandWritten"/>-->
-<!--              </div>-->
-<!--              <div *ngIf="fileHandWritten.invalid && fileHandWritten.touched" class="text-danger">-->
-<!--                <div *ngIf="fileHandWritten.errors?.['required']">Pièce manuscrite est requise</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="form-group row mb-3">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes<span-->
-<!--              class="text-danger">*</span></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <div class="custom-file">-->
-<!--                <input cFormControl id="formFileMultiple" (change)="onFileAttachmentsChange($event)"-->
-<!--                       formControlName="fileAttachments[]" multiple type="file"-->
-<!--                       name="fileAttachments[]"-->
-<!--                       accept=".png, .jpeg, .jpg, .pdf"/>-->
+                <input cFormControl id="formFile" (change)="onFileChange($event)" type="file"
+                       accept=".png, .jpeg, .jpg, .pdf"
+                       formControlName="fileHandWritten" name="fileHandWritten"/>
+              </div>
+              <div *ngIf="fileHandWritten.invalid && fileHandWritten.touched" class="text-danger">
+                <div *ngIf="fileHandWritten.errors?.['required']">Pièce manuscrite est requise</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-3">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Pieces jointes<span
+              class="text-danger">*</span></label>
+            <div class="col-sm-12 col-md-7">
+              <div class="custom-file">
+                <input cFormControl id="formFileMultiple" (change)="onFileAttachmentsChange($event)"
+                       formControlName="fileAttachments[]" multiple type="file"
+                       name="fileAttachments[]"
+                       accept=".png, .jpeg, .jpg, .pdf"/>
 
-<!--              </div>-->
+              </div>
 
-<!--              <div *ngIf="fileAttachments.invalid && fileAttachments.touched" class="text-danger">-->
-<!--                <div *ngIf="fileAttachments.errors?.['required']">Pièces jointes sont requises</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+              <div *ngIf="fileAttachments.invalid && fileAttachments.touched" class="text-danger">
+                <div *ngIf="fileAttachments.errors?.['required']">Pièces jointes sont requises</div>
+              </div>
+            </div>
+          </div>
 
-<!--          <div class="form-group row mb-2">-->
-<!--            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>-->
-<!--            <div class="col-sm-12 col-md-7">-->
-<!--              <button type="submit" class="btn btn-primary"[disabled]="!requestForm.valid"  style="font-size: 12px;">Soumettre</button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+          <div class="form-group row mb-2">
+            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+            <div class="col-sm-12 col-md-7">
+              <button type="submit" class="btn btn-primary"[disabled]="!requestForm.valid"  style="font-size: 12px;">Soumettre</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

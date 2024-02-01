@@ -5,23 +5,32 @@ export class BadgeStatus {
   constructor(private date: DateUtils) {
   }
 
-  getStatusBadgeClass(publicationDate: string, deadline: string): string {
+  getBadgeStatusClass(publicationDate: string, deadline: string): string {
+    if (!publicationDate || !deadline) {
+      return 'badge badge-warning';
+    }
+
     const startDate = new Date(publicationDate);
     const endDate = new Date(deadline);
 
-    if (!this.date.isRequestIntervalValid(startDate, endDate)) {
+    if ((startDate > endDate)) {
       return 'badge badge-danger'; // Intervalle expiré
     } else {
       return 'badge badge-success'; // Intervalle en cours
     }
+
   }
 
   // Fonction pour obtenir le libellé du badge en fonction des dates
-  getStatusLabel(publicationDate: string, deadline: string): string {
+  getBadgeStatusLabel(publicationDate: string, deadline: string): string {
+    if (!publicationDate || !deadline) {
+      return RequestStateConstants.NON_DEFINI; // Statut "Non défini"
+    }
+
     const startDate = new Date(publicationDate);
     const endDate = new Date(deadline);
 
-    if (!this.date.isRequestIntervalValid(startDate, endDate)) {
+    if (startDate > endDate) {
       return RequestStateConstants.TERMINEE; // Intervalle expiré
     } else {
       return RequestStateConstants.EN_COURS_DE_TRAITEMENT; // Intervalle en cours

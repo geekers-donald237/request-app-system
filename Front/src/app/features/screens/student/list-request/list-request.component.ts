@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
 import {IRequest} from "../../../models/student.request.model";
 import {Router} from "@angular/router";
+import {RequestStateConstants} from "../../../constant/constant";
 
 @Component({
   selector: 'app-list-request',
@@ -45,7 +46,6 @@ export class ListRequestComponent implements OnInit {
     this.requestService.getRequestFromStudent(studentId).subscribe(
       (response) => {
         this.requests = response.requests;
-        console.log(response.requests);
       },
       (error) => {
         console.log('An error occurred. Please try again later.');
@@ -84,4 +84,5 @@ export class ListRequestComponent implements OnInit {
 
 
   protected readonly console = console;
+  protected readonly RequestStateConstants = RequestStateConstants;
 }

@@ -26,14 +26,13 @@
           <td>{{ entry.created_at | date:'hh:mm a' }}</td>
           <td>
             <div [ngClass]="{
-              'badge': true,
-              'badge-success': entry.status === 'accepter',
-              'badge-danger': entry.status === 'refuser',
-              'badge-warning': entry.status === 'attente_validation',
-              'badge-info': entry.status === 'en_cours',
-              'badge-primary': entry.status === 'attente_soumission',
-              'badge-error': entry.status === 'terminer',
-            }">
+                  'badge': true,
+                   'badge-success': entry.status === RequestStateConstants.ACCEPTEE,
+                  'badge-danger': entry.status === RequestStateConstants.REFUSEE || RequestStateConstants.TERMINEE,
+                  'badge-warning': entry.status === RequestStateConstants.ATTENTE_DE_VALIDATION,
+                  'badge-info': entry.status === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
+                  'badge-primary': entry.status === RequestStateConstants.ATTENTE_DE_SOUMISSION,
+                }">
               {{ entry.status }}
             </div>
           </td>

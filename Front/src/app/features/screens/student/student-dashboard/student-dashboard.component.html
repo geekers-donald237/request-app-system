@@ -17,20 +17,22 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let course of courses; let i = index">
+        <tr *ngFor="let i = index let course of courses ">
           <td>{{ i + 1 }}</td>
           <td>{{ course.code_ue }}</td>
-<!--          <td>{{ course.staff.name }}</td>-->
-          <td>{{ course.request_deadline | date: 'dd-MM-yyyy' }}</td>
+          <td>{{ course.staff.user?.name }}</td>
+          <td>{{ course.request_deadline ? (course.request_deadline | date: 'dd-MM-yyyy') : 'non défini' }}</td>
           <td>
-            <div [ngClass]="badgeStatus?.getStatusBadgeClass(course.publication_date!, course.request_deadline!)">
-              {{ badgeStatus?.getStatusLabel(course.publication_date!, course.request_deadline!) }}
+            <div [ngClass]="badgeStatus.getBadgeStatusClass(course.publication_date!, course.request_deadline!)">
+              {{ badgeStatus.getBadgeStatusLabel(course.publication_date!, course.request_deadline!) }}
             </div>
           </td>
         </tr>
+
         </tbody>
       </table>
     </div>
+
   </div>
 
 </div>

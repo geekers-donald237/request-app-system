@@ -1,36 +1,27 @@
 import {Component, OnInit} from '@angular/core';
-import {Utils} from "../../../services/shared/utils/utils";
-import {UeService} from "../../../services/ue/ue.service";
 import {BadgeStatus} from "../../../services/shared/utils/badge.status";
 import {IUe} from "../../../models/ue.model";
-import {IStudentInfoResponse} from "../../../models/student.info.model";
+import {DateUtils} from "../../../services/shared/utils/date";
+import {CourseService} from "../../../services/shared/course/courses.service";
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
-  styleUrl: './student-dashboard.component.scss'
+  styleUrls: ['./student-dashboard.component.scss']
 })
 export class StudentDashboardComponent implements OnInit {
   courses: IUe[] = [];
-  badgeStatus: BadgeStatus | undefined;
+  badgeStatus: BadgeStatus;
+  date: DateUtils | undefined;
 
-  constructor(private utils: Utils, private ueService: UeService) {
+  constructor(private courseService: CourseService) {
+    this.badgeStatus = new BadgeStatus(this.date!);
   }
 
   ngOnInit(): void {
-    this.fetchData();
-  }
-
-  private fetchData(): void {
-    const userId = this.utils.getUserIdFromLocalStorage();
-    this.ueService.getStudentInfo(userId).subscribe(
-      (studentSchoolData: IStudentInfoResponse) => {
-        this.courses = studentSchoolData.data.ue;
-        console.log(this.courses);
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des données:', error);
-      }
-    );
+    this.courseService.fetchData();
+    this.courseService.courses$.subscribe((courses) => {
+      this.courses = courses;
+    });
   }
 }

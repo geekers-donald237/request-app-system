@@ -3,6 +3,7 @@ import {RequestService} from "../../../services/request/request.service";
 import {IRequestHistory, IRequestHistoryResponse} from "../../../models/request.history.model";
 import {Utils} from "../../../services/shared/utils/utils";
 import {IUser} from "../../../models/staff.member.model";
+import {RequestStateConstants} from "../../../constant/constant";
 
 @Component({
   selector: 'app-show-request-student',
@@ -45,4 +46,5 @@ export class ShowRequestStudentComponent implements OnInit {
     });
   }
 
+  protected readonly RequestStateConstants = RequestStateConstants;
 }

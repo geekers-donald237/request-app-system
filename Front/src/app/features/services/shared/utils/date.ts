@@ -6,8 +6,9 @@ import {Pipe} from '@angular/core';
 })
 export class DateUtils {
   isRequestIntervalValid(startDate: Date, endDate: Date): boolean {
-    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-    return timeDiff >= 0;
+    const timeDiff = endDate.getTime() - startDate.getTime();
+    return timeDiff > 0;
   }
+
 }
 

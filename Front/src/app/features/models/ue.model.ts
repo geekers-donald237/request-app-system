@@ -1,3 +1,5 @@
+import {IStaffMember} from "./staff.member.model";
+
 export interface IUe {
   id: number;
   level_id: number;
@@ -10,4 +12,5 @@ export interface IUe {
   request_deadline: string | null;
   created_at: string;
   updated_at: string;
+  staff: IStaffMember;
 }

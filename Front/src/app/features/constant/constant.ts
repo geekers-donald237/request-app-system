@@ -12,6 +12,7 @@ export class RequestStateConstants {
   static readonly ACCEPTEE = 'accepter';
   static readonly REFUSEE = 'refuser';
   static readonly TERMINEE = 'terminer';
+  static readonly NON_DEFINI = 'non defini';
 }
 
 export const requestModel = 'Monsieur (ou Madame),\n' +

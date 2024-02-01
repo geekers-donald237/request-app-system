@@ -23,7 +23,7 @@
               <td>{{ i + 1 }}</td>
               <td>{{ ue.code_ue }}</td>
               <td>{{ ue.libelle }}</td>
-              <td>{{ ue.request_deadline ? (ue.request_deadline | date: 'dd-MM-yyyy') : 'Non défini' }}</td>
+              <td>{{ ue.request_deadline ? (ue.request_deadline | date: 'dd-MM-yyyy') : 'pas défini' }}</td>
               <td>
                 <!-- Utilisation des fonctions pour déterminer le badge en fonction des dates -->
                 <div [ngClass]="getStatusBadgeClass(ue.publication_date!, ue.request_deadline!)">

@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
-import {IRequestPattern, IRequestPatternsResponse} from "../../../models/request.patterns.model";
-import {forkJoin} from "rxjs";
+import {IRequestPattern} from "../../../models/request.patterns.model";
 import {requestModel} from "../../../constant/constant";
 import {UeService} from "../../../services/ue/ue.service";
 import {Utils} from "../../../services/shared/utils/utils";
-import {CourseService} from "../../../services/shared/course/courses.service";
 import {IUe} from "../../../models/ue.model";
-import {IStudentInfo, IStudentInfoResponse} from "../../../models/student.info.model";
+import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
+import {CourseService} from "../../../services/shared/course/courses.service";
 
 @Component({
   selector: 'app-add-request',
@@ -20,7 +19,6 @@ export class AddRequestComponent implements OnInit {
   visible = false;
   dismissible = true;
   courses: IUe[] = [];
-  selectedUeId: null | number | undefined;
 
   afficherAlerte: boolean = false;
   errorMessage: string | undefined;
@@ -36,7 +34,7 @@ export class AddRequestComponent implements OnInit {
   });
 
   constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private utils: Utils,
-              private ueService: UeService, private courseService: CourseService) {
+              private ueService: UeService, private requestPatternService: RequestPatternService, private courseService: CourseService) {
 
   }
 
@@ -88,18 +86,11 @@ export class AddRequestComponent implements OnInit {
 
 
   sendRequest() {
-    if (!this.requestForm.valid) {
-      this.errorMessage = 'Le formulaire n\'est pas valide.';
-      return;
-    }
-
     const formData = this.createFormData();
     const ueId = 1;
 
     this.requestService.saveRequest(formData).subscribe(
       (response) => {
-        console.log('Requête envoyée avec succès:', response);
-
         if (response.isSaved) {
           this.handleSuccessfulRequest(response, ueId);
         }
@@ -165,41 +156,41 @@ export class AddRequestComponent implements OnInit {
   private sendRequestDetails(requestId: number, ueId: number): void {
     this.requestService.sendRequest(requestId, ueId).subscribe(
       (saveResponse) => {
-
+        console.log(saveResponse.message);
         console.log('Détails de la requête enregistrés avec succès:', saveResponse);
         this.router.navigate(['/app/list-requests']);
+        if (saveResponse.isSent) {
+        } else {
+          this.color = 'danger';
+          this.errorMessage = saveResponse.message;
+          this.afficherAlerte = true;
+          this.router.navigate(['/app/list-requests']);
+        }
       },
       (saveError) => {
         console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
-
       }
     );
   }
 
+  private fetchRequestPatterns(): void {
+    this.requestPatternService.fetchRequestPatterns();
+    this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
+        this.requestPatterns = requestPatterns;
+      },
+    );
+  }
+
+  private fetchStudentInfo(): void {
+    this.courseService.fetchData();
+    this.courseService.courses$.subscribe((courses) => {
+      this.courses = courses;
+    });
+  }
 
   private fetchData(): void {
-    const userId = this.utils.getUserIdFromLocalStorage();
-
-    // Modifiez la signature de la fonction de rappel dans votre subscribe
-    forkJoin([
-      this.requestService.getRequestPatterns(),
-      this.ueService.getStudentInfo(userId)
-    ]).subscribe(
-      ([requestPatternsResponse, studentSchoolData]: [IRequestPatternsResponse, IStudentInfoResponse]) => {
-        this.handleRequestPatternsResponse(requestPatternsResponse);
-        this.courses = studentSchoolData.data.ue;
-
-        this.courseService.setCourses(this.courses);
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des données:', error);
-      }
-    );
-  }
-
-
-  private handleRequestPatternsResponse(response: IRequestPatternsResponse): void {
-    this.requestPatterns = response.patterns;
+    this.fetchRequestPatterns();
+    this.fetchStudentInfo();
   }
 
   protected requestModel = requestModel;
