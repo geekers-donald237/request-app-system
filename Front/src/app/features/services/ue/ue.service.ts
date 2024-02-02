@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {IAddDeadlineResponse, IUpdateDeadlineResponse} from "../../models/add.deadline.model";
+import {IAddDeadlineResponse} from "../../models/add.deadline.model";
 import {IStudentInfoResponse} from "../../models/student.info.model";
+import {IUpdateDeadlineResponse} from "../../models/update.deadline.model";
 
 @Injectable({
   providedIn: 'root'

@@ -1,12 +1,9 @@
-import {IAttachment} from "./student.request.model";
+import {IReceiver} from "./student.request.model";
+import {ISender} from "./sender.request.model";
+import {IAttachment} from "./file.attachement.model";
 
-export interface IRequestDetailsResponse {
-  message: string;
-  request: IRequestDetails;
-  statut: number;
-}
 
-export interface IRequestDetails {
+export interface IRequest {
   id: number;
   content: string;
   created_at: string;
@@ -18,5 +15,15 @@ export interface IRequestDetails {
   statut: string;
   title: string;
   updated_at: string;
-  attachements : IAttachment[]
+  attachements: IAttachment[]
+  receivers: IReceiver[];
+  sender: ISender[];
 }
+
+export interface IRequestResponse {
+  message: string;
+  request: IRequest;
+  statut: number;
+}
+
+

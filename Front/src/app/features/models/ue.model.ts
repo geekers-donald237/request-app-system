@@ -14,3 +14,9 @@ export interface IUe {
   updated_at: string;
   staff: IStaffMember;
 }
+
+export interface IUeResponse {
+  status: number;
+  ues: IUe[];
+  message: string;
+}

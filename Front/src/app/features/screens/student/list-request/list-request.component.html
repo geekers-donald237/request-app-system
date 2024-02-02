@@ -1,16 +1,9 @@
 <c-alert [(visible)]="visible"
          [dismissible]="dismissible"
-         color="danger"
+         color="{{color}}"
          fade
          *ngIf="visible">
-  <strong>{{ errorMessage }}</strong>
-</c-alert>
-<c-alert [(visible)]="successVisible"
-         [dismissible]=true
-         color="success"
-         fade
-         *ngIf="successVisible">
-  <strong>Requête supprimée avec succès</strong>
+  <strong>{{ message }}</strong>
 </c-alert>
 <div class="card">
   <div class="card-header">
@@ -33,13 +26,13 @@
         <tbody>
         <tr *ngFor="let request of requests;">
           <td>{{ request.request_code }}</td>
-          <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
+          <td>{{ utils.getRequestPatternById(request.request_pattern_id, requestPatterns) }}</td>
           <td>{{ request.ues[0].code_ue }}</td>
           <td>
             <div [ngClass]="{
                   'badge': true,
-                   'badge-success': request.statut === RequestStateConstants.ACCEPTEE,
-                  'badge-danger': request.statut === RequestStateConstants.REFUSEE || RequestStateConstants.TERMINEE,
+                   'badge-success': request.statut === RequestStateConstants.ACCEPTED,
+                  'badge-danger': request.statut === RequestStateConstants.REFUSED || RequestStateConstants.TERMINEE,
                   'badge-warning': request.statut === RequestStateConstants.ATTENTE_DE_VALIDATION,
                   'badge-info': request.statut === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
                   'badge-primary': request.statut === RequestStateConstants.ATTENTE_DE_SOUMISSION,
@@ -80,7 +73,6 @@
               </c-modal-footer>
             </c-modal>
           </ng-template>
-
         </tr>
         </tbody>
       </table>

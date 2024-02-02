@@ -15,23 +15,30 @@ export class ShowRequestStudentComponent implements OnInit {
   requestId: number | undefined;
   student: any;
   users: IUser[] = [];
-  usersInfo: { [key: number]: { email: string, name: string } } = {};
-
-
 
   constructor(private requestService: RequestService, private utils: Utils) {
   }
 
   ngOnInit(): void {
-    this.requestId = Number(localStorage.getItem('requestId'));
+    this.loadData();
+  }
+
+  // LOAD ALL DATA FOR STUDENT VIEW REQUEST HISTORY COMPONENT
+  private loadData() {
+    this.requestId = this.utils.loadRequestIdFromLocalStorage();
+    this.loadUserFromLocalStorage();
+    this.loadRequestHistory();
+  }
+
+  // LOAD USER FROM LOCALSTORAGE
+  private loadUserFromLocalStorage(): void {
     this.student = this.utils.getUserFromLocalStorage();
+  }
 
-    this.requestService.getUsers().subscribe(response => {
-      this.users = response.user;
-      console.log(this.users);
-    });
 
-    this.requestService.getRequestHistory(this.requestId).subscribe(
+  // LOAD REQUEST HISTORY
+  private loadRequestHistory(): void {
+    this.requestService.getRequestHistory(this.requestId!).subscribe(
       (response: IRequestHistoryResponse) => {
         this.historyResponse = response.history;
       },
@@ -39,12 +46,8 @@ export class ShowRequestStudentComponent implements OnInit {
         console.error('Failed to fetch request history:', error);
       }
     );
-
-    this.requestService.getUsers().subscribe(response => {
-      this.users = response.user;
-      console.log(this.users)
-    });
   }
 
   protected readonly RequestStateConstants = RequestStateConstants;
+
 }

@@ -28,7 +28,6 @@ export class ReceiveRequestSecretaryComponent implements OnInit {
   getAllSecretaryRequest(secretaryId: number): void {
     this.requestService.getRequestReceiveBySecretary(secretaryId).subscribe(
       (response) => {
-        console.log(response);
         this.requests = response.requests;
       },
       (error) => {

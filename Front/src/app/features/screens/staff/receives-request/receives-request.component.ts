@@ -6,23 +6,28 @@ import {RequestService} from "../../../services/request/request.service";
 
 @Component({
   selector: 'app-receives-request',
-
   templateUrl: './receives-request.component.html',
   styleUrl: './receives-request.component.scss'
 })
-export class ReceivesRequestComponent implements OnInit {
-  staffId: number | null = null;
-  requests: IPersonnalRequest[] = [];
 
+export class ReceivesRequestComponent implements OnInit {
+  staffId: number | undefined;
+  requests: IPersonnalRequest[] = [];
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  // LOAD DATA INFORMATION
+  private loadData() {
     this.staffId = this.utils.getUserIdFromLocalStorage();
     this.getAllStaffRequest(this.staffId);
   }
 
+  // REQUEST OPERATIONS...
   getAllStaffRequest(staffId: number): void {
     this.requestService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {

@@ -20,14 +20,19 @@ export class StaffDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUeFromStaff()
   }
 
+  loadData() {
+    this.getUeFromStaff()
+
+  }
+
+  // GET UE FROM STAFF
   getUeFromStaff() {
     const staffId = this.utils.getUserIdFromLocalStorage();
     this.requestService.getUesWithDeadlinesForStaff(staffId).subscribe(
       (uesWithDeadlines) => {
-      this.courses = uesWithDeadlines.ues;
+        this.courses = uesWithDeadlines.ues;
         console.log(this.courses);
       }, (error) => {
         console.log('An error occurred. Please try again later.');

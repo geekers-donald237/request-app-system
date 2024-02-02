@@ -19,6 +19,11 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadCoursesFromCoursesService();
+  }
+
+  // LOAD COURSES FROM SERVICES HANDLING
+  private loadCoursesFromCoursesService() {
     this.courseService.fetchData();
     this.courseService.courses$.subscribe((courses) => {
       this.courses = courses;

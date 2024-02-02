@@ -4,8 +4,6 @@ import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {requestModel} from "../../../constant/constant";
-import {UeService} from "../../../services/ue/ue.service";
-import {Utils} from "../../../services/shared/utils/utils";
 import {IUe} from "../../../models/ue.model";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 import {CourseService} from "../../../services/shared/course/courses.service";
@@ -16,12 +14,11 @@ import {CourseService} from "../../../services/shared/course/courses.service";
   styleUrls: ['./add-request.component.scss']
 })
 export class AddRequestComponent implements OnInit {
+
   visible = false;
   dismissible = true;
+  message: string | undefined;
   courses: IUe[] = [];
-
-  afficherAlerte: boolean = false;
-  errorMessage: string | undefined;
   color: string | undefined;
   requestPatterns: IRequestPattern[] = [];
   requestForm = this.fb.group({
@@ -33,11 +30,14 @@ export class AddRequestComponent implements OnInit {
     ueId: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private utils: Utils,
-              private ueService: UeService, private requestPatternService: RequestPatternService, private courseService: CourseService) {
-
+  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private requestPatternService: RequestPatternService, private courseService: CourseService) {
   }
 
+  ngOnInit() {
+    this.fetchData();
+  }
+
+  // FIELDS VALIDATION
   get requestPatternId() {
     return this.requestForm.controls['requestPatternId'];
   }
@@ -62,10 +62,8 @@ export class AddRequestComponent implements OnInit {
     return this.requestForm.controls['fileAttachments[]'];
   }
 
-  ngOnInit() {
-    this.fetchData();
-  }
 
+  // FILE CONFIGURATION FOR DOM MANIPULATION
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -84,46 +82,21 @@ export class AddRequestComponent implements OnInit {
     }
   }
 
-
-  sendRequest() {
-    const formData = this.createFormData();
-    const ueId = 1;
-
-    this.requestService.saveRequest(formData).subscribe(
-      (response) => {
-        if (response.isSaved) {
-          this.handleSuccessfulRequest(response, ueId);
-        }
-      },
-      (error) => {
-        console.error('Erreur lors de l\'envoi de la requête:', error);
-        this.handleFailedRequest();
-      }
-    );
-
+  private appendFile(key: string, file: any, formData: FormData): void {
+    if (file !== null && file !== undefined) {
+      formData.append(key, file);
+    }
   }
 
-  fermerAlerte() {
-    this.afficherAlerte = false;
-  }
-
-  private handleSuccessfulRequest(response: any, ueId: number): void {
-    this.sendRequestDetails(response.requestId, ueId);
-    this.color = 'success';
-    this.errorMessage = 'Requête envoyée avec succès.';
-    this.afficherAlerte = true;
-    setTimeout(() => {
-      this.fermerAlerte();
-    }, 3000);
-
-  }
-
-  private handleFailedRequest(): void {
-    this.color = 'danger';
-    this.errorMessage = 'Erreur lors de l\'envoi de la requête.';
+  private appendFiles(key: string, files: any, formData: FormData): void {
+    const filesArray = files as unknown as File[];
+    for (const file of filesArray) {
+      formData.append(key, file);
+    }
   }
 
 
+// CREATE FORM DATA
   private createFormData(): FormData {
     const formData = new FormData();
 
@@ -140,39 +113,8 @@ export class AddRequestComponent implements OnInit {
     return formData;
   }
 
-  private appendFile(key: string, file: any, formData: FormData): void {
-    if (file !== null && file !== undefined) {
-      formData.append(key, file);
-    }
-  }
 
-  private appendFiles(key: string, files: any, formData: FormData): void {
-    const filesArray = files as unknown as File[];
-    for (const file of filesArray) {
-      formData.append(key, file);
-    }
-  }
-
-  private sendRequestDetails(requestId: number, ueId: number): void {
-    this.requestService.sendRequest(requestId, ueId).subscribe(
-      (saveResponse) => {
-        console.log(saveResponse.message);
-        console.log('Détails de la requête enregistrés avec succès:', saveResponse);
-        this.router.navigate(['/app/list-requests']);
-        if (saveResponse.isSent) {
-        } else {
-          this.color = 'danger';
-          this.errorMessage = saveResponse.message;
-          this.afficherAlerte = true;
-          this.router.navigate(['/app/list-requests']);
-        }
-      },
-      (saveError) => {
-        console.error('Erreur lors de l\'enregistrement des détails de la requête:', saveError);
-      }
-    );
-  }
-
+// REQUEST INFORMATION AND STUDENT INFOS....
   private fetchRequestPatterns(): void {
     this.requestPatternService.fetchRequestPatterns();
     this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
@@ -191,6 +133,51 @@ export class AddRequestComponent implements OnInit {
   private fetchData(): void {
     this.fetchRequestPatterns();
     this.fetchStudentInfo();
+  }
+
+  sendRequest() {
+    const formData = this.createFormData();
+    const ueId = Math.floor(Math.random() * 3) + 1;
+
+    this.requestService.saveRequest(formData).subscribe(
+      (response) => {
+        if (response.isSaved) {
+          this.sendRequestDetails(response.requestId, ueId);
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de l\'envoi de la requête:', error);
+        this.color = 'danger';
+        this.message = error.message;
+      }
+    );
+  }
+
+
+  // REQUEST OPERATION
+
+  private sendRequestDetails(requestId: number, ueId: number): void {
+    this.requestService.sendRequest(requestId, ueId).subscribe(
+      (saveResponse) => {
+        if (saveResponse.isSent) {
+          this.showMessage('success', saveResponse.message)
+        } else {
+          this.showMessage('warning', saveResponse.message)
+        }
+        this.router.navigate(['/app/list-requests']);
+      },
+      (saveError) => {
+        this.showMessage('danger', saveError.message)
+      }
+    );
+  }
+
+
+  // SHOW MESSAGE IN ALERT
+  showMessage(color: string, message: string): void {
+    this.visible = true;
+    this.color = color;
+    this.message = message;
   }
 
   protected requestModel = requestModel;

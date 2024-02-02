@@ -5,14 +5,14 @@ import {IGetStudentRequestResponse} from "../../models/student.request.model";
 import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
-import {IRequestDetailsResponse} from "../../models/request.model";
+import {IRequestResponse} from "../../models/request.model";
 import {IUpdateStatusResponse} from "../../models/request.status.model";
-import {IDeleteRequestApiResponse} from "../../models/delete.request.model";
-import {IGetPersonnRequestsResponse} from "../../models/staff.request.model";
+import {IDeleteRequestResponse} from "../../models/delete.request.model";
+import {IRequestsResponse} from "../../models/staff.request.model";
 import {IRequestHistoryResponse} from "../../models/request.history.model";
 import {IUserResponse} from "../../models/staff.member.model";
-import {IUesWithDeadlinesResponse} from "../../models/get.ue.with.deadline.model";
 import {IStudentResponse} from "../../models/student.model";
+import {IUeResponse} from "../../models/ue.model";
 
 
 @Injectable({
@@ -60,8 +60,8 @@ export class RequestService {
     return this.http.get<IStudentResponse>(url, {headers: this.headers});
   }
 
-  getDetailsRequest(requestId: number): Observable<IRequestDetailsResponse> {
-    return this.http.get<IRequestDetailsResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
+  getDetailsRequest(requestId: number): Observable<IRequestResponse> {
+    return this.http.get<IRequestResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
   }
 
   updateRequestStatus(requestId: number, statut: string): Observable<IUpdateStatusResponse> {
@@ -69,17 +69,17 @@ export class RequestService {
     return this.http.patch<IUpdateStatusResponse>(url, {}, {headers: this.headers});
   }
 
-  deleteRequest(requestId: number): Observable<IDeleteRequestApiResponse> {
+  deleteRequest(requestId: number): Observable<IDeleteRequestResponse> {
     const url = `${this.baseUrl}/request/${requestId}`;
-    return this.http.delete<IDeleteRequestApiResponse>(url, {headers: this.headers});
+    return this.http.delete<IDeleteRequestResponse>(url, {headers: this.headers});
   }
 
-  getRequestReceiveByStaff(staffId: number): Observable<IGetPersonnRequestsResponse> {
-    return this.http.get<IGetPersonnRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
+  getRequestReceiveByStaff(staffId: number): Observable<IRequestsResponse> {
+    return this.http.get<IRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
   }
 
-  getRequestReceiveBySecretary(secretaryId: number): Observable<IGetPersonnRequestsResponse> {
-    return this.http.get<IGetPersonnRequestsResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
+  getRequestReceiveBySecretary(secretaryId: number): Observable<IRequestsResponse> {
+    return this.http.get<IRequestsResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
   }
 
   getRequestHistory(requestId: number): Observable<IRequestHistoryResponse> {
@@ -91,14 +91,14 @@ export class RequestService {
     return this.http.get<IUserResponse>(url, {headers: this.headers});
   }
 
-  getUesWithDeadlines(secretaryId: number): Observable<IUesWithDeadlinesResponse> {
+  getUesWithDeadlines(secretaryId: number): Observable<IUeResponse> {
     const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;
-    return this.http.get<IUesWithDeadlinesResponse>(url, {headers: this.headers});
+    return this.http.get<IUeResponse>(url, {headers: this.headers});
   }
 
-  getUesWithDeadlinesForStaff(staffId: number): Observable<IUesWithDeadlinesResponse> {
+  getUesWithDeadlinesForStaff(staffId: number): Observable<IUeResponse> {
     const url = `${this.baseUrl}/staff/${staffId}/ues`;
-    return this.http.get<IUesWithDeadlinesResponse>(url, { headers: this.headers });
+    return this.http.get<IUeResponse>(url, { headers: this.headers });
   }
 
 }

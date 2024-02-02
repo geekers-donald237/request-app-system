@@ -2,7 +2,8 @@ import {Router} from '@angular/router';
 import {UserRoleConstants} from "../../../constant/constant";
 import {Injectable} from "@angular/core";
 import {ILoginResponse, IUserRole} from "../../../models/login.response.model";
-import {IUser} from "../../../models/staff.member.model";
+import {IRequestPattern} from "../../../models/request.patterns.model";
+import {IUser} from "../../../models/user.model";
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +57,15 @@ export class Utils {
 
   public clearLocalStorage(): void {
     localStorage.clear();
+  }
+
+  getRequestPatternById(patternId: number, requestPatterns: IRequestPattern[]): string {
+    const pattern = requestPatterns.find((p) => p.id === patternId);
+    return pattern ? pattern.pattern_description : 'Non défini';
+  }
+
+  public loadRequestIdFromLocalStorage(): number {
+    return  Number(localStorage.getItem('requestId'));
   }
 
 

@@ -44,7 +44,7 @@ export class AddDeadlineComponent implements OnInit {
   ngOnInit() {
   }
 
-  // Accès aux contrôles du formulaire pour les validations dans le template
+  // FORM FIELD CONTROLS
   get levelId() {
     return this.addDeadlineForm.controls['levelId'];
   }

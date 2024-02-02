@@ -18,7 +18,7 @@
             <tr>
               <td>{{ userData?.nom }}</td>
               <td>{{ userData?.matricule }}</td>
-              <td>{{ getPatternDescriptionById(request.request_pattern_id) }}</td>
+              <td>{{ utils.getRequestPatternById(request.request_pattern_id, requestPatterns) }}</td>
               <td>{{ request.created_at | date: 'dd-MM-yyyy' }}</td>
             </tr>
           </table>
@@ -45,7 +45,8 @@
   <div class="row mt-4">
     <div class="col-md-12">
       <p class="section-lead"><span
-        style="font-weight: bold;">Objet  :</span> {{ getPatternDescriptionById(request?.request_pattern_id) }}</p><br>
+        style="font-weight: bold;">Objet  :</span> {{ utils.getRequestPatternById(request?.request_pattern_id, requestPatterns) }}
+      </p><br>
       <p class="section-lead"><span style="font-weight: bold;">Intitulé : </span> {{ request?.title }} <br></p>
       <p class="section-lead"><span style="font-weight: bold;">Contenu : </span> {{ request?.content }} <br></p>
       <div class="row mt-4">
@@ -55,7 +56,7 @@
             <p class="section-lead" *ngFor="let attachment of request.attachments; let i = index">
               <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top"
                       title="Voir la piece jointe.">
-                <a [href]="getAttachmentUrl(attachment.file_path)" target="_blank"
+                <a [href]="redirectLink.getAttachmentUrl(attachment.file_path)" target="_blank"
                    style="color: white;text-decoration: none; ">Pièce {{ i + 1 }}</a>
               </button>
             </p>
@@ -70,7 +71,7 @@
       <br>
 
       <div class="float-lg-left mb-lg-0 mb-3">
-        <div *ngIf="afficherAlerte" class="alert alert-success">
+        <div *ngIf="showAlert" class="alert alert-success">
           Votre Traitement a éte effectué avec succes
         </div>
         <button class="btn btn-success" (click)="validateRequest()" style="font-size: 12px;">

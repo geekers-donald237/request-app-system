@@ -4,6 +4,9 @@ import {RequestService} from '../../../services/request/request.service';
 import {RequestStateConstants} from '../../../constant/constant';
 import {IRequestPattern} from '../../../models/request.patterns.model';
 import {IStudent, IStudentResponse} from "../../../models/student.model";
+import {Utils} from "../../../services/shared/utils/utils";
+import {RedirectLink} from "../../../services/shared/utils/redirect.link";
+import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 
 @Component({
   selector: 'app-show-request',
@@ -14,14 +17,18 @@ export class ShowRequestComponent implements OnInit {
   request: any | undefined;
   userData: IStudent | undefined;
   requestPatterns: IRequestPattern[] = [];
-  requestId: number;
-  afficherAlerte: boolean = false;
+  requestId: number = 0;
+  utils: Utils;
+  redirectLink: RedirectLink;
+  showAlert: boolean = false;
 
   constructor(
     private router: Router,
     private requestService: RequestService
+    , private requestPatternService: RequestPatternService
   ) {
-    this.requestId = Number(localStorage.getItem('requestId')) || 0;
+    this.utils = new Utils(this.router);
+    this.redirectLink = new RedirectLink()
   }
 
   ngOnInit(): void {
@@ -29,8 +36,9 @@ export class ShowRequestComponent implements OnInit {
   }
 
   loadData(): void {
+    this.requestId = Number(localStorage.getItem('requestId'));
     this.getRequestDetails();
-    this.getRequestPatterns();
+    this.fetchRequestPatterns();
   }
 
   getRequestDetails(): void {
@@ -43,19 +51,16 @@ export class ShowRequestComponent implements OnInit {
         }
       },
       (error) => {
-        this.handleError('An error occurred while fetching request details:', error);
+        console.log('An error occurred while fetching request details:', error);
       }
     );
   }
 
-  getRequestPatterns(): void {
-    this.requestService.getRequestPatterns().subscribe(
-      (response) => {
-        this.requestPatterns = response.patterns;
+  private fetchRequestPatterns(): void {
+    this.requestPatternService.fetchRequestPatterns();
+    this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
+        this.requestPatterns = requestPatterns;
       },
-      (error) => {
-        this.handleError('Error retrieving request patterns:', error);
-      }
     );
   }
 
@@ -65,48 +70,9 @@ export class ShowRequestComponent implements OnInit {
         this.userData = response.data;
       },
       (error) => {
-        this.handleError('An error occurred while fetching student information:', error);
+        console.log('An error occurred while fetching student information:', error);
       }
     );
-  }
-
-
-  validateRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.ACCEPTEE);
-    this.afficherAlerte = true;
-    setTimeout(() => {
-      this.fermerAlerte();
-    }, 3000);
-  }
-
-  putOnHoldRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
-    this.afficherAlerte = true;
-    setTimeout(() => {
-      this.fermerAlerte();
-    }, 3000);
-  }
-
-  rejectRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.REFUSEE);
-    this.afficherAlerte = true;
-    setTimeout(() => {
-      this.fermerAlerte();
-    }, 3000);
-  }
-
-  fermerAlerte() {
-    this.afficherAlerte = false;
-  }
-
-  getAttachmentUrl(filePath: string): string {
-    const laravelBaseUrl = 'http://127.0.0.1:8000/storage';
-    return `${laravelBaseUrl}/${filePath}`;
-  }
-
-  getPatternDescriptionById(patternId: number | undefined): string {
-    const pattern = this.requestPatterns.find((p) => p.id === patternId);
-    return pattern ? pattern.pattern_description : 'Non défini';
   }
 
   private updateRequestStatus(statut: string): void {
@@ -118,13 +84,35 @@ export class ShowRequestComponent implements OnInit {
         }, 3000);
       },
       (error) => {
-        this.handleError('An error occurred while updating request status:', error);
+        console.log('An error occurred while updating request status:', error);
       }
     );
   }
 
-  private handleError(message: string, error: any): void {
-    console.error(`${message} ${error}`);
-    // Ajoutez ici la logique pour gérer les erreurs (par exemple, afficher un message à l'utilisateur)
+
+  // UPDATE REQUEST STATE AND DISPLAY ALERT
+  showAlertWithTimeout(requestStatus: string): void {
+    this.updateRequestStatus(requestStatus);
+    this.showAlert = true;
+    setTimeout(() => {
+      this.closeAlert();
+    }, 3000);
   }
+
+  validateRequest(): void {
+    this.showAlertWithTimeout(RequestStateConstants.ACCEPTED);
+  }
+
+  putOnHoldRequest(): void {
+    this.showAlertWithTimeout(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
+  }
+
+  rejectRequest(): void {
+    this.showAlertWithTimeout(RequestStateConstants.REFUSED);
+  }
+
+  closeAlert() {
+    this.showAlert = false;
+  }
+
 }

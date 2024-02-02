@@ -9,11 +9,12 @@ export class RequestStateConstants {
   static readonly ATTENTE_DE_SOUMISSION = 'attente soumission';
   static readonly ATTENTE_DE_VALIDATION = 'attente validation';
   static readonly EN_COURS_DE_TRAITEMENT = 'en cours';
-  static readonly ACCEPTEE = 'accepter';
-  static readonly REFUSEE = 'refuser';
+  static readonly ACCEPTED = 'accepter';
+  static readonly REFUSED = 'refuser';
   static readonly TERMINEE = 'terminer';
   static readonly NON_DEFINI = 'non defini';
 }
+
 
 export const requestModel = 'Monsieur (ou Madame),\n' +
   '\n' +

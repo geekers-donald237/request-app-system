@@ -3,6 +3,9 @@ import {RequestService} from "../../../services/request/request.service";
 import {IRequest} from "../../../models/student.request.model";
 import {Router} from "@angular/router";
 import {RequestStateConstants} from "../../../constant/constant";
+import {IRequestPattern} from "../../../models/request.patterns.model";
+import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
+import {Utils} from "../../../services/shared/utils/utils";
 
 @Component({
   selector: 'app-list-request',
@@ -10,39 +13,43 @@ import {RequestStateConstants} from "../../../constant/constant";
   styleUrls: ['./list-request.component.scss']
 })
 export class ListRequestComponent implements OnInit {
-  studentId: number | null = null;
+  studentId: number = 1;
+  color = "";
   visible = false;
   dismissible = true;
-  errorMessage: string | undefined;
-  successVisible = false;
+  message: string | undefined;
   requests: IRequest[] = [];
-  public liveDemoVisible = false;
+  utils: Utils;
+  requestPatterns: IRequestPattern[] = [];
 
-  requestPatterns: any[] = [];
 
-
-  constructor(private requestService: RequestService, private router: Router) {
-
+  constructor(private requestService: RequestService, private requestPatternService: RequestPatternService, private router: Router) {
+    this.utils = new Utils(this.router);
   }
 
   ngOnInit(): void {
-    const userDataString = localStorage.getItem('user');
-    const userData = userDataString ? JSON.parse(userDataString) : null;
-    this.studentId = userData ? parseInt(userData.id) : 0;
+    this.loadData()
+  }
 
-    this.getAllStudentsRequest(this.studentId);
+  //  LOADING DATA
+  loadData() {
+    this.studentId = this.utils?.getUserIdFromLocalStorage();
+    this.getRequestsFromStudent(this.studentId);
+    this.fetchRequestPatterns();
+  }
 
-    this.requestService.getRequestPatterns().subscribe(
-      (response) => {
-        this.requestPatterns = response.patterns;
+
+  // REQUEST INFORMATION AND STUDENT INFOS....
+  private fetchRequestPatterns(): void {
+    this.requestPatternService.fetchRequestPatterns();
+    this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
+        this.requestPatterns = requestPatterns;
       },
-      (error) => {
-        console.error('Erreur lors de la récupération des motifs de requête:', error);
-      }
     );
   }
 
-  getAllStudentsRequest(studentId: number): void {
+  // REQUEST OPERATIONS.....
+  getRequestsFromStudent(studentId: number): void {
     this.requestService.getRequestFromStudent(studentId).subscribe(
       (response) => {
         this.requests = response.requests;
@@ -53,36 +60,34 @@ export class ListRequestComponent implements OnInit {
     );
   }
 
-  getPatternDescriptionById(patternId: number): string {
-    const pattern = this.requestPatterns.find((p) => p.id === patternId);
-    return pattern ? pattern.pattern_description : 'Non défini';
-  }
-
   deleteRequest(requestId: number): void {
     this.requestService.deleteRequest(requestId).subscribe(
       (response) => {
         if (response.isDeleted) {
-          this.successVisible = true;
-          // Actualiser la liste des requêtes après la suppression
-          this.getAllStudentsRequest(this.studentId!);
-
+          this.getRequestsFromStudent(this.studentId);
+          this.showMessage('success', response.message)
         } else {
-          this.errorMessage = response.message;
-          this.visible = true;
+          this.showMessage('danger', response.message)
         }
       },
       (error) => {
-        console.error('Erreur lors de la suppression de la requête:', error);
+        this.showMessage('danger', error.message)
       }
     );
   }
 
+  // GO TO OTHER PAGE
   showRequest(requestId: number): void {
     localStorage.setItem('requestId', requestId.toString());
-    this.router.navigate(['/app/show-request/:'+requestId]);
+    this.router.navigate(['/app/show-request/:' + requestId]);
   }
 
+  // SHOW MESSAGE IN ALERT
+  showMessage(color: string, message: string): void {
+    this.visible = true;
+    this.color = color;
+    this.message = message;
+  }
 
-  protected readonly console = console;
   protected readonly RequestStateConstants = RequestStateConstants;
 }

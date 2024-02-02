@@ -2,7 +2,6 @@
   <div class="card-header"><br>
     <h5>Detail de votre requête</h5><br>
   </div>
-  <!-- your-component.component.html -->
 
   <div class="card-body">
     <div class="table-responsive">
@@ -27,8 +26,8 @@
           <td>
             <div [ngClass]="{
                   'badge': true,
-                   'badge-success': entry.status === RequestStateConstants.ACCEPTEE,
-                  'badge-danger': entry.status === RequestStateConstants.REFUSEE || RequestStateConstants.TERMINEE,
+                   'badge-success': entry.status === RequestStateConstants.ACCEPTED,
+                  'badge-danger': entry.status === RequestStateConstants.REFUSED || RequestStateConstants.TERMINEE,
                   'badge-warning': entry.status === RequestStateConstants.ATTENTE_DE_VALIDATION,
                   'badge-info': entry.status === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
                   'badge-primary': entry.status === RequestStateConstants.ATTENTE_DE_SOUMISSION,

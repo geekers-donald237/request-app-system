@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {RequestService} from "../../../services/request/request.service";
 import {RequestStateConstants} from "../../../constant/constant";
 import {IStudent, IStudentResponse} from "../../../models/student.model";
-import {IStudentInfoResponse} from "../../../models/student.info.model";
+import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 
 @Component({
   selector: 'app-show-request-secretary',
@@ -23,7 +23,8 @@ export class ShowRequestSecretaryComponent {
 
   constructor(
     private router: Router,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private requestPatternService: RequestPatternService
   ) {
     this.requestId = Number(localStorage.getItem('requestId')) || 0;
   }
@@ -53,13 +54,10 @@ export class ShowRequestSecretaryComponent {
   }
 
   getRequestPatterns(): void {
-    this.requestService.getRequestPatterns().subscribe(
-      (response) => {
-        this.requestPatterns = response.patterns;
+    this.requestPatternService.fetchRequestPatterns();
+    this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
+        this.requestPatterns = requestPatterns;
       },
-      (error) => {
-        this.handleError('Error retrieving request patterns:', error);
-      }
     );
   }
 
@@ -75,13 +73,12 @@ export class ShowRequestSecretaryComponent {
   }
 
 
-  transferingRequest(): void {
+  transferringRequest(): void {
     this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
-
   }
 
   rejectRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.REFUSEE);
+    this.updateRequestStatus(RequestStateConstants.REFUSED);
 
   }
 
