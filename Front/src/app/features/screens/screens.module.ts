@@ -36,7 +36,8 @@ import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.
 import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
 import {StudentDashboardComponent} from "./student/student-dashboard/student-dashboard.component";
 import {WidgetsModule} from "../../views/widgets/widgets.module";
-import {NgxPaginationModule} from "ngx-pagination";
+import {ButtonModule} from "primeng/button";
+import {DialogModule} from "primeng/dialog";
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import {NgxPaginationModule} from "ngx-pagination";
     CardComponent,
     CardBodyComponent,
     WidgetsModule,
-    NgxPaginationModule,
+    ButtonModule,
+    DialogModule,
   ]
 })
 export class ScreensModule {

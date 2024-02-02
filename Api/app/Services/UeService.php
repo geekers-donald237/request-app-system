@@ -7,6 +7,7 @@ use App\Commands\UpdateDeadlineActionCommand;
 use App\Models\Department;
 use App\Models\UE;
 use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
+use App\Responses\GetUeFromStaffActionResponse;
 use App\Responses\SaveDeadlineActionResponse;
 use App\Responses\UpdateDeadlineActionResponse;
 use Carbon\Carbon;
@@ -125,8 +126,25 @@ class UeService
     public function updateUeInformation(UE $ue, UpdateDeadlineActionCommand $command): void
     {
         $ue->publication_date = $command->newPublicationDate;
-        $ue->request_deadline = $command->newSendingRequestInterval;
+        $ue->request_deadline = Carbon::parse($ue->publication_date)->addHours(intval($command->newSendingRequestInterval));
         $ue->save();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function handleGetUeFromStaff(string $staffId): GetUeFromStaffActionResponse
+    {
+        $response = new GetUeFromStaffActionResponse();
+        RequestService::checkIfAuthenticateUserIsStaffMemberOrThrowException();
+        $staff = RequestService::getStaffIfExistOrThrowException($staffId);
+        $staffWithUes = RequestService::loadStaffWithUes($staff);
+
+        $response->message = "ues getting succesfully";
+        $response->ues = $staffWithUes->ues;
+
+        return $response;
+
     }
 
 }

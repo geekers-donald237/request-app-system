@@ -96,5 +96,9 @@ export class RequestService {
     return this.http.get<IUesWithDeadlinesResponse>(url, {headers: this.headers});
   }
 
+  getUesWithDeadlinesForStaff(staffId: number): Observable<IUesWithDeadlinesResponse> {
+    const url = `${this.baseUrl}/staff/${staffId}/ues`;
+    return this.http.get<IUesWithDeadlinesResponse>(url, { headers: this.headers });
+  }
 
 }

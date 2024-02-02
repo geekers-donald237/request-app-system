@@ -91,4 +91,26 @@ class UeController extends Controller
         return response()->json($httpJson);
     }
 
+    public function getUeFromStaff(
+        string    $staffId,
+        UeService $handler
+
+    ): JsonResponse
+    {
+        $httpJson = [
+            'status' => 200,
+            'message' => ''
+        ];
+        try {
+            $response = $handler->handleGetUeFromStaff($staffId);
+            $httpJson = [
+                'status' => 201,
+                'ues' => $response->ues,
+                'message' => $response->message
+            ];
+        } catch (Exception $e) {
+            $httpJson['message'] = $e->getMessage();
+        }
+        return response()->json($httpJson);
+    }
 }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {IAddDeadlineResponse} from "../../models/add.deadline.model";
+import {IAddDeadlineResponse, IUpdateDeadlineResponse} from "../../models/add.deadline.model";
 import {IStudentInfoResponse} from "../../models/student.info.model";
 
 @Injectable({
@@ -30,5 +30,10 @@ export class UeService {
   createDeadline(secretaryId: number, deadlineData: any): Observable<IAddDeadlineResponse> {
     const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;
     return this.http.post<IAddDeadlineResponse>(url, deadlineData, {headers: this.headers});
+  }
+
+  updateDeadline(ueId: number, updatedDeadlineData: any): Observable<IUpdateDeadlineResponse> {
+    const url = `${this.baseUrl}/ues/${ueId}/deadline/update`;
+    return this.http.post<IUpdateDeadlineResponse>(url, updatedDeadlineData, {headers: this.headers});
   }
 }

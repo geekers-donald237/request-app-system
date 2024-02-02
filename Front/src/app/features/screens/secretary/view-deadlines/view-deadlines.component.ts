@@ -2,7 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
 import {Utils} from "../../../services/shared/utils/utils";
 import {IUe} from "../../../models/ue.model";
-import {IUE} from "../../../models/student.request.model";
+import {BadgeStatus} from "../../../services/shared/utils/badge.status";
+import {DateUtils} from "../../../services/shared/utils/date";
+import {FormBuilder, Validators} from "@angular/forms";
+import {UeService} from "../../../services/ue/ue.service";
 
 @Component({
   selector: 'app-view-deadlines',
@@ -11,15 +14,31 @@ import {IUE} from "../../../models/student.request.model";
 })
 export class ViewDeadlinesComponent implements OnInit {
   ues: IUe[] = [];
+  selectedUe: IUe | undefined;
+  date: DateUtils | undefined;
+  badgeStatus: BadgeStatus;
+  editForm = this.fb.group({
+    newPublicationDate: ['', [Validators.required]],
+    newSendingRequestInterval: ['', [Validators.required]]
+  });
 
-  constructor(private requestService: RequestService , private utils:Utils) {
+  constructor(private ueService: UeService, private fb: FormBuilder, private requestService: RequestService, private utils: Utils) {
+    this.badgeStatus = new BadgeStatus(this.date!);
+
+  }
+
+  get sendingRequestInterval() {
+    return this.editForm.controls['newSendingRequestInterval'];
+  }
+
+  get publicationDate() {
+    return this.editForm.controls['newPublicationDate'];
   }
 
   ngOnInit() {
     const secretaryId = this.utils.getUserIdFromLocalStorage();
     this.requestService.getUesWithDeadlines(secretaryId).subscribe(
       (data) => {
-        console.log(data.ues)
         this.ues = data.ues;
       },
       (error) => {
@@ -29,34 +48,30 @@ export class ViewDeadlinesComponent implements OnInit {
   }
 
 
-
-
-  getStatusBadgeClass(publicationDate: string, deadline: string): string {
-    const startDate = new Date(publicationDate);
-    const endDate = new Date(deadline);
-
-    if (!this.isRequestIntervalValid(startDate, endDate)) {
-      return 'badge badge-danger'; // Intervalle expiré
-    } else {
-      return 'badge badge-success'; // Intervalle en cours
-    }
+  onEditClick(ue: IUe) {
+    this.selectedUe = ue;
   }
 
-  // Fonction pour obtenir le libellé du badge en fonction des dates
-  getStatusLabel(publicationDate: string, deadline: string): string {
-    const startDate = new Date(publicationDate);
-    const endDate = new Date(deadline);
+  updateDeadline() {
+    if (this.selectedUe) {
+      const ueId = this.selectedUe.id;
+      const updatedDeadlineData = {
+        newPublicationDate: this.publicationDate.value,
+        newSendingRequestInterval: this.sendingRequestInterval.value
+      };
 
-    if (!this.isRequestIntervalValid(startDate, endDate)) {
-      return 'Terminé'; // Intervalle expiré
-    } else {
-      return 'En cours'; // Intervalle en cours
+      this.ueService.updateDeadline(ueId, updatedDeadlineData).subscribe(
+        (response) => {
+          console.log('Deadline mise à jour avec succès :', response);
+          // location.reload();
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour de la deadline :', error);
+          // Gérez les erreurs selon vos besoins
+        }
+      );
     }
-  }
-
-  isRequestIntervalValid(startDate: Date, endDate: Date): boolean {
-    const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
-    return timeDiff >= 0;
   }
 
 }
+

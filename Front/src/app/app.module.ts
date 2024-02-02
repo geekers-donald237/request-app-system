@@ -44,7 +44,7 @@ import {ScreensModule} from "./features/screens/screens.module";
 import {Utils} from "./features/services/shared/utils/utils";
 import {RippleModule} from "primeng/ripple";
 import {ButtonModule} from "primeng/button";
-import {NgxPaginationModule} from "ngx-pagination";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const APP_CONTAINERS = [
   DefaultFooterComponent,
@@ -64,7 +64,7 @@ const APP_CONTAINERS = [
     DropdownModule,
     GridModule,
     HeaderModule,
-    NgxPaginationModule,
+
     SidebarModule,
     IconModule,
     NavModule,
@@ -84,7 +84,8 @@ const APP_CONTAINERS = [
     ScreensModule,
     ToastModule,
     RippleModule,
-    ButtonModule
+    ButtonModule,
+    NgbModule
   ],
   providers: [
     {

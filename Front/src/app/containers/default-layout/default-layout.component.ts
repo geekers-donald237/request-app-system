@@ -80,11 +80,6 @@ export class DefaultLayoutComponent implements OnInit {
           name: 'Traitement des Requêtes',
           url: '/app/receive-request',
         },
-        {
-          name: 'Echeance Requêtes',
-          url: '/app/show-program',
-        },
-      
       ];
     } else if (role === UserRoleConstants.SECRETARY) {
       gestionDesRequetes.children = [

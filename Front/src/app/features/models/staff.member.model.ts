@@ -8,10 +8,6 @@ export interface IStaffMember {
   user?: IUser | null;
 }
 
-// export interface IUser {
-//   id: number;
-//   name: string;
-// }
 
 // user.model.ts
 export interface IUser {

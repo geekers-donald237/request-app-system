@@ -1,1 +1,36 @@
-<p>Display Staff Dashboard Elements UI</p>
+<app-widgets-dropdown></app-widgets-dropdown>
+
+<div class="card">
+  <div class="card-header">
+    <h5>Echeances des Requetes</h5>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover" id="tableExport">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>UE</th>
+          <th>Delai d'envoi</th>
+          <th>Etat du Delai</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let i = index let course of courses ">
+          <td>{{ i + 1 }}</td>
+          <td>{{ course.code_ue }}</td>
+          <td>{{ course.request_deadline ? (course.request_deadline | date: 'dd-MM-yyyy') : 'non défini' }}</td>
+          <td>
+            <div [ngClass]="badgeStatus.getBadgeStatusClass(course.publication_date!, course.request_deadline!)">
+              {{ badgeStatus.getBadgeStatusLabel(course.publication_date!, course.request_deadline!) }}
+            </div>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

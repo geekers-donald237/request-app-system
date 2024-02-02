@@ -1,43 +1,94 @@
 <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <h5>Echeances des Requetes</h5>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>UE</th>
-                    <th>Filiere</th>
-                    <th>Date d'envois</th>
-                    <th>Etat du Delai</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <!-- Supposons que 'ues' soit le tableau d'objets contenant vos données -->
-            <tbody>
-            <tr *ngFor="let ue of ues; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ ue.code_ue }}</td>
-              <td>{{ ue.libelle }}</td>
-              <td>{{ ue.request_deadline ? (ue.request_deadline | date: 'dd-MM-yyyy') : 'pas défini' }}</td>
-              <td>
-                <!-- Utilisation des fonctions pour déterminer le badge en fonction des dates -->
-                <div [ngClass]="getStatusBadgeClass(ue.publication_date!, ue.request_deadline!)">
-                  {{ getStatusLabel(ue.publication_date!, ue.request_deadline!) }}
-                </div>
-              </td>
-              <td>
-                <a class="btn btn-warning btn-action mr-1" style="font-size: 12px;">Editer</a>
-              </td>
-            </tr>
-            </tbody>
+  <div class="card">
+    <div class="card-header">
+      <h5>Echeances des Requetes</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover" id="tableExport" style="width:100%;">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>UE</th>
+            <th>Filiere</th>
+            <th>Date d'envois</th>
+            <th>Etat du Delai</th>
+            <th></th>
+            <th></th>
+          </tr>
+          </thead>
+          <!-- Supposons que 'ues' soit le tableau d'objets contenant vos données -->
+          <tbody>
+          <tr *ngFor="let ue of ues; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ ue.code_ue }}</td>
+            <td>{{ ue.libelle }}</td>
+            <td>{{ ue.request_deadline ? (ue.request_deadline | date: 'dd-MM-yyyy') : 'pas défini' }}</td>
+            <td>
+              <!-- Utilisation des fonctions pour déterminer le badge en fonction des dates -->
+              <div [ngClass]="badgeStatus.getBadgeStatusClass(ue.publication_date!, ue.request_deadline!)">
+                {{ badgeStatus.getBadgeStatusLabel(ue.publication_date!, ue.request_deadline!) }}
+              </div>
+            </td>
 
-          </table>
-        </div>
+            <td>
+              <a class="btn btn-warning btn-action mr-1" (click)="onEditClick(ue)"
+                 style="font-size: 12px;">Editer</a>
+            </td>
+
+
+          </tr>
+          </tbody>
+
+        </table>
       </div>
     </div>
   </div>
+</div>
+<br>
+
+
+<div class="col-12 mt-5" *ngIf="selectedUe">
+  <div class="card">
+    <div class="card-header">
+      <h5>Modification des delais pour l'ue {{selectedUe.code_ue}}</h5>
+    </div>
+    <div class="card-body">
+      <form action="edit-deadline" method="post" [formGroup]="editForm" (ngSubmit)="updateDeadline()">
+        <div class="form-group row mb-4">
+          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">nouvelle Intervalle<span
+            class="text-danger">*</span></label>
+          <div class="col-sm-12 col-md-7">
+            <input type="text" id="newSendingRequestInterval" name="newSendingRequestInterval"
+                   placeholder="Saisissez l'intervalle d'envoi des requêtes"
+                   formControlName="newSendingRequestInterval" class="form-control" min="1" max="100"/>
+            <div
+              *ngIf="editForm.get('newSendingRequestInterval')?.invalid && editForm.get('newSendingRequestInterval')?.touched"
+              class="text-danger">
+              <div *ngIf="editForm.get('newSendingRequestInterval')?.errors?.['required']">Intervalle d'envoi des requêtes
+                est requis
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nouvelle Date de Publication<span
+            class="text-danger">*</span></label>
+          <div class="col-sm-12 col-md-7">
+            <input type="date" id="newPublicationDate" name="newPublicationDate" pInputText
+                   formControlName="newPublicationDate" class="form-control"/>
+            <div *ngIf="editForm.get('newPublicationDate')?.invalid && editForm.get('newPublicationDate')?.touched"
+                 class="text-danger">
+              <div *ngIf="editForm.get('newPublicationDate')?.errors?.['required']">Date de Publication est requise
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid">Mettre a jour
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+

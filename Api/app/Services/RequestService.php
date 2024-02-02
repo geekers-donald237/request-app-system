@@ -296,10 +296,11 @@ class RequestService
         return $response;
     }
 
+
     /**
      * @throws Exception
      */
-    private function checkIfAuthenticateUserIsStaffMemberOrThrowException(): void
+    public static function checkIfAuthenticateUserIsStaffMemberOrThrowException(): void
     {
         $authUserRules = Auth::user()->rules()->pluck('name')->toArray();
         if (!in_array(RuleEnum::STAFF->value, $authUserRules)) {
@@ -310,7 +311,7 @@ class RequestService
     /**
      * @throws Exception
      */
-    private function getStaffIfExistOrThrowException(string $staffId): Staff
+    public static function getStaffIfExistOrThrowException(string $staffId): Staff
     {
         $staff = Staff::whereUserId($staffId)->whereIsDeleted(false)->first();
 
@@ -318,10 +319,9 @@ class RequestService
             throw new Exception('Le membre du personnel spécifié n\'existe pas !');
         }
         return $staff;
-
     }
 
-    protected function loadStaffWithUes(Staff $staff): Builder|array|Collection|Model
+    public static function loadStaffWithUes(Staff $staff): Builder|array|Collection|Model
     {
         return Staff::with('ues')->find($staff->id);
     }
