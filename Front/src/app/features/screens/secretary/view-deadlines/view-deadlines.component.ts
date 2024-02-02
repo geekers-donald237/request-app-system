@@ -63,7 +63,7 @@ export class ViewDeadlinesComponent implements OnInit {
       this.ueService.updateDeadline(ueId, updatedDeadlineData).subscribe(
         (response) => {
           console.log('Deadline mise à jour avec succès :', response);
-          // location.reload();
+          location.reload();
         },
         (error) => {
           console.error('Erreur lors de la mise à jour de la deadline :', error);
