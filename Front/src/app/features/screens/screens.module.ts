@@ -29,6 +29,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {AddRequestComponent} from "./student/add-individual-request/add-request.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
 import {DocsComponentsModule} from "@docs-components/docs-components.module";
+import { ProfilComponent } from './profil/profil.component';
 
 
 @NgModule({

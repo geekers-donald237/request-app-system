@@ -13,6 +13,7 @@ import {
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
 import {AddRequestComponent} from './student/add-individual-request/add-request.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,7 @@ const routes: Routes = [
       title: 'voir ma requete'
     }
   },
-
+ 
 
   // staff
   {
@@ -85,7 +86,6 @@ const routes: Routes = [
     }
   },
 
-
   // secretary
   {
     path: 'secretary/requests',
@@ -93,13 +93,16 @@ const routes: Routes = [
     data: {
       title: 'requete secetaire'
     }
-  }, {
+  },
+  
+   {
     path: 'show-request-secretary',
     component: ShowRequestSecretaryComponent,
     data: {
       title: 'requete secretaire details'
     }
-  }
+  },
+ 
 ];
 
 @NgModule({
