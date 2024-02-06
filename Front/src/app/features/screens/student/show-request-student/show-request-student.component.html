@@ -21,7 +21,7 @@
 
           <td>{{ student.name }}</td>
           <td>{{ entry.created_at | date:'yyyy/MM/dd' }}</td>
-          <td>{{entry.modify_by ?? "John doe"}}</td>
+          <td>{{entry.modify_by}}</td>
           <td>{{ entry.created_at | date:'hh:mm a' }}</td>
           <td>
             <div [ngClass]="{

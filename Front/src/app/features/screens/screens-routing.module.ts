@@ -11,8 +11,8 @@ import {
 } from "./secretary/receive-request-secretary/receive-request-secretary.component";
 import {ShowRequestStudentComponent} from "./student/show-request-student/show-request-student.component";
 import {AddRequestComponent} from './student/add-individual-request/add-request.component';
-import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
 import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.component";
+import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
 
 
 const routes: Routes = [
@@ -65,7 +65,7 @@ const routes: Routes = [
 
 
   {
-    path: 'show-request',
+    path: 'show-request/:id',
     component: ShowRequestComponent,
     data: {
       title: 'Voir  requête'
@@ -81,7 +81,7 @@ const routes: Routes = [
       title: 'requete secetaire'
     }
   }, {
-    path: 'show-request-secretary',
+    path: 'show-request-secretary/:id',
     component: ShowRequestSecretaryComponent,
     data: {
       title: 'requete secretaire details'

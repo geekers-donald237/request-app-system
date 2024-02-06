@@ -21,6 +21,11 @@ export class ViewDeadlinesComponent implements OnInit {
     newPublicationDate: ['', [Validators.required]],
     newSendingRequestInterval: ['', [Validators.required]]
   });
+  // Propriétés pour la gestion de l'affichage d'alerte
+  visible = false;
+  dismissible = true;
+  message: string | undefined;
+  color = '';
 
   constructor(private ueService: UeService, private fb: FormBuilder, private requestService: RequestService, private utils: Utils) {
     this.badgeStatus = new BadgeStatus(this.date!);
@@ -62,15 +67,28 @@ export class ViewDeadlinesComponent implements OnInit {
 
       this.ueService.updateDeadline(ueId, updatedDeadlineData).subscribe(
         (response) => {
-          console.log('Deadline mise à jour avec succès :', response);
-          location.reload();
+          this.showMessage(response.message, 'success');
+          this.relaodPageAfterUpdated();
         },
         (error) => {
-          console.error('Erreur lors de la mise à jour de la deadline :', error);
-          // Gérez les erreurs selon vos besoins
+          this.showMessage(error.message, 'danger')
         }
       );
     }
+  }
+
+  // Afficher un message
+  showMessage(message: string, color: string): void {
+    this.message = message;
+    this.visible = true;
+    this.color = color;
+  }
+
+  // Rediriger après le succès de la sauvegarde
+  private relaodPageAfterUpdated() {
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   }
 
 }

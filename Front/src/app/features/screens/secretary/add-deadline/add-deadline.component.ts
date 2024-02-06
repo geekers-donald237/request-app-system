@@ -15,7 +15,7 @@ export class AddDeadlineComponent implements OnInit {
   // Propriétés pour la gestion de l'affichage d'alerte
   visible = false;
   dismissible = true;
-  errorMessage: string | undefined;
+  message: string | undefined;
   color = '';
 
   // Formulaire de création de deadline
@@ -38,7 +38,12 @@ export class AddDeadlineComponent implements OnInit {
     {id: 8, name: 'Plus....'},
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private ueService: UeService, private utils: Utils) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private ueService: UeService,
+    private utils: Utils
+  ) {
   }
 
   ngOnInit() {
@@ -61,50 +66,36 @@ export class AddDeadlineComponent implements OnInit {
     return this.addDeadlineForm.controls['publicationDateS2'];
   }
 
+  // Sauvegarder la deadline
   saveDeadline() {
     const userId = this.utils.getUserIdFromLocalStorage();
     const formData = this.addDeadlineForm.value;
 
     this.ueService.createDeadline(userId, formData).subscribe(
-      (response) => {
-        // Traitement de la réponse
-        this.handleSaveResponse(response);
+      (response: IAddDeadlineResponse) => {
+        if (response.isSaved) {
+          this.showMessage(response.message, 'success');
+          this.addDeadlineForm.reset();
+          this.navigateAfterSuccess();
+        } else {
+          this.showMessage(response.message, 'danger');
+        }
       },
       (error) => {
         // Gestion des erreurs
-        this.handleSaveError();
+        this.showMessage("Une erreur est survenue, veuillez réessayer", 'danger');
       }
     );
   }
 
-  private handleSaveResponse(response: IAddDeadlineResponse) {
-    if (response.isSaved) {
-      this.handleSuccess(response.message);
-      this.navigateAfterSuccess();
-    } else {
-      this.handleError(response.message);
-    }
-  }
-
-  private handleSuccess(message: string) {
-    this.errorMessage = message;
-    this.color = "success";
+  // Afficher un message
+  showMessage(message: string, color: string): void {
+    this.message = message;
     this.visible = true;
+    this.color = color;
   }
 
-  private handleError(message: string) {
-    console.log(message);
-    this.errorMessage = message;
-    this.color = "danger";
-    this.visible = true;
-  }
-
-  private handleSaveError() {
-    this.errorMessage = "An error occurred. Please try again later.";
-    this.color = "danger";
-    this.visible = true;
-  }
-
+  // Rediriger après le succès de la sauvegarde
   private navigateAfterSuccess() {
     setTimeout(() => {
       this.router.navigate(['app/show-program']);

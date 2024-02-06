@@ -1,16 +1,20 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {IRequestPattern} from "../../../models/request.patterns.model";
-import {Router} from "@angular/router";
-import {RequestService} from "../../../services/request/request.service";
-import {RequestStateConstants} from "../../../constant/constant";
-import {IStudent, IStudentResponse} from "../../../models/student.model";
-import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
+import {IRequestPattern} from '../../../models/request.patterns.model';
+import {IStudent} from '../../../models/student.model';
+import {RequestPatternService} from '../../../services/shared/request-pattern/request-pattern.service';
+import {Utils} from '../../../services/shared/utils/utils';
+import {RedirectLink} from '../../../services/shared/utils/redirect.link';
+import {RequestDetailsService} from '../../../services/shared/request-details/request-details.service';
+import {UpdateRequestStateService} from '../../../services/shared/update-request-state/update-request-state.service';
+import {AlertComponent} from '@coreui/angular';
+import {IUe} from '../../../models/ue.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-show-request-secretary',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AlertComponent],
   templateUrl: './show-request-secretary.component.html',
   styleUrl: './show-request-secretary.component.scss'
 })
@@ -18,103 +22,101 @@ export class ShowRequestSecretaryComponent {
   request: any | undefined;
   userData: IStudent | undefined;
   requestPatterns: IRequestPattern[] = [];
-  requestId: number;
-  visible: boolean = false;
+  requestId: number | undefined;
+  visible = false;
+  dismissible = true;
+  message: string | undefined;
+  courses: IUe[] = [];
+  color: string | undefined;
+  utils: Utils | undefined;
+  redirectLink : RedirectLink | undefined;
 
   constructor(
+    private requestPatternService: RequestPatternService,
+    private requestDetailsService: RequestDetailsService,
     private router: Router,
-    private requestService: RequestService,
-    private requestPatternService: RequestPatternService
+    private updateRequestStateService: UpdateRequestStateService
   ) {
-    this.requestId = Number(localStorage.getItem('requestId')) || 0;
   }
 
   ngOnInit(): void {
     this.loadData();
   }
 
+  // CHARGER LES DONNÉES
   loadData(): void {
+    this.requestId = Number(localStorage.getItem('requestId'));
     this.getRequestDetails();
     this.getRequestPatterns();
   }
 
+  // OBTENIR LES DÉTAILS DE LA DEMANDE
   getRequestDetails(): void {
-    this.requestService.getDetailsRequest(this.requestId).subscribe(
-      (response) => {
-        console.log(response);
-        this.request = response.requests;
+    this.requestDetailsService.fetchRequestDetails();
+    this.requestDetailsService.requestDetails$.subscribe(
+      (requestDetails: Request) => {
+        this.request = requestDetails;
         if (this.request?.sender_id) {
           this.loadStudentInformation(this.request.sender_id);
         }
-      },
-      (error) => {
-        this.handleError('An error occurred while fetching request details:', error);
       }
     );
   }
 
+  // OBTENIR LES MOTIFS DE DEMANDE
   getRequestPatterns(): void {
     this.requestPatternService.fetchRequestPatterns();
     this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
-        this.requestPatterns = requestPatterns;
-      },
-    );
+      this.requestPatterns = requestPatterns;
+    });
   }
 
+  // CHARGER LES INFORMATIONS SUR L'ÉTUDIANT
   loadStudentInformation(senderId: number): void {
-    this.requestService.getStudentInformation(senderId).subscribe(
-      (response: IStudentResponse) => {
-        this.userData = response.data;
-      },
-      (error) => {
-        this.handleError('An error occurred while fetching student information:', error);
-      }
-    );
+    this.requestDetailsService.loadStudentInformation(this.request.sender_id);
+    this.requestDetailsService.studentInfo$.subscribe((studentInfo: IStudent) => {
+      this.userData = studentInfo;
+    });
   }
 
-
+  // TRANSFÉRER LA DEMANDE
   transferringRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
-  }
-
-  rejectRequest(): void {
-    this.updateRequestStatus(RequestStateConstants.REFUSED);
-
-  }
-
-  fermerAlerte() {
-    this.visible = false;
-  }
-
-  getAttachmentUrl(filePath: string): string {
-    const laravelBaseUrl = 'http://127.0.0.1:8000/storage';
-    return `${laravelBaseUrl}/${filePath}`;
-  }
-
-  getPatternDescriptionById(patternId: number | undefined): string {
-    const pattern = this.requestPatterns.find((p) => p.id === patternId);
-    return pattern ? pattern.pattern_description : 'Non défini';
-  }
-
-  private updateRequestStatus(statut: string): void {
-    this.requestService.updateRequestStatus(this.requestId, statut).subscribe(
-      () => {
-        console.log('Status update');
-        this.visible = true;
-        setTimeout(() => {
-          this.fermerAlerte();
-          this.router.navigate(['/app/secretary/requests']);
-        }, 3000);
-
-      },
-      (error) => {
-        this.handleError('An error occurred while updating request status:', error);
+    this.updateRequestStateService.transferringRequest().subscribe(
+      (success) => {
+        if (success) {
+          this.handleDisplaySuccessMessage();
+        } else {
+          this.showMessage('Une erreur est survenue, veuillez réessayer', 'danger');
+        }
       }
     );
   }
 
-  private handleError(message: string, error: any): void {
-    console.error(`${message} ${error}`);
-    // Ajoutez ici la logique pour gérer les erreurs (par exemple, afficher un message à l'utilisateur)
+  // REJETER LA DEMANDE
+  rejectRequest(): void {
+    this.updateRequestStateService.rejectRequest().subscribe(
+      (success) => {
+        if (success) {
+          this.handleDisplaySuccessMessage();
+        } else {
+          this.showMessage('Une erreur est survenue, veuillez réessayer', 'danger');
+        }
+      }
+    );
+  }
+
+  // AFFICHER UN MESSAGE
+  showMessage(message: string, color: string): void {
+    this.message = message;
+    this.visible = true;
+    this.color = color;
+  }
+
+  // AFFICHER UN MESSAGE DE SUCCÈS AVEC UNE DURÉE
+  handleDisplaySuccessMessage(): void {
+    this.showMessage('Le traitement a été effectué avec succès', 'success');
+    setTimeout(() => {
+      this.router.navigate(['/app/secretary/requests']);
+    }, 3000);
   }
 }

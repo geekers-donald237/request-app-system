@@ -5,7 +5,7 @@ import {IGetStudentRequestResponse} from "../../models/student.request.model";
 import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
-import {IRequestResponse} from "../../models/request.model";
+import {IRequestDetailsResponse, IRequestResponse} from "../../models/request.model";
 import {IDeleteRequestResponse} from "../../models/delete.request.model";
 import {IRequestHistoryResponse} from "../../models/request.history.model";
 import {IStudentResponse} from "../../models/student.model";
@@ -59,8 +59,8 @@ export class RequestService {
     return this.http.get<IStudentResponse>(url, {headers: this.headers});
   }
 
-  getDetailsRequest(requestId: number): Observable<IRequestResponse> {
-    return this.http.get<IRequestResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
+  getDetailsRequest(requestId: number): Observable<IRequestDetailsResponse> {
+    return this.http.get<IRequestDetailsResponse>(`${this.baseUrl}/requests/${requestId}/`, {headers: this.headers});
   }
 
   updateRequestStatus(requestId: number, statut: string): Observable<IUpdateStatusResponse> {

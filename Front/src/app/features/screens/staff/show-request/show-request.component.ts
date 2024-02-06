@@ -45,7 +45,7 @@ export class ShowRequestComponent implements OnInit {
     this.requestService.getDetailsRequest(this.requestId).subscribe(
       (response) => {
         console.log(response);
-        this.request = response.requests;
+        this.request = response.request;
         if (this.request?.sender_id) {
           this.loadStudentInformation(this.request.sender_id);
         }

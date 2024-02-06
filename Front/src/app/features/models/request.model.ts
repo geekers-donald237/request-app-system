@@ -29,4 +29,10 @@ export interface IRequestResponse {
   statut: number;
 }
 
+export interface IRequestDetailsResponse {
+  message: string;
+  request: IRequest;
+  statut: number;
+}
+
 
