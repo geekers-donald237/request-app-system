@@ -24,7 +24,6 @@ export class StaffDashboardComponent implements OnInit {
 
   loadData() {
     this.getUeFromStaff()
-
   }
 
   // GET UE FROM STAFF
