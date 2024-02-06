@@ -10,7 +10,7 @@
         <tr>
           <th>Expediteur</th>
           <th>Date transmission</th>
-          <th>Traite par</th>
+          <th>Modifié par</th>
           <th>Heure de traitement</th>
           <th>Etat de traitement</th>
           <th>Commentaire</th>
@@ -21,7 +21,7 @@
 
           <td>{{ student.name }}</td>
           <td>{{ entry.created_at | date:'yyyy/MM/dd' }}</td>
-          <td>john doe - dpt infos</td>
+          <td>{{entry.modify_by ?? "John doe"}}</td>
           <td>{{ entry.created_at | date:'hh:mm a' }}</td>
           <td>
             <div [ngClass]="{

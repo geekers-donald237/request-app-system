@@ -1,7 +1,7 @@
 export interface IRequestHistory {
   id: number;
   request_id: number;
-  modify_by: number;
+  modify_by: string;
   status: string;
   is_deleted: number;
   created_at: string;

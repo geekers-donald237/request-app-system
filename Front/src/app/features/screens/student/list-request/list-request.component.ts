@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
-import {IRequest} from "../../../models/student.request.model";
 import {Router} from "@angular/router";
 import {RequestStateConstants} from "../../../constant/constant";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 import {Utils} from "../../../services/shared/utils/utils";
+import {IRequest} from "../../../models/request.model";
 
 @Component({
   selector: 'app-list-request',
@@ -55,7 +55,7 @@ export class ListRequestComponent implements OnInit {
         this.requests = response.requests;
       },
       (error) => {
-        console.log('An error occurred. Please try again later.');
+        console.error('An error occurred. Please try again later.');
       }
     );
   }
@@ -67,7 +67,7 @@ export class ListRequestComponent implements OnInit {
           this.getRequestsFromStudent(this.studentId);
           this.showMessage('success', response.message)
         } else {
-          this.showMessage('danger', response.message)
+          this.showMessage('warning', response.message)
         }
       },
       (error) => {

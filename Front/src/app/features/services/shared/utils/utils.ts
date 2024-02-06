@@ -1,9 +1,10 @@
 import {Router} from '@angular/router';
 import {UserRoleConstants} from "../../../constant/constant";
 import {Injectable} from "@angular/core";
-import {ILoginResponse, IUserRole} from "../../../models/login.response.model";
+import {ILoginResponse} from "../../../models/login.response.model";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {IUser} from "../../../models/user.model";
+import {IUserRole} from "../../../models/user.role.model";
 
 @Injectable({
   providedIn: 'root',

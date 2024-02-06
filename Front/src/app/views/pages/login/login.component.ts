@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../features/services/shared/auth/auth.service";
-import {Router} from "@angular/router";
 import {MessageService} from "primeng/api";
 import {Utils} from "../../../features/services/shared/utils/utils";
+import {ILoginResponse} from "../../../features/models/login.response.model";
 
 @Component({
   selector: 'app-login',
@@ -24,11 +24,11 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
     private utils: Utils
   ) {
   }
 
+  // FIELDS VALIDATION
   get email() {
     return this.loginForm.controls['email'];
   }
@@ -37,27 +37,37 @@ export class LoginComponent {
     return this.loginForm.controls['password'];
   }
 
+  // FUNCTION TO PERFORM THE LOGIN ACTION
+
   login() {
     const {email, password} = this.loginForm.value;
     this.authService.login(email!, password!).subscribe(
       (response) => {
-        this.utils.clearLocalStorage();
-        if (response.isLogged) {
-          const user = response.user;
-          const token = response.token;
-          const userRule = this.utils.getUserRule(user.rules);
-          this.utils.setUserData(response);
-          this.utils.gotoSpecificDashboard(userRule!);
-        } else {
-          this.errorMessage = response.message; // Stocke le message d'erreur
-          this.visible = true;
-        }
+        this.handleLogin(response);
       },
       (error) => {
-        console.log('An error occurred. ' + error);
-        this.errorMessage = 'An error occurred. Please try again later.'; // Message d'erreur générique
-        this.visible = true;
+        console.error('An error occurred. ' + error);
+        this.showErrorMessage('An error occurred. Please try again later.');
       }
     );
+  }
+
+  handleLogin(response: ILoginResponse): void {
+    this.utils.clearLocalStorage();
+    if (response.isLogged) {
+      const user = response.user;
+      const token = response.token;
+      const userRule = this.utils.getUserRule(user.rules);
+      this.utils.setUserData(response);
+      this.utils.gotoSpecificDashboard(userRule!);
+    } else {
+      this.showErrorMessage(response.message);
+    }
+  }
+
+  // DISPLAY SOME ISSUE OR ERROR
+  showErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.visible = true;
   }
 }

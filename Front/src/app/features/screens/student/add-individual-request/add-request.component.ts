@@ -137,7 +137,7 @@ export class AddRequestComponent implements OnInit {
 
   sendRequest() {
     const formData = this.createFormData();
-    const ueId = Math.floor(Math.random() * 3) + 1;
+    const ueId = 1;
 
     this.requestService.saveRequest(formData).subscribe(
       (response) => {
@@ -146,9 +146,7 @@ export class AddRequestComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erreur lors de l\'envoi de la requête:', error);
-        this.color = 'danger';
-        this.message = error.message;
+        this.showMessage('An error occurred. Please try again later.', "danger");
       }
     );
   }
@@ -160,24 +158,27 @@ export class AddRequestComponent implements OnInit {
     this.requestService.sendRequest(requestId, ueId).subscribe(
       (saveResponse) => {
         if (saveResponse.isSent) {
-          this.showMessage('success', saveResponse.message)
+          this.showMessage(saveResponse.message, 'success');
         } else {
-          this.showMessage('warning', saveResponse.message)
+          this.showMessage(saveResponse.message, 'warning');
         }
-        this.router.navigate(['/app/list-requests']);
+        setTimeout(() => {
+          this.router.navigate(['/app/list-requests']);
+        }, 1000);
+
       },
       (saveError) => {
-        this.showMessage('danger', saveError.message)
+        this.showMessage(saveError.message, 'danger')
       }
     );
   }
 
 
-  // SHOW MESSAGE IN ALERT
-  showMessage(color: string, message: string): void {
+  // DISPLAY SOME ISSUE OR ERROR
+  showMessage(message: string, color: string): void {
+    this.message = message;
     this.visible = true;
     this.color = color;
-    this.message = message;
   }
 
   protected requestModel = requestModel;

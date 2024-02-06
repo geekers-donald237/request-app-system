@@ -27,7 +27,7 @@
         <tr *ngFor="let request of requests;">
           <td>{{ request.request_code }}</td>
           <td>{{ utils.getRequestPatternById(request.request_pattern_id, requestPatterns) }}</td>
-          <td>{{ request.ues[0].code_ue }}</td>
+          <td> {{ request.ues[0].code_ue }} </td>
           <td>
             <div [ngClass]="{
                   'badge': true,

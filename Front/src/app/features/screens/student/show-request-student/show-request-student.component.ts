@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {RequestService} from "../../../services/request/request.service";
 import {IRequestHistory, IRequestHistoryResponse} from "../../../models/request.history.model";
 import {Utils} from "../../../services/shared/utils/utils";
-import {IUser} from "../../../models/staff.member.model";
 import {RequestStateConstants} from "../../../constant/constant";
+import {IUser} from "../../../models/user.model";
 
 @Component({
   selector: 'app-show-request-student',

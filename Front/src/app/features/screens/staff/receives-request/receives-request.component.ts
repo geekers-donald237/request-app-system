@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {IPersonnalRequest} from "../../../models/staff.request.model";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {RequestService} from "../../../services/request/request.service";
+import {IRequest} from "../../../models/request.model";
 
 @Component({
   selector: 'app-receives-request',
@@ -12,7 +12,7 @@ import {RequestService} from "../../../services/request/request.service";
 
 export class ReceivesRequestComponent implements OnInit {
   staffId: number | undefined;
-  requests: IPersonnalRequest[] = [];
+  requests: IRequest[] = [];
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
@@ -32,7 +32,7 @@ export class ReceivesRequestComponent implements OnInit {
     this.requestService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {
         console.log(response);
-        this.requests = response.requests;
+        // this.requests = response.requests;
       },
       (error) => {
         console.log('An error occurred. Please try again later.');

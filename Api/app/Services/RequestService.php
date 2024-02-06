@@ -184,7 +184,7 @@ class RequestService
         $requestHistory = new RequestHistory();
         $requestHistory->fill([
             'request_id' => $request->id,
-            'modify_by' => Auth::user()->getAuthIdentifier(),
+            'modify_by' => Auth::user()->name,
             'status' => $newRequestState,
         ])->save();
     }

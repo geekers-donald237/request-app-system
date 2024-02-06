@@ -4,6 +4,7 @@ import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {ButtonDirective} from "@coreui/angular";
+import {IRequest} from "../../../models/request.model";
 
 @Component({
   selector: 'app-receive-request-secretary',
@@ -14,7 +15,7 @@ import {ButtonDirective} from "@coreui/angular";
 })
 export class ReceiveRequestSecretaryComponent implements OnInit {
   secretaryId: number | null = null;
-  requests: IPersonnalRequest[] = [];
+  requests: IRequest[] = [];
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
@@ -27,7 +28,7 @@ export class ReceiveRequestSecretaryComponent implements OnInit {
   getAllSecretaryRequest(secretaryId: number): void {
     this.requestService.getRequestReceiveBySecretary(secretaryId).subscribe(
       (response) => {
-        this.requests = response.requests;
+        // this.requests = response.request;
       },
       (error) => {
         console.log('An error occurred. Please try again later.');

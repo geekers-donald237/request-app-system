@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('request_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('request_id')->constrained('requests');
-            $table->foreignId('modify_by')->constrained('users');
+            $table->string('modify_by');
             $table->enum('status', [
                 RequestStateEnum::ATTENTE_DE_SOUMISSION->value,
                 RequestStateEnum::ATTENTE_DE_VALIDATION->value,

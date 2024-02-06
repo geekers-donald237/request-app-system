@@ -6,13 +6,12 @@ import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
 import {IRequestResponse} from "../../models/request.model";
-import {IUpdateStatusResponse} from "../../models/request.status.model";
 import {IDeleteRequestResponse} from "../../models/delete.request.model";
-import {IRequestsResponse} from "../../models/staff.request.model";
 import {IRequestHistoryResponse} from "../../models/request.history.model";
-import {IUserResponse} from "../../models/staff.member.model";
 import {IStudentResponse} from "../../models/student.model";
 import {IUeResponse} from "../../models/ue.model";
+import {IUserResponse} from "../../models/user.model";
+import {IUpdateStatusResponse} from "../../models/update.request.state.model";
 
 
 @Injectable({
@@ -74,12 +73,12 @@ export class RequestService {
     return this.http.delete<IDeleteRequestResponse>(url, {headers: this.headers});
   }
 
-  getRequestReceiveByStaff(staffId: number): Observable<IRequestsResponse> {
-    return this.http.get<IRequestsResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
+  getRequestReceiveByStaff(staffId: number): Observable<IRequestResponse> {
+    return this.http.get<IRequestResponse>(`${this.baseUrl}/staff/${staffId}/requests`, {headers: this.headers});
   }
 
-  getRequestReceiveBySecretary(secretaryId: number): Observable<IRequestsResponse> {
-    return this.http.get<IRequestsResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
+  getRequestReceiveBySecretary(secretaryId: number): Observable<IRequestResponse> {
+    return this.http.get<IRequestResponse>(`${this.baseUrl}/secretary/${secretaryId}/requests`, {headers: this.headers});
   }
 
   getRequestHistory(requestId: number): Observable<IRequestHistoryResponse> {
@@ -98,7 +97,7 @@ export class RequestService {
 
   getUesWithDeadlinesForStaff(staffId: number): Observable<IUeResponse> {
     const url = `${this.baseUrl}/staff/${staffId}/ues`;
-    return this.http.get<IUeResponse>(url, { headers: this.headers });
+    return this.http.get<IUeResponse>(url, {headers: this.headers});
   }
 
 }
