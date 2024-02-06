@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 
 import {Utils} from "../../features/services/shared/utils/utils";
-import {IUser} from "../../features/models/login.response.model";
 import {UserRoleConstants} from "../../features/constant/constant";
 import {INavData} from "@coreui/angular";
 import {MessageService} from "primeng/api";
+import {IUser} from "../../features/models/user.model";
 
 @Component({
   selector: 'app-dashboard',

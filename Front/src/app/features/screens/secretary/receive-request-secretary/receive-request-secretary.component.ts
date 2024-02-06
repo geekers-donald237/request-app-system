@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {IPersonnalRequest} from "../../../models/staff.request.model";
 import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
