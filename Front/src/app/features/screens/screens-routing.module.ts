@@ -46,6 +46,13 @@ const routes: Routes = [
       title: 'voir ma requete'
     }
   },
+  {
+    path: 'profil',
+    component: ProfilComponent ,
+    data: {
+      title: 'profil page'
+    }
+  },
  
 
   // staff
@@ -91,7 +98,7 @@ const routes: Routes = [
     path: 'secretary/requests',
     component: ReceiveRequestSecretaryComponent,
     data: {
-      title: 'requete secetaire'
+      title: 'requete secretaire'
     }
   },
   

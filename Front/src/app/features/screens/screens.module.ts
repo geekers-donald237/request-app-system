@@ -34,6 +34,7 @@ import { ProfilComponent } from './profil/profil.component';
 
 @NgModule({
   declarations: [
+    ProfilComponent,
     ListRequestComponent,
     AddRequestComponent,
     AddDeadlineComponent,
@@ -42,6 +43,7 @@ import { ProfilComponent } from './profil/profil.component';
     ViewDeadlinesComponent,
     ShowRequestComponent,
     ShowRequestStudentComponent,
+    
   ],
   imports: [
     CommonModule,
