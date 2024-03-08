@@ -9,5 +9,4 @@ enum RuleEnum: string
     case STAFF = 'staff';
     case TECHNICAL_ADMIN = 'technical_admin';
 
-
 }

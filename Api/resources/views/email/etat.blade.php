@@ -11,8 +11,8 @@
     <p>Nous tenons à vous informer que le statut de votre requête a été mis à jour :</p>
 
     <div class="status-update">
-        <p>Requête : <span class="highlight">[NUMÉRO DE REQUÊTE]</span></p>
-        <p>Nouveau statut : <span class="highlight">[NOUVEAU STATUT]</span></p>
+        <p>Requête : <span class="highlight">[{{$userData['request_number']}}]</span></p>
+        <p>Nouveau statut : <span class="highlight">[{{$userData['new_state']}}}]</span></p>
     </div>
 
     <p>Nous vous invitons à vous connecter à votre compte pour consulter les détails de votre requête.</p>

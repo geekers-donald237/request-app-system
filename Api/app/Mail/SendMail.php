@@ -2,8 +2,11 @@
 
 namespace App\Mail;
 
+use App\Enums\EmailEnum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class SendMail extends Mailable
@@ -19,20 +22,44 @@ class SendMail extends Mailable
         $this->status = $status;
     }
 
-    public function build()
+    /**
+     * Get the message envelope.
+     */
+    public function envelope(): Envelope
     {
-        // Choisissez la vue en fonction du statut
-        $view = ''; // Vue par défaut
+        return new Envelope(
+            subject: 'Mail From Easy Request',
+        );
+    }
 
-        if ($this->status == 'status1') {
+    /**
+     * Get the message content definition.
+     */
+    public function content(): Content
+    {
+        $view = 'email.password'; // Par défaut, utilisez la vue 'email.password'
+
+        // Vérifiez la valeur de $this->status et mettez à jour $view en conséquence
+        if ($this->status == EmailEnum::STATUT1->value) {
             $view = 'email.deadline';
-        } elseif ($this->status == 'status2') {
+        } elseif ($this->status == EmailEnum::STATUT2->value) {
             $view = 'email.etat';
-        } elseif ($this->status == 'status3') {
+        } elseif ($this->status == EmailEnum::STATUT3->value) {
             $view = 'email.password';
         }
 
-        return $this->view($view)
-            ->with(['userData' => $this->userData]);
+        return new Content(view: $view);
+    }
+
+
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

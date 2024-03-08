@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Commands\SaveRequestActionCommand;
 use App\Commands\SendRequestActionCommand;
+use App\Enums\EmailEnum;
 use App\Enums\RequestStateEnum;
 use App\Enums\RuleEnum;
 use App\Enums\StorageDirectoryEnum;
+use App\Events\SendMailEvent;
 use App\Helpers\HelpersFunction;
 use App\Models\Attachment;
 use App\Models\Request;
@@ -49,7 +51,6 @@ class RequestService
         $response = new saveRequestActionResponse();
         $this->checkIfAuthenticateUserIsStudentOrThrowException();
         $this->checkIfRequestPatternExistOrThrowException($command->requestPatternId);
-
         $request = $this->saveStudentRequest($command);
         $this->createRequestHistory($request, RequestStateEnum::ATTENTE_DE_SOUMISSION->value);
 
@@ -59,6 +60,7 @@ class RequestService
 
         return $response;
     }
+
 
     /**
      * @throws Exception
@@ -182,6 +184,14 @@ class RequestService
     private function createRequestHistory(Request $request, string $newRequestState): void
     {
         $requestHistory = new RequestHistory();
+        $sender =User::findOrFail( $request->sender()->get()->first()->id);
+
+        $userData = [
+            'email' => $sender->email,
+            'request_number' => $request->request_code,
+            'new_state' => $newRequestState
+        ];
+        event(new SendMailEvent($userData, EmailEnum::STATUT2->value));
         $requestHistory->fill([
             'request_id' => $request->id,
             'modify_by' => Auth::user()->name,

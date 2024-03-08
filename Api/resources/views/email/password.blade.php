@@ -11,8 +11,8 @@
     <p>Voici vos informations d'accès :</p>
 
     <div class="status-update">
-        <p><span class="highlight">Adresse e-mail :</span> [ADRESSE E-MAIL]</p>
-        <p><span class="highlight">Mot de passe :</span> [MOT DE PASSE]</p>
+        <p><span class="highlight">Adresse e-mail :</span> [{{$userData['email']}}]</p>
+        <p><span class="highlight">Mot de passe :</span> [{{$userData['password']}}]</p>
     </div>
 
     <p>Nous vous recommandons de changer votre mot de passe dès votre première connexion.</p>

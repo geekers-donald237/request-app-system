@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Request;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -46,15 +47,42 @@ class HelpersFunction
         return in_array($extension, $allowedFileTypes, true);
     }
 
-  public static  function unique_str(): string
-  {
+    public static function unique_str(): string
+    {
         $uniqueStr = Str::random(8);
-        while(Request::where('request_code', $uniqueStr)->exists()) {
+        while (Request::where('request_code', $uniqueStr)->exists()) {
             $uniqueStr = Str::random(8);
         }
         return $uniqueStr;
     }
 
 
+    public static function getUserData($userId): array
+    {
+        $user = User::whereIsDeleted(false)->whereId($userId)->get();
 
+        if (!$user) {
+            // User not found
+            return [];
+        }
+        // Create the user data array
+        return [
+            'name' => $user->name,
+            'email' => $user->email,
+        ];
+    }
+
+   public static function generateRandomPassword($length = 8): string
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $password = '';
+        $charLength = strlen($characters) - 1;
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomChar = $characters[rand(0, $charLength)];
+            $password .= $randomChar;
+        }
+
+        return $password;
+    }
 }
