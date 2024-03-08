@@ -13,6 +13,7 @@ import {ShowRequestStudentComponent} from "./student/show-request-student/show-r
 import {AddRequestComponent} from './student/add-individual-request/add-request.component';
 import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.component";
 import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
+import { ProfilComponent } from './profil/profil.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,14 @@ const routes: Routes = [
       title: 'voir ma requete'
     }
   },
-
+  {
+    path: 'profil',
+    component: ProfilComponent ,
+    data: {
+      title: 'profil page'
+    }
+  },
+ 
 
   // staff
   {
@@ -72,13 +80,12 @@ const routes: Routes = [
     }
   },
 
-
   // secretary
   {
     path: 'secretary/requests',
     component: ReceiveRequestSecretaryComponent,
     data: {
-      title: 'requete secetaire'
+      title: 'requete secretaire'
     }
   }, {
     path: 'show-request-secretary/:id',

@@ -7,6 +7,7 @@ import {Page500Component} from './views/pages/page500/page500.component';
 import {LoginComponent} from './views/pages/login/login.component';
 import {RegisterComponent} from './views/pages/register/register.component';
 import {AcceuilComponent} from "./features/screens/acceuil/acceuil/acceuil.component";
+import { ProfilComponent } from "./features/screens/profil/profil.component";
 
 const routes: Routes = [
 
@@ -110,6 +111,14 @@ const routes: Routes = [
       title: 'Register Page'
     }
   },
+  {
+    path: 'profil',
+    component: ProfilComponent ,
+    data: {
+      title: 'profil page'
+    }
+  },
+  
 
   {path: '**', redirectTo: 'home'}
 ];
