@@ -5,11 +5,12 @@ import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {ButtonDirective} from "@coreui/angular";
 import {IRequest} from "../../../models/request.model";
+import {DateUtils} from "../../../services/shared/utils/date";
 
 @Component({
   selector: 'app-receive-request-secretary',
   standalone: true,
-  imports: [CommonModule, ButtonDirective],
+  imports: [CommonModule, ButtonDirective, DateUtils],
   templateUrl: './receive-request-secretary.component.html',
   styleUrl: './receive-request-secretary.component.scss'
 })
