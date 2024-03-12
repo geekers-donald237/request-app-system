@@ -28,8 +28,6 @@ class UeService
         $ues = $this->getSubjectsForSecretaryWithLevel($secretary, $command->levelId);
         $this->addPublicationDateForUEs(ues: $ues, command: $command);
 
-        dd($ues);
-
         $response->isSaved = true;
         $response->message = 'Deadline Successfully saved';
         return $response;
