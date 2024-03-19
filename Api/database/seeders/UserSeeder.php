@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
      */
     public function createdStudentUsers(): void
     {
-        User::factory()->create(['name' => 'Mbiada Idris', 'email' => 'bayidris@gmail.com', 'password' =>'123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
+        User::factory()->create(['name' => 'Mbiada Idris', 'email' => 'bayidris@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
         Student::factory()->create(['user_id' => (User::whereEmail('bayidris@gmail.com')->first()->id),
             'matricule' => '21Q2915'
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
         $this->userData = [
             'name' => "Mbiada Bayon",
             'email' => 'bayonidris@gmail.com',
-            'password' =>'123456789',
+            'password' => '123456789',
 
         ];
     }
@@ -60,14 +60,14 @@ class UserSeeder extends Seeder
      */
     public function createSecretaryUser(): void
     {
-        User::factory()->create(['name' => 'Jane doe', 'email' => 'janedoe@gmail.com', 'password' =>'123456789'])->rules()->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
+        User::factory()->create(['name' => 'Jane doe', 'email' => 'janedoe@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::SECRETARY->value)->first()->id);
 
         Secretary::factory()->create(['user_id' => (User::whereEmail('janedoe@gmail.com')->first()->id), 'job_title' => 'secretaire dpt info', 'address' => 'Extension 2', 'phone_number' => '+237 699854525', 'department_id' => '4']);
 
         $this->secretaryData = [
             'name' => "Jane doe",
             'email' => 'janedoe@gmail.com',
-            'password' =>'123456789',
+            'password' => '123456789',
         ];
     }
 
@@ -76,16 +76,56 @@ class UserSeeder extends Seeder
      */
     public function createStaffUser(): void
     {
-        User::factory()->create(['name' => 'John doe',
-            'email' => 'johndoe@gmail.com', 'password' =>'123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+        User::factory()->create(['name' => 'Moyou Pierre',
+            'email' => 'moyou@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
 
         Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525']);
 
         $this->staffData = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@gmail.com',
-            'password' =>'123456789',
+            'name' => 'Moyou Pierre',
+            'email' => 'moyou@gmail.com',
+            'password' => '123456789',
         ];
+
+        User::factory()->create([
+            'name' => 'Fomekong Evarice',
+            'email' => 'fomekong@gmail.com',
+            'password' => '123456789'
+        ])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+
+        Staff::factory()->create([
+            'user_id' => User::whereEmail('fomekong@gmail.com')->first()->id,
+            'job_title' => 'Enseignant',
+            'address' => 'Bloc Pedagogique',
+            'phone_number' => '+237 699854525'
+        ]);
+
+        $this->staffData = [
+            'name' => 'Fomekong evarice',
+            'email' => 'fomekong@gmail.com',
+            'password' => '123456789',
+        ];
+
+        User::factory()->create([
+            'name' => 'Thomas Messi Nguelle',
+            'email' => 'thomas@gmail.com',
+            'password' => '123456789'
+        ])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+
+        Staff::factory()->create([
+            'user_id' => User::whereEmail('thomas@gmail.com')->first()->id,
+            'job_title' => 'Enseignant',
+            'address' => 'Bloc Pedagogique',
+            'phone_number' => '+237 699854525'
+        ]);
+
+        $this->staffData = [
+            'name' => 'Messi Nguele Thomas',
+            'email' => 'messi@gmail.com',
+            'password' => '123456789',
+        ];
+
+
     }
 
     /**
