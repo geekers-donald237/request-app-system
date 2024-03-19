@@ -3,9 +3,14 @@
 namespace App\Services;
 
 use App\Commands\LoginActionCommand;
+use App\Commands\NewsletterActionCommand;
+use App\Enums\EmailEnum;
+use App\Events\SendMailEvent;
+use App\Models\Newsletter;
 use App\Models\User;
 use App\Responses\LoginActionResponse;
 use App\Responses\LogoutActionResponse;
+use App\Responses\NewsletterActionResponse;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +43,27 @@ class AuthService
         }
 
         throw new Exception('User Not Found');
+    }
+
+    public function handleNewsletter(NewsletterActionCommand $command): NewsletterActionResponse
+    {
+        $response = new NewsletterActionResponse();
+        $newsletter = $this->createNewsletter($command->email);
+        $userData = [
+            'name' => '',
+            'email' => $command->email,
+        ];
+        event(new SendMailEvent($userData, EmailEnum::STATUT4->value));
+        $response->message = 'User newsletter Successfully';
+        return $response;
+    }
+
+    private function createNewsletter(string $email): Newsletter
+    {
+        $newsletter = new Newsletter();
+        $newsletter->email = $email;
+        $newsletter->save();
+        return $newsletter;
     }
 
 

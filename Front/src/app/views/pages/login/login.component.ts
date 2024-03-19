@@ -13,6 +13,7 @@ import {ILoginResponse} from "../../../features/models/login.response.model";
 })
 export class LoginComponent {
   visible = false;
+  isLoading = false;
   dismissible = true;
   errorMessage: string | undefined;
 
@@ -40,6 +41,8 @@ export class LoginComponent {
   // FUNCTION TO PERFORM THE LOGIN ACTION
 
   login() {
+
+    this.isLoading = true;
     const {email, password} = this.loginForm.value;
     this.authService.login(email!, password!).subscribe(
       (response) => {
@@ -50,7 +53,13 @@ export class LoginComponent {
         this.showErrorMessage('An error occurred. Please try again later.');
       }
     );
+    setTimeout(() => {
+      this.isLoading = false;
+
+    }, 1000);
+
   }
+
 
   handleLogin(response: ILoginResponse): void {
     this.utils.clearLocalStorage();

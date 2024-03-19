@@ -1,4 +1,5 @@
 <div class="intro-section" id="home-section">
+
   <div class="slide-1"
        style="background-image: url('../../../assets/img/pexels-charlotte-may-5965930.jpg'); height: auto;">
     <div class="container" style="max-width: 600px; padding: 0;">
@@ -13,7 +14,7 @@
                        *ngIf="visible">
                 <strong>{{ errorMessage }}</strong>
               </c-alert>
-              <form action="liste_requete3" method="post" [formGroup]="loginForm" (ngSubmit)="login()"
+              <form action="liste_requete3" method="post" readonly="" [formGroup]="loginForm" (ngSubmit)="login()"
                     class="form-box">
                 <h3 class="h4 text-black mb-4 " style="font-weight: bold;">Connexion</h3>
                 <div class="form-group form-floating mt-3 d-flex flex-column">
@@ -38,9 +39,11 @@
                   </div>
                 </div>
 
-                <div class="form-group  mt-3 ">
-                  <button cButton type="submit" class="btn btn px-4 btn-pill btn-block" style="background-color:black;"
-                          [disabled]="!loginForm.valid">Se Connecter
+                <div class="form-group justify-content-between mt-3 ">
+                  <button  cButton type="submit" class="btn btn px-4 btn-pill btn-block" style="background-color:black;"
+                          [disabled]="!loginForm.valid">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Se Connecter
                   </button>
                 </div>
               </form>
@@ -52,3 +55,4 @@
     </div>
   </div>
 </div>
+

@@ -37,20 +37,17 @@ class SendMail extends Mailable
      */
     public function content(): Content
     {
-        $view = 'email.password'; // Par défaut, utilisez la vue 'email.password'
+        $view = match ($this->status) {
+            EmailEnum::STATUT1->value => 'email.deadline',
+            EmailEnum::STATUT2->value => 'email.etat',
+            EmailEnum::STATUT3->value => 'email.password',
+            EmailEnum::STATUT4->value => 'email.newsletter',
+            default => 'email.default',
+        };
 
-        // Vérifiez la valeur de $this->status et mettez à jour $view en conséquence
-        if ($this->status == EmailEnum::STATUT1->value) {
-            $view = 'email.deadline';
-        } elseif ($this->status == EmailEnum::STATUT2->value) {
-            $view = 'email.etat';
-        } elseif ($this->status == EmailEnum::STATUT3->value) {
-            $view = 'email.password';
-        }
 
         return new Content(view: $view);
     }
-
 
 
     /**
