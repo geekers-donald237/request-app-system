@@ -14,6 +14,7 @@ import {IRequest} from "../../../models/request.model";
 })
 export class ListRequestComponent implements OnInit {
   studentId: number = 1;
+  pageIsLoad = true;
   color = "";
   visible = false;
   dismissible = true;
@@ -46,6 +47,9 @@ export class ListRequestComponent implements OnInit {
         this.requestPatterns = requestPatterns;
       },
     );
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   // REQUEST OPERATIONS.....

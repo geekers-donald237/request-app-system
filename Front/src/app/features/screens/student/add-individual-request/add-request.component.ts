@@ -16,6 +16,8 @@ import {CourseService} from "../../../services/shared/course/courses.service";
 export class AddRequestComponent implements OnInit {
 
   visible = false;
+  isLoading = false;
+  isReadonly = false;
   dismissible = true;
   message: string | undefined;
   courses: IUe[] = [];
@@ -136,6 +138,8 @@ export class AddRequestComponent implements OnInit {
   }
 
   sendRequest() {
+    this.isLoading = true
+    this.isReadonly = true
     const formData = this.createFormData();
     const ueId = 1;
 
@@ -147,8 +151,13 @@ export class AddRequestComponent implements OnInit {
       },
       (error) => {
         this.showMessage('An error occurred. Please try again later.', "danger");
+        setTimeout(() => {
+          this.isLoading = false;
+          this.isReadonly = false;
+        }, 2000);
       }
     );
+
   }
 
 
@@ -163,14 +172,17 @@ export class AddRequestComponent implements OnInit {
           this.showMessage(saveResponse.message, 'warning');
         }
         setTimeout(() => {
+          this.isLoading = false;
+          this.isReadonly = false;
           this.router.navigate(['/app/list-requests']);
         }, 1000);
-
       },
       (saveError) => {
         this.showMessage(saveError.message, 'danger')
       }
     );
+
+
   }
 
 

@@ -12,6 +12,7 @@ import {CourseService} from "../../../services/shared/course/courses.service";
 export class StudentDashboardComponent implements OnInit {
   courses: IUe[] = [];
   badgeStatus: BadgeStatus;
+  pageIsLoad = true;
   date: DateUtils | undefined;
 
   constructor(private courseService: CourseService) {
@@ -28,5 +29,8 @@ export class StudentDashboardComponent implements OnInit {
     this.courseService.courses$.subscribe((courses) => {
       this.courses = courses;
     });
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 }

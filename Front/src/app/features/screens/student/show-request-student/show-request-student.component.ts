@@ -15,6 +15,7 @@ export class ShowRequestStudentComponent implements OnInit {
   requestId: number | undefined;
   student: any;
   users: IUser[] = [];
+  pageIsLoad = true;
 
   constructor(private requestService: RequestService, private utils: Utils) {
   }
@@ -46,6 +47,9 @@ export class ShowRequestStudentComponent implements OnInit {
         console.error('Failed to fetch request history:', error);
       }
     );
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   protected readonly RequestStateConstants = RequestStateConstants;
