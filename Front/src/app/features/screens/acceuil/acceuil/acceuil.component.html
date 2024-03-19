@@ -138,28 +138,32 @@
         </div>
 
         <div class="col-md-5">
-          <h3>inscris toi</h3>
+          <h3>Inscrivez-vous à notre newsletter</h3>
           <p style="color: gray;">
-            pour etre membre de notre communauté et avoir acces à nos
-            derniers mises à jour et recommandation inscrivez vous sur notre
-            plateforme
+            Pour devenir membre de notre communauté et accéder à nos dernières mises à jour et recommandations, inscrivez-vous sur notre plateforme.
           </p>
-          <form action="#" class="footer-subscribe">
+          <form action="subscribe-to-newsletter" [formGroup]="newsletterForm" class="footer-subscribe" (ngSubmit)="subscribeToNewsletter()">
             <div class="d-flex mb-5">
               <input
-                type="text"
+                type="email"
                 class="form-control rounded-0"
                 placeholder="Email"
-              /> &nbsp;&nbsp;
-              <input
-                type="submit"
-                class="btn btn-primary rounded-2"
-                value="Subscribe"
-                style="font-size: 10px; background-color: black;"
-              />
+                name="email"
+                formControlName="email"
+              />&nbsp;&nbsp;
+              <div class="form-group row mb-2">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                <div class="col-sm-12 col-md-7">
+                  <button type="submit"  class="btn btn-primary rounded-2"
+                          value="Subscribe"
+                          style="background-color: rgb(10, 10, 11); border: none; padding: 15px 22px;" [disabled]="!newsletterForm.valid"  style="font-size: 12px;">Soumettre</button>
+                </div>
+              </div>
+
             </div>
           </form>
         </div>
+
       </div>
     </div>
   </footer>
