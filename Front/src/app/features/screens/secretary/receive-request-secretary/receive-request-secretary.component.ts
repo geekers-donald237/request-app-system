@@ -5,13 +5,14 @@ import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {ButtonDirective} from "@coreui/angular";
 import {IRequest} from "../../../models/request.model";
+import { DateUtils } from "../../../services/shared/utils/date";
 
 @Component({
-  selector: 'app-receive-request-secretary',
-  standalone: true,
-  imports: [CommonModule, ButtonDirective],
-  templateUrl: './receive-request-secretary.component.html',
-  styleUrl: './receive-request-secretary.component.scss'
+    selector: 'app-receive-request-secretary',
+    standalone: true,
+    templateUrl: './receive-request-secretary.component.html',
+    styleUrl: './receive-request-secretary.component.scss',
+    imports: [CommonModule, ButtonDirective, DateUtils]
 })
 export class ReceiveRequestSecretaryComponent implements OnInit {
   secretaryId: number | null = null;
