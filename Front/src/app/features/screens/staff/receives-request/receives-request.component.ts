@@ -13,6 +13,7 @@ import {IRequest} from "../../../models/request.model";
 export class ReceivesRequestComponent implements OnInit {
   staffId: number | undefined;
   requests: IRequest[] = [];
+  pageIsLoad = true;
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
@@ -31,18 +32,21 @@ export class ReceivesRequestComponent implements OnInit {
   getAllStaffRequest(staffId: number): void {
     this.requestService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {
-        console.log(response);
-        // this.requests = response.requests;
+        this.requests = response.requests;
       },
       (error) => {
         console.log('An error occurred. Please try again later.');
       }
     );
+
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   showRequest(requestId: number): void {
     localStorage.setItem('requestId', requestId.toString());
-    this.router.navigate(['/app/show-request']);
+    this.router.navigate(['app/staff/show-request/:id:' + requestId]);
   }
 
 }

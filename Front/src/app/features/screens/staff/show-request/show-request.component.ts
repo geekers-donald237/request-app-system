@@ -18,9 +18,20 @@ export class ShowRequestComponent implements OnInit {
   userData: IStudent | undefined;
   requestPatterns: IRequestPattern[] = [];
   requestId: number = 0;
+
+  isLoading1 = false;
+  isLoading2 = false;
+  isLoading3 = false;
+
   utils: Utils;
+  visible = false;
+
+  dismissible = true;
+  message: string | undefined;
+  color: string | undefined;
   redirectLink: RedirectLink;
   showAlert: boolean = false;
+  pageIsLoad = true;
 
   constructor(
     private router: Router,
@@ -29,6 +40,20 @@ export class ShowRequestComponent implements OnInit {
   ) {
     this.utils = new Utils(this.router);
     this.redirectLink = new RedirectLink()
+  }
+
+  showMessage(message: string, color: string): void {
+
+    setTimeout(() => {
+      this.isLoading1 = false;
+      this.isLoading2 = false;
+      this.isLoading3 = false;
+    }, 1000);
+
+    this.message = message;
+    this.visible = true;
+    this.color = color;
+
   }
 
   ngOnInit(): void {
@@ -62,6 +87,9 @@ export class ShowRequestComponent implements OnInit {
         this.requestPatterns = requestPatterns;
       },
     );
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   loadStudentInformation(senderId: number): void {
@@ -78,41 +106,37 @@ export class ShowRequestComponent implements OnInit {
   private updateRequestStatus(statut: string): void {
     this.requestService.updateRequestStatus(this.requestId, statut).subscribe(
       () => {
-        console.log('Status update');
-        setTimeout(() => {
-          this.router.navigate(['/app/receive-request']);
-        }, 3000);
+        this.router.navigate(['/app/receive-request']);
       },
       (error) => {
-        console.log('An error occurred while updating request status:', error);
+        this.showMessage('An error occurred while updating request status:', error);
       }
     );
+
   }
 
 
   // UPDATE REQUEST STATE AND DISPLAY ALERT
   showAlertWithTimeout(requestStatus: string): void {
     this.updateRequestStatus(requestStatus);
-    this.showAlert = true;
-    setTimeout(() => {
-      this.closeAlert();
-    }, 3000);
+    this.showMessage('Le traitement a été effectué avec succès', 'success');
   }
 
   validateRequest(): void {
+    this.isLoading1 = true;
     this.showAlertWithTimeout(RequestStateConstants.ACCEPTED);
+
   }
 
   putOnHoldRequest(): void {
+    this.isLoading2 = true;
     this.showAlertWithTimeout(RequestStateConstants.EN_COURS_DE_TRAITEMENT);
   }
 
   rejectRequest(): void {
+    this.isLoading3 = true;
     this.showAlertWithTimeout(RequestStateConstants.REFUSED);
   }
 
-  closeAlert() {
-    this.showAlert = false;
-  }
 
 }

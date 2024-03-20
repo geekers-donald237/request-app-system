@@ -7,7 +7,6 @@ import {HttpClientModule} from "@angular/common/http";
 
 import {StaffDashboardComponent} from "./staff/staff-dashboard/staff-dashboard.component";
 import {ReceivesRequestComponent} from "./staff/receives-request/receives-request.component";
-import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 import {
   AlertComponent,
   ButtonCloseDirective,
@@ -38,7 +37,8 @@ import {StudentDashboardComponent} from "./student/student-dashboard/student-das
 import {WidgetsModule} from "../../views/widgets/widgets.module";
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
-import { ProfilComponent } from './profil/profil.component';
+import {ProfilComponent} from './profil/profil.component';
+import {ShowRequestComponent} from "./staff/show-request/show-request.component";
 
 
 @NgModule({
@@ -51,9 +51,9 @@ import { ProfilComponent } from './profil/profil.component';
     StaffDashboardComponent,
     StudentDashboardComponent,
     ViewDeadlinesComponent,
-    ShowRequestComponent,
     ShowRequestStudentComponent,
-    
+    ShowRequestComponent
+
   ],
   imports: [
     CommonModule,

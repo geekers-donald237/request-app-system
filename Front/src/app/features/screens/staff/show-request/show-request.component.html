@@ -1,3 +1,8 @@
+<div *ngIf="pageIsLoad" class="fade show" style="text-align: center; padding-top: calc(100vh / 2); height: 100vh">
+  <i class="spinner-grow spinner-grow-sm"></i>
+  <span class="m-1">Loading...</span>
+</div>
+
 <div class="invoice">
   <div class="invoice-print">
     <div class="row">
@@ -71,16 +76,23 @@
       <br>
 
       <div class="float-lg-left mb-lg-0 mb-3">
-        <div *ngIf="showAlert" class="alert alert-success">
-          Votre Traitement a éte effectué avec succes
-        </div>
+        <c-alert [(visible)]="visible"
+                 [dismissible]="dismissible"
+                 color="{{color}}"
+                 fade
+                 *ngIf="visible">
+          <strong>{{ message }}</strong>
+        </c-alert>
         <button class="btn btn-success" (click)="validateRequest()" style="font-size: 12px;">
+          <span *ngIf="isLoading1" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Valider
         </button>&nbsp;&nbsp;
         <button class="btn btn-warning" (click)="putOnHoldRequest()" style="font-size: 12px;">
+          <span *ngIf="isLoading2" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Mettre en attente
         </button>&nbsp;&nbsp;
         <button class="btn btn-danger" (click)="rejectRequest()" style="font-size: 12px;">
+          <span *ngIf="isLoading3" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Rejeter
         </button>
       </div>

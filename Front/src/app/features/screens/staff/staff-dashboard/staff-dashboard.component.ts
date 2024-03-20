@@ -14,12 +14,14 @@ export class StaffDashboardComponent implements OnInit {
   courses: IUe[] = [];
   badgeStatus: BadgeStatus;
   date: DateUtils | undefined;
+  pageIsLoad = true;
 
   constructor(private requestService: RequestService, private utils: Utils) {
     this.badgeStatus = new BadgeStatus(this.date!);
   }
 
   ngOnInit(): void {
+    this.loadData()
   }
 
   loadData() {
@@ -36,5 +38,8 @@ export class StaffDashboardComponent implements OnInit {
       }, (error) => {
         console.log('An error occurred. Please try again later.');
       });
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 }
