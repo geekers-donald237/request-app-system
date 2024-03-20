@@ -29,22 +29,19 @@
 
 <ng-template #userDropdown>
   <c-dropdown alignment="end" variant="nav-item">
-    <button
-      cButton
-      color=""
-      [caret]="false"
+    <c-avatar
+      size="md"
+      src="./assets/img/avatar.png"
+      status="success"
+      style="  width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"
       cDropdownToggle
-      class="py-0"
-      cBorder="none"
     >
-      <c-avatar
-        size="md"
-        src="./assets/img/photo_2023-11-16_05-38-51.jpg"
-        status="success"
-      >
-      </c-avatar>
-    </button>
-    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+    </c-avatar>
+    <ul cDropdownMenu class="pt-0 w-auto">
       <li>
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Account</h6>
       </li>
@@ -59,21 +56,22 @@
       </li>
       <li></li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilSettings"></svg>
           langue
         </a>
       </li>
       <li>
-        <hr cDropdownDivider />
+        <hr cDropdownDivider/>
       </li>
-      <li>
-        <a routerLink="./" cDropdownItem>
+      <li style="background-color: red">
+        <a routerLink="./" cDropdownItem class="logout-item">
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
           Deconnexion
         </a>
       </li>
       <li></li>
     </ul>
+
   </c-dropdown>
 </ng-template>
