@@ -26,6 +26,8 @@ export class ViewDeadlinesComponent implements OnInit {
   dismissible = true;
   message: string | undefined;
   color = '';
+  pageIsLoad = true;
+  isLoading = false;
 
   constructor(private ueService: UeService, private fb: FormBuilder, private requestService: RequestService, private utils: Utils) {
     this.badgeStatus = new BadgeStatus(this.date!);
@@ -50,6 +52,9 @@ export class ViewDeadlinesComponent implements OnInit {
         console.error('Erreur lors de la récupération des UEs avec délais :', error);
       }
     );
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
 
@@ -58,6 +63,7 @@ export class ViewDeadlinesComponent implements OnInit {
   }
 
   updateDeadline() {
+    this.isLoading = true;
     if (this.selectedUe) {
       const ueId = this.selectedUe.id;
       const updatedDeadlineData = {
@@ -74,6 +80,10 @@ export class ViewDeadlinesComponent implements OnInit {
           this.showMessage(error.message, 'danger')
         }
       );
+      setTimeout(() => {
+        this.isLoading = false;
+
+      }, 1000);
     }
   }
 

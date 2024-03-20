@@ -10,6 +10,7 @@ import {UpdateRequestStateService} from '../../../services/shared/update-request
 import {AlertComponent} from '@coreui/angular';
 import {IUe} from '../../../models/ue.model';
 import {Router} from '@angular/router';
+import {IRequest} from "../../../models/request.model";
 
 @Component({
   selector: 'app-show-request-secretary',
@@ -21,15 +22,21 @@ import {Router} from '@angular/router';
 export class ShowRequestSecretaryComponent {
   request: any | undefined;
   userData: IStudent | undefined;
+  isLoading1 = false;
+  isLoading2 = false;
+
   requestPatterns: IRequestPattern[] = [];
   requestId: number | undefined;
   visible = false;
+
   dismissible = true;
   message: string | undefined;
   courses: IUe[] = [];
   color: string | undefined;
   utils: Utils | undefined;
-  redirectLink : RedirectLink | undefined;
+  redirectLink: RedirectLink | undefined;
+  pageIsLoad = true;
+
 
   constructor(
     private requestPatternService: RequestPatternService,
@@ -54,7 +61,7 @@ export class ShowRequestSecretaryComponent {
   getRequestDetails(): void {
     this.requestDetailsService.fetchRequestDetails();
     this.requestDetailsService.requestDetails$.subscribe(
-      (requestDetails: Request) => {
+      (requestDetails: IRequest) => {
         this.request = requestDetails;
         if (this.request?.sender_id) {
           this.loadStudentInformation(this.request.sender_id);
@@ -69,6 +76,9 @@ export class ShowRequestSecretaryComponent {
     this.requestPatternService.requestPatterns$.subscribe((requestPatterns: IRequestPattern[]) => {
       this.requestPatterns = requestPatterns;
     });
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   // CHARGER LES INFORMATIONS SUR L'ÉTUDIANT
@@ -81,6 +91,7 @@ export class ShowRequestSecretaryComponent {
 
   // TRANSFÉRER LA DEMANDE
   transferringRequest(): void {
+    this.isLoading1 = true;
     this.updateRequestStateService.transferringRequest().subscribe(
       (success) => {
         if (success) {
@@ -90,10 +101,14 @@ export class ShowRequestSecretaryComponent {
         }
       }
     );
+    setTimeout(() => {
+      this.isLoading1 = false;
+    }, 1000);
   }
 
   // REJETER LA DEMANDE
   rejectRequest(): void {
+    this.isLoading2 = true;
     this.updateRequestStateService.rejectRequest().subscribe(
       (success) => {
         if (success) {
@@ -103,6 +118,9 @@ export class ShowRequestSecretaryComponent {
         }
       }
     );
+    setTimeout(() => {
+      this.isLoading2 = false;
+    }, 500);
   }
 
   // AFFICHER UN MESSAGE
@@ -117,6 +135,6 @@ export class ShowRequestSecretaryComponent {
     this.showMessage('Le traitement a été effectué avec succès', 'success');
     setTimeout(() => {
       this.router.navigate(['/app/secretary/requests']);
-    }, 3000);
+    }, 1000);
   }
 }

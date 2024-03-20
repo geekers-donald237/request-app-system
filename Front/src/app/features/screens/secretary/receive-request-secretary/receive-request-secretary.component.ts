@@ -17,6 +17,8 @@ import {DateUtils} from "../../../services/shared/utils/date";
 export class ReceiveRequestSecretaryComponent implements OnInit {
   secretaryId: number | null = null;
   requests: IRequest[] = [];
+  pageIsLoad = true;
+
 
   constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
   }
@@ -41,6 +43,9 @@ export class ReceiveRequestSecretaryComponent implements OnInit {
         console.log('An error occurred. Please try again later.');
       }
     );
+    setTimeout(() => {
+      this.pageIsLoad = false;
+    }, 2000);
   }
 
   showRequest(requestId: number): void {

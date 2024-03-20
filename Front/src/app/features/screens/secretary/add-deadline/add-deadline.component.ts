@@ -17,6 +17,7 @@ export class AddDeadlineComponent implements OnInit {
   dismissible = true;
   message: string | undefined;
   color = '';
+  isLoading = false;
 
   // Formulaire de création de deadline
   addDeadlineForm = this.fb.group({
@@ -47,6 +48,7 @@ export class AddDeadlineComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   // FORM FIELD CONTROLS
@@ -68,6 +70,7 @@ export class AddDeadlineComponent implements OnInit {
 
   // Sauvegarder la deadline
   saveDeadline() {
+    this.isLoading = true;
     const userId = this.utils.getUserIdFromLocalStorage();
     const formData = this.addDeadlineForm.value;
 
@@ -86,6 +89,10 @@ export class AddDeadlineComponent implements OnInit {
         this.showMessage("Une erreur est survenue, veuillez réessayer", 'danger');
       }
     );
+    setTimeout(() => {
+      this.isLoading = false;
+
+    }, 1000);
   }
 
   // Afficher un message
