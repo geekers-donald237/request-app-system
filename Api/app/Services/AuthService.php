@@ -2,17 +2,22 @@
 
 namespace App\Services;
 
+
+use App\Command\UpdateProfileActionCommand;
+use App\Command\UpdateUserPasswordCommand;
 use App\Commands\LoginActionCommand;
-use App\Commands\NewsletterActionCommand;
-use App\Enums\EmailEnum;
-use App\Events\SendMailEvent;
-use App\Models\Newsletter;
 use App\Models\User;
+use App\Responses\DeleteAccountActionResponse;
+use App\Responses\GetUserProfileActionResponse;
 use App\Responses\LoginActionResponse;
 use App\Responses\LogoutActionResponse;
-use App\Responses\NewsletterActionResponse;
+use App\Responses\UpdatePasswordActionResponse;
+use App\Responses\UpdateProfilActionResponse;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class AuthService
 {
@@ -45,27 +50,49 @@ class AuthService
         throw new Exception('User Not Found');
     }
 
-    public function handleNewsletter(NewsletterActionCommand $command): NewsletterActionResponse
+    public function handleGetUserProfile(): GetUserProfileActionResponse
     {
-        $response = new NewsletterActionResponse();
-        $newsletter = $this->createNewsletter($command->email);
-        $userData = [
-            'name' => '',
-            'email' => $command->email,
-        ];
-        event(new SendMailEvent($userData, EmailEnum::STATUT4->value));
-        $response->message = 'User newsletter Successfully';
+        $response = new GetUserProfileActionResponse();
+
+
+        $response->user = Auth::user()->where('is_deleted', false)
+            ->with(['rules'])
+            ->first();
+        $response->message = "Profile From User";
         return $response;
     }
 
-    private function createNewsletter(string $email): Newsletter
+    public function handleUpdateProfile(UpdateProfileActionCommand $command): UpdateProfilActionResponse
     {
-        $newsletter = new Newsletter();
-        $newsletter->email = $email;
-        $newsletter->save();
-        return $newsletter;
+        $response = new UpdateProfilActionResponse();
+        $user = Auth::user();
+        $user->email = $command->email;
+        $user->name = $command->name;
+        $user->save();
+        $response->message = "profile Update Succcesfully";
+        return $response;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function handleUpdatePassword(UpdateUserPasswordCommand $command): UpdatePasswordActionResponse
+    {
+        $response = new UpdatePasswordActionResponse();
+        $user = Auth::user();
+        if (Hash::check($command->password, $user->password)) {
+            $response->message = "Le nouveau mot de passe doit être différent de l'ancien";
+            return $response;
+        }
+        if (!($command->password === $command->cPassword)) {
+            throw new Exception('La confirmation du mot de passe ne correspond pas');
+        }
+        $user->password = Hash::make($command->password);
+        $user->save();
+        $this->handleLogout();
+        $response->message = "mot de passe mis à jour avec succès";
+        return $response;
+    }
 
     public function handleLogout(): LogoutActionResponse
     {
@@ -73,6 +100,20 @@ class AuthService
         Auth::user()->currentAccessToken()->delete();
         $response->message = 'User Logged Out Successfully';
 
+        return $response;
+    }
+
+    public function handleDeleteAccount(Request $request): DeleteAccountActionResponse
+    {
+        $response = new DeleteAccountActionResponse;
+        $user = $request->user();
+        $user->is_deleted = true;
+        $user->save();
+        Auth::user()->currentAccessToken()->delete();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $response->message = response()->noContent();
         return $response;
     }
 }

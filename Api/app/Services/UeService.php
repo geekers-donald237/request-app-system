@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-
 use App\Commands\SaveDeadlineActionCommand;
 use App\Commands\UpdateDeadlineActionCommand;
 use App\Models\Department;

@@ -76,56 +76,16 @@ class UserSeeder extends Seeder
      */
     public function createStaffUser(): void
     {
-        User::factory()->create(['name' => 'Moyou Pierre',
-            'email' => 'moyou@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
+        User::factory()->create(['name' => 'John Doe',
+            'email' => 'johndoe@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
 
         Staff::factory()->create(['user_id' => (User::whereEmail('johndoe@gmail.com')->first()->id), 'job_title' => 'Enseignant ICT317', 'address' => 'Bloc Pedagogique Porte S107', 'phone_number' => '+237 699854525']);
 
         $this->staffData = [
-            'name' => 'Moyou Pierre',
-            'email' => 'moyou@gmail.com',
+            'name' => 'John Doe',
+            'email' => 'johndoe@gmail.com',
             'password' => '123456789',
         ];
-
-        User::factory()->create([
-            'name' => 'Fomekong Evarice',
-            'email' => 'fomekong@gmail.com',
-            'password' => '123456789'
-        ])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
-
-        Staff::factory()->create([
-            'user_id' => User::whereEmail('fomekong@gmail.com')->first()->id,
-            'job_title' => 'Enseignant',
-            'address' => 'Bloc Pedagogique',
-            'phone_number' => '+237 699854525'
-        ]);
-
-        $this->staffData = [
-            'name' => 'Fomekong evarice',
-            'email' => 'fomekong@gmail.com',
-            'password' => '123456789',
-        ];
-
-        User::factory()->create([
-            'name' => 'Thomas Messi Nguelle',
-            'email' => 'thomas@gmail.com',
-            'password' => '123456789'
-        ])->rules()->attach(Rule::whereName(RuleEnum::STAFF->value)->first()->id);
-
-        Staff::factory()->create([
-            'user_id' => User::whereEmail('thomas@gmail.com')->first()->id,
-            'job_title' => 'Enseignant',
-            'address' => 'Bloc Pedagogique',
-            'phone_number' => '+237 699854525'
-        ]);
-
-        $this->staffData = [
-            'name' => 'Messi Nguele Thomas',
-            'email' => 'messi@gmail.com',
-            'password' => '123456789',
-        ];
-
-
     }
 
     /**
