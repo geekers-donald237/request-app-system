@@ -1,0 +1,76 @@
+<div class="container-xl px-4 mt-4">
+  <h3>Your Profile</h3>
+  <hr class="mt-0 mb-4">
+  <div class="row">
+    <div class="col-lg-6">
+      <!-- Change password card-->
+      <div class="card mb-4">
+        <div class="card-header">Change Password</div>
+        <div class="card-body">
+          <form>
+            <!-- Form Group (current password)-->
+            <div class="mb-3">
+              <label class="small mb-1" for="currentPassword">Current Password</label>
+              <input class="form-control" id="currentPassword" value="00000000000" type="password" placeholder="Enter current password">
+            </div>
+            <!-- Form Group (new password)-->
+            <div class="mb-3">
+              <label class="small mb-1" for="newPassword">New Password</label>
+              <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
+            </div>
+            <!-- Form Group (confirm password)-->
+            <div class="mb-3">
+              <label class="small mb-1" for="confirmPassword">Confirm Password</label>
+              <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
+            </div>
+            <button class="btn btn-primary" type="button">Save</button>
+          </form>
+        </div>
+      </div>
+      <!-- Security preferences card-->
+      <div class="card mb-4">
+        <div class="card-header">Security Preferences</div>
+        <div class="card-body">
+          <!-- Account privacy optinos-->
+          <h5 class="mb-1">Account Privacy</h5>
+          <p class="small text-muted">By setting your account to private, your profile information and posts will not be
+            visible to users outside of your user groups.</p>
+          <hr class="my-4">
+          <!-- Data sharing options-->
+          <h5 class="mb-1">Data Sharing</h5>
+          <p class="small text-muted">Sharing usage data can help us to improve our products and better serve our users
+            as they navigation through our application. When you agree to share usage data with us, crash reports and
+            usage analytics will be automatically sent to our development team for investigation.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <!-- Two factor authentication card-->
+      <div class="card mb-4">
+        <div class="card-header">Change Profile</div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label class="small mb-1" for="name">Your name</label>
+              <input class="form-control" id="name" type="text" placeholder="Enter name" >
+            </div>
+            <div class="mb-3">
+              <label class="small mb-1" for="email">Email</label>
+              <input class="form-control" id="email" type="email" placeholder="Enter email" >
+            </div>
+            <button class="btn btn-primary" type="button">Save</button>
+          </form>
+        </div>
+      </div>
+      <!-- Delete account card-->
+      <div class="card mb-4">
+        <div class="card-header">Delete Account</div>
+        <div class="card-body">
+          <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your
+            account, select the button below.</p>
+          <button class="btn btn-danger text-white" (click)="deleteUserAccount()" type="button">I understand, delete my account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

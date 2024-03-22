@@ -37,13 +37,12 @@ import {StudentDashboardComponent} from "./student/student-dashboard/student-das
 import {WidgetsModule} from "../../views/widgets/widgets.module";
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
-import {ProfilComponent} from './profil/profil.component';
 import {ShowRequestComponent} from "./staff/show-request/show-request.component";
+import {ProfileComponent} from "./profile/profile.component";
 
 
 @NgModule({
   declarations: [
-    ProfilComponent,
     ListRequestComponent,
     AddRequestComponent,
     AddDeadlineComponent,
@@ -52,8 +51,8 @@ import {ShowRequestComponent} from "./staff/show-request/show-request.component"
     StudentDashboardComponent,
     ViewDeadlinesComponent,
     ShowRequestStudentComponent,
-    ShowRequestComponent
-
+    ShowRequestComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,

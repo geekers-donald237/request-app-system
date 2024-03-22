@@ -1,4 +1,11 @@
+import {HttpHeaders} from "@angular/common/http";
+
 export const environment = {
-  production: false,
-  apiUrl: 'http://my-api-url'
+  baseUrl: 'http://192.99.168.190:8000/api',
+  token: localStorage.getItem('token'),
+
+  headers: new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  })
 };

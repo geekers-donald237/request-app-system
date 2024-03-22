@@ -1,13 +1,11 @@
 import {HttpHeaders} from "@angular/common/http";
 
-const token = localStorage.getItem('token');
-
 export const environment = {
-  production: true,
-  apiUrl: 'http://localhost:8000/api',
+  baseUrl: 'http://localhost:8000/api',
+  token : localStorage.getItem('token'),
 
-  headers: new HttpHeaders({
+  headers : new HttpHeaders({
     'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`
-  }),
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  })
 };

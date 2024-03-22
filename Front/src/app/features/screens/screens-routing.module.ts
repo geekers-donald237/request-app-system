@@ -13,7 +13,7 @@ import {ShowRequestStudentComponent} from "./student/show-request-student/show-r
 import {AddRequestComponent} from './student/add-individual-request/add-request.component';
 import {ViewDeadlinesComponent} from "./secretary/view-deadlines/view-deadlines.component";
 import {AddDeadlineComponent} from "./secretary/add-deadline/add-deadline.component";
-import {ProfilComponent} from './profil/profil.component';
+import {ProfileComponent} from "./profile/profile.component";
 
 
 const routes: Routes = [
@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'profil',
-    component: ProfilComponent,
+    component: ProfileComponent,
     data: {
       title: 'profil page'
     }
