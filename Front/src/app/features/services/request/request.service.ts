@@ -10,7 +10,6 @@ import {IDeleteRequestResponse} from "../../models/delete.request.model";
 import {IRequestHistoryResponse} from "../../models/request.history.model";
 import {IStudentResponse} from "../../models/student.model";
 import {IUeResponse} from "../../models/ue.model";
-import {IUserResponse} from "../../models/user.model";
 import {IUpdateStatusResponse} from "../../models/update.request.state.model";
 
 
@@ -85,10 +84,6 @@ export class RequestService {
     return this.http.get<IRequestHistoryResponse>(`${this.baseUrl}/requests/${requestId}/history`, {headers: this.headers});
   }
 
-  getUsers(): Observable<IUserResponse> {
-    const url = `${this.baseUrl}/users`;
-    return this.http.get<IUserResponse>(url, {headers: this.headers});
-  }
 
   getUesWithDeadlines(secretaryId: number): Observable<IUeResponse> {
     const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;

@@ -65,10 +65,10 @@
         <hr cDropdownDivider/>
       </li>
       <li style="background-color: red">
-        <a routerLink="./" cDropdownItem class="logout-item">
+        <span routerLink="./" (click)="logout()" cDropdownItem class="logout-item">
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
           Deconnexion
-        </a>
+        </span>
       </li>
       <li></li>
     </ul>

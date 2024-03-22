@@ -1,10 +1,15 @@
 <?php
 
 namespace App\Services;
+
 use App\Commands\SaveDeadlineActionCommand;
 use App\Commands\UpdateDeadlineActionCommand;
+use App\Enums\EmailEnum;
+use App\Events\SendMailEvent;
 use App\Models\Department;
+use App\Models\Student;
 use App\Models\UE;
+use App\Models\User;
 use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
 use App\Responses\GetUeFromStaffActionResponse;
 use App\Responses\SaveDeadlineActionResponse;
@@ -26,12 +31,12 @@ class UeService
         $secretary = RequestService::getSecretaryIfExistOrThrowException($secretaryId);
         $ues = $this->getSubjectsForSecretaryWithLevel($secretary, $command->levelId);
         $this->addPublicationDateForUEs(ues: $ues, command: $command);
+        $this->sendEmailToStudents($command->levelId);
 
         $response->isSaved = true;
         $response->message = 'Deadline Successfully saved';
         return $response;
     }
-
 
     /**
      * @throws Exception
@@ -42,7 +47,6 @@ class UeService
 
         if ($department) {
             $subjects = $department->subjects;
-
             if ($subjects->isNotEmpty()) {
                 return $subjects->filter(function ($subject) use ($levelId) {
                     return $subject->level_id == $levelId;
@@ -72,7 +76,15 @@ class UeService
 
             $ue->save();
         }
+    }
 
+    protected function sendEmailToStudents(int $levelId): void
+    {
+        $studentIds = Student::where('level_id', $levelId)->pluck('user_id');
+        $users = User::whereIn('id', $studentIds)->get();
+        $users->each(function ($user) {
+            event(new SendMailEvent($user, EmailEnum::STATUT1->value));
+        });
     }
 
     /**

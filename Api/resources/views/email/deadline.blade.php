@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Changement de statut de la requête</title>
+    <title>Nouvelle deadline ajoutée</title>
     <link rel="stylesheet" href="mail.css">
 </head>
 <body>
     <div class="container">
-        <h1>Changement de statut de la requête</h1>
-        <p>Cher utilisateur,</p>
-        <p>Nous tenons à vous informer que le statut de votre requête a été mis à jour :</p>
-        
-        <div class="status-update">
-            <p>Requête : <span class="highlight">[NUMÉRO DE REQUÊTE]</span></p>
-            <p>Nouveau statut : <span class="highlight">[NOUVEAU STATUT]</span></p>
-        </div>
-        
-        <p>Nous vous invitons à vous connecter à votre compte pour consulter les détails de votre requête.</p>
+        <h1>Nouvelle deadline ajoutée</h1>
+        <p>Cher.e <span style="font-weight: bold">{{$userData['name']}}</span></p>
+        <p>Nous tenons à vous informer qu'une nouvelle deadline a été ajoutée/modifiée pour votre niveau :</p>
+
+        <p>Nous vous recommandons de prendre en compte cette nouvelle deadline pour vos activités.</p>
         <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
         <p>Cordialement,</p>
         <p>L'équipe de l'université</p>
@@ -26,6 +21,6 @@
             <a href="#">Contactez nous</a>
         </footer><br>
     </div>
-    
+
 </body>
 </html>

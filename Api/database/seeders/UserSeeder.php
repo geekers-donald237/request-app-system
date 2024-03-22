@@ -29,8 +29,6 @@ class UserSeeder extends Seeder
         $this->createStaffUser();
         $this->createTechnicalAdminUser();
 
-        $this->sendEmailToUser();
-
     }
 
     /**
@@ -38,9 +36,9 @@ class UserSeeder extends Seeder
      */
     public function createdStudentUsers(): void
     {
-        User::factory()->create(['name' => 'Mbiada Idris', 'email' => 'bayidris@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
+        User::factory()->create(['name' => 'Mbiada Idris', 'email' => 'bayonidris@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
-        Student::factory()->create(['user_id' => (User::whereEmail('bayidris@gmail.com')->first()->id),
+        Student::factory()->create(['user_id' => (User::whereEmail('bayonidris@gmail.com')->first()->id),
             'matricule' => '21Q2915'
             , 'department_id' => '4'
             , 'level_id' => 3,
@@ -53,6 +51,7 @@ class UserSeeder extends Seeder
             'password' => '123456789',
 
         ];
+        event(new SendMailEvent($this->userData, EmailEnum::STATUT3->value));
     }
 
     /**
@@ -69,6 +68,7 @@ class UserSeeder extends Seeder
             'email' => 'janedoe@gmail.com',
             'password' => '123456789',
         ];
+        event(new SendMailEvent($this->secretaryData, EmailEnum::STATUT3->value));
     }
 
     /**
@@ -86,6 +86,7 @@ class UserSeeder extends Seeder
             'email' => 'johndoe@gmail.com',
             'password' => '123456789',
         ];
+        event(new SendMailEvent($this->staffData, EmailEnum::STATUT3->value));
     }
 
     /**
@@ -96,10 +97,4 @@ class UserSeeder extends Seeder
         User::factory()->create(['name' => 'Equipe Technique', 'email' => 'request-app@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::TECHNICAL_ADMIN->value)->first()->id);
     }
 
-    public function sendEmailToUser(): void
-    {
-        event(new SendMailEvent($this->userData, EmailEnum::STATUT3->value));
-        event(new SendMailEvent($this->secretaryData, EmailEnum::STATUT3->value));
-        event(new SendMailEvent($this->staffData, EmailEnum::STATUT3->value));
-    }
 }

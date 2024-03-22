@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {ILoginResponse} from "../../../models/login.response.model";
 import {ISubscribeNewsletterModel} from "../../../models/subscribe.newsletter.model";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Injectable} from "@angular/core";
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,24 @@ export class AuthService {
       email: email
     };
     return this.http.post<ISubscribeNewsletterModel>(url, data, {headers: this.headers});
+  }
+
+
+  logout(): Observable<any> {
+    const url = `${this.baseUrl}/logout`;
+    return this.http.get(url);
+  }
+
+  updateUserProfile(profileData: any) {
+    return this.http.post(`${this.baseUrl}/profile`, profileData);
+  }
+
+  deleteUserAccount() {
+    return this.http.delete(`${this.baseUrl}/profile`);
+  }
+
+  updateUserPassword(passwordData: any) {
+    return this.http.post(`${this.baseUrl}/update-password`, passwordData);
   }
 }
 

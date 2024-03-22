@@ -37,4 +37,5 @@ export class UeService {
     const url = `${this.baseUrl}/ues/${ueId}/deadline/update`;
     return this.http.post<IUpdateDeadlineResponse>(url, updatedDeadlineData, {headers: this.headers});
   }
+
 }
