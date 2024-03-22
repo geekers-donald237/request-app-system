@@ -99,7 +99,6 @@ class AuthService
         $response = new LogoutActionResponse();
         Auth::user()->currentAccessToken()->delete();
         $response->message = 'User Logged Out Successfully';
-
         return $response;
     }
 
