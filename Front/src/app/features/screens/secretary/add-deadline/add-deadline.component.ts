@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {UeService} from "../../../services/ue/ue.service";
 import {Utils} from "../../../services/shared/utils/utils";
 import {CustomValidators} from "../../../services/shared/utils/invalid.controls";
 import {Router} from "@angular/router";
 import {IAddDeadlineResponse} from "../../../models/add.deadline.model";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-add-deadline',
@@ -42,7 +42,7 @@ export class AddDeadlineComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private ueService: UeService,
+    private appService: AppService,
     private utils: Utils
   ) {
   }
@@ -74,7 +74,7 @@ export class AddDeadlineComponent implements OnInit {
     const userId = this.utils.getUserIdFromLocalStorage();
     const formData = this.addDeadlineForm.value;
 
-    this.ueService.createDeadline(userId, formData).subscribe(
+    this.appService.createDeadline(userId, formData).subscribe(
       (response: IAddDeadlineResponse) => {
         if (response.isSaved) {
           this.showMessage(response.message, 'success');

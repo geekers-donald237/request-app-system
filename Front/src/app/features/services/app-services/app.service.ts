@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {IGetStudentRequestResponse} from "../../models/student.request.model";
@@ -12,13 +11,19 @@ import {IStudentResponse} from "../../models/student.model";
 import {IUeResponse} from "../../models/ue.model";
 import {IUserResponse} from "../../models/user.model";
 import {IUpdateStatusResponse} from "../../models/update.request.state.model";
+import {Injectable} from "@angular/core";
+import {IStudentInfoResponse} from "../../models/student.info.model";
+import {IAddDeadlineResponse} from "../../models/add.deadline.model";
+import {IUpdateDeadlineResponse} from "../../models/update.deadline.model";
+import {ILoginResponse} from "../../models/login.response.model";
+import {ISubscribeNewsletterModel} from "../../models/subscribe.newsletter.model";
+import {IUpdatePasswordModel} from "../../models/update.password.model";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RequestService {
-
+export class AppService {
   private baseUrl = 'http://localhost:8000/api';
   private token = localStorage.getItem('token');
 
@@ -98,6 +103,54 @@ export class RequestService {
   getUesWithDeadlinesForStaff(staffId: number): Observable<IUeResponse> {
     const url = `${this.baseUrl}/staff/${staffId}/ues`;
     return this.http.get<IUeResponse>(url, {headers: this.headers});
+  }
+
+
+  getStudentInfo(studentId: number): Observable<IStudentInfoResponse> {
+
+    const url = `${this.baseUrl}/student/${studentId}/student`;
+    return this.http.get<IStudentInfoResponse>(url, {headers: this.headers});
+  }
+
+  createDeadline(secretaryId: number, deadlineData: any): Observable<IAddDeadlineResponse> {
+    const url = `${this.baseUrl}/ues/${secretaryId}/deadline`;
+    return this.http.post<IAddDeadlineResponse>(url, deadlineData, {headers: this.headers});
+  }
+
+  updateDeadline(ueId: number, updatedDeadlineData: any): Observable<IUpdateDeadlineResponse> {
+    const url = `${this.baseUrl}/ues/${ueId}/deadline/update`;
+    return this.http.post<IUpdateDeadlineResponse>(url, updatedDeadlineData, {headers: this.headers});
+  }
+
+
+  login(email: string, password: string): Observable<ILoginResponse> {
+    const body = {email, password};
+    return this.http.post<ILoginResponse>(`${this.baseUrl}/login`, body);
+  }
+
+  updateUserProfile(profileData: any) {
+    return this.http.post(`${this.baseUrl}/profile`, profileData, {headers: this.headers});
+  }
+
+  subscribeToNewsletter(email: string | null): Observable<ISubscribeNewsletterModel> {
+    const url = `${this.baseUrl}/newsletter`;
+    const data = {
+      email: email
+    };
+    return this.http.post<ISubscribeNewsletterModel>(url, data, {headers: this.headers});
+  }
+
+  deleteUserAccount() {
+    return this.http.delete(`${this.baseUrl}/profile`, {headers: this.headers});
+  }
+
+  updateUserPassword(passwordData: FormData) {
+    return this.http.post<IUpdatePasswordModel>(`${this.baseUrl}/update-password`, passwordData, {headers: this.headers});
+  }
+
+  logout(): Observable<any> {
+    const url = `${this.baseUrl}/logout`;
+    return this.http.post(url, '', {headers: this.headers});
   }
 
 }

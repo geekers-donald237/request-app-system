@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../services/shared/auth/auth.service";
 import {Utils} from "../../services/shared/utils/utils";
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {IUser} from "../../models/user.model";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AppService} from "../../services/app-services/app.service";
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     cPassword: ['', Validators.required],
   });
 
-  constructor(private authService: AuthService, private utils: Utils, private fb: FormBuilder, private router: Router, private modalService: NgbModal) {
+  constructor(private appService: AppService, private utils: Utils, private fb: FormBuilder, private router: Router, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
 
     this.isLoading1 = true;
     const formData = this.createFormData();
-    this.authService.updateUserProfile(formData).subscribe(
+    this.appService.updateUserProfile(formData).subscribe(
       () => {
         this.showMessage("Profil mis à jour avec succès", 'success');
         setTimeout(() => {
@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit {
     if (!this.userPasswordFormData.valid) return;
 
     const formData = this.createuserFormData();
-    this.authService.updateUserPassword(formData).subscribe(
+    this.appService.updateUserPassword(formData).subscribe(
       () => {
         this.showMessage("Mot de passe mis à jour avec succès", 'success');
         setTimeout(() => {
@@ -84,7 +84,7 @@ export class ProfileComponent implements OnInit {
 
 
   deleteUserAccount() {
-    this.authService.deleteUserAccount().subscribe(
+    this.appService.deleteUserAccount().subscribe(
       () => {
         this.router.navigateByUrl('');
         setTimeout(() => {

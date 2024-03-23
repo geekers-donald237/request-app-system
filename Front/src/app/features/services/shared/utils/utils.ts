@@ -68,7 +68,4 @@ export class Utils {
   public loadRequestIdFromLocalStorage(): number {
     return  Number(localStorage.getItem('requestId'));
   }
-
-
-
 }

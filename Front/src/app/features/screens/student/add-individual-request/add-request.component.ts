@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {requestModel} from "../../../constant/constant";
 import {IUe} from "../../../models/ue.model";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 import {CourseService} from "../../../services/shared/course/courses.service";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-add-request',
@@ -32,7 +32,7 @@ export class AddRequestComponent implements OnInit {
     ueId: ['', Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private requestService: RequestService, private requestPatternService: RequestPatternService, private courseService: CourseService) {
+  constructor(private fb: FormBuilder, private router: Router, private appService: AppService, private requestPatternService: RequestPatternService, private courseService: CourseService) {
   }
 
   ngOnInit() {
@@ -143,7 +143,7 @@ export class AddRequestComponent implements OnInit {
     const formData = this.createFormData();
     const ueId = 1;
 
-    this.requestService.saveRequest(formData).subscribe(
+    this.appService.saveRequest(formData).subscribe(
       (response) => {
         if (response.isSaved) {
           this.sendRequestDetails(response.requestId, ueId);
@@ -164,7 +164,7 @@ export class AddRequestComponent implements OnInit {
   // REQUEST OPERATION
 
   private sendRequestDetails(requestId: number, ueId: number): void {
-    this.requestService.sendRequest(requestId, ueId).subscribe(
+    this.appService.sendRequest(requestId, ueId).subscribe(
       (saveResponse) => {
         if (saveResponse.isSent) {
           this.showMessage(saveResponse.message, 'success');
@@ -182,7 +182,6 @@ export class AddRequestComponent implements OnInit {
       }
     );
   }
-
 
   // DISPLAY SOME ISSUE OR ERROR
   showMessage(message: string, color: string): void {

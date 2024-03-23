@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { RequestService } from '../../request/request.service';
 import {IStudentResponse} from "../../../models/student.model";
+import {AppService} from "../../app-services/app.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,13 +15,13 @@ export class RequestDetailsService {
   private studentInfoSubject: BehaviorSubject<any> = new BehaviorSubject<any>({});
   public studentInfo$: Observable<any> = this.studentInfoSubject.asObservable();
 
-  constructor(private requestService: RequestService) {
+  constructor(private appService: AppService) {
     this.requestId = Number(localStorage.getItem('requestId')) || 0;
 
   }
 
   fetchRequestDetails(): void {
-    this.requestService.getDetailsRequest(this.requestId).subscribe(
+    this.appService.getDetailsRequest(this.requestId).subscribe(
       (response) => {
         this.requestDetailsSubject.next(response.request);
       },
@@ -32,7 +32,7 @@ export class RequestDetailsService {
   }
 
   loadStudentInformation(senderId: number): void {
-    this.requestService.getStudentInformation(senderId).subscribe(
+    this.appService.getStudentInformation(senderId).subscribe(
       (response: IStudentResponse) => {
         this.studentInfoSubject.next(response.data);
       },

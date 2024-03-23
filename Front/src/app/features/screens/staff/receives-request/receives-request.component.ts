@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
-import {RequestService} from "../../../services/request/request.service";
 import {IRequest} from "../../../models/request.model";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-receives-request',
@@ -15,7 +15,7 @@ export class ReceivesRequestComponent implements OnInit {
   requests: IRequest[] = [];
   pageIsLoad = true;
 
-  constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
+  constructor(private appService: AppService, private router: Router, private utils: Utils) {
   }
 
   ngOnInit(): void {
@@ -30,7 +30,7 @@ export class ReceivesRequestComponent implements OnInit {
 
   // REQUEST OPERATIONS...
   getAllStaffRequest(staffId: number): void {
-    this.requestService.getRequestReceiveByStaff(staffId).subscribe(
+    this.appService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {
         this.requests = response.requests;
       },

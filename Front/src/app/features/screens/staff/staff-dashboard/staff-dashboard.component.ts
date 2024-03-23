@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {IUe} from "../../../models/ue.model";
 import {BadgeStatus} from "../../../services/shared/utils/badge.status";
 import {DateUtils} from "../../../services/shared/utils/date";
-import {RequestService} from "../../../services/request/request.service";
 import {Utils} from "../../../services/shared/utils/utils";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -16,7 +16,7 @@ export class StaffDashboardComponent implements OnInit {
   date: DateUtils | undefined;
   pageIsLoad = true;
 
-  constructor(private requestService: RequestService, private utils: Utils) {
+  constructor(private appService: AppService, private utils: Utils) {
     this.badgeStatus = new BadgeStatus(this.date!);
   }
 
@@ -31,7 +31,7 @@ export class StaffDashboardComponent implements OnInit {
   // GET UE FROM STAFF
   getUeFromStaff() {
     const staffId = this.utils.getUserIdFromLocalStorage();
-    this.requestService.getUesWithDeadlinesForStaff(staffId).subscribe(
+    this.appService.getUesWithDeadlinesForStaff(staffId).subscribe(
       (uesWithDeadlines) => {
         this.courses = uesWithDeadlines.ues;
         console.log(this.courses);

@@ -18,7 +18,6 @@ export class BadgeStatus {
     } else {
       return 'badge badge-success'; // Intervalle en cours
     }
-
   }
 
   // Fonction pour obtenir le libellé du badge en fonction des dates

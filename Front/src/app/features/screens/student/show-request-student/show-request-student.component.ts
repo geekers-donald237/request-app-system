@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {RequestService} from "../../../services/request/request.service";
 import {IRequestHistory, IRequestHistoryResponse} from "../../../models/request.history.model";
 import {Utils} from "../../../services/shared/utils/utils";
 import {RequestStateConstants} from "../../../constant/constant";
 import {IUser} from "../../../models/user.model";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-show-request-student',
@@ -17,7 +17,7 @@ export class ShowRequestStudentComponent implements OnInit {
   users: IUser[] = [];
   pageIsLoad = true;
 
-  constructor(private requestService: RequestService, private utils: Utils) {
+  constructor(private appService: AppService, private utils: Utils) {
   }
 
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class ShowRequestStudentComponent implements OnInit {
 
   // LOAD REQUEST HISTORY
   private loadRequestHistory(): void {
-    this.requestService.getRequestHistory(this.requestId!).subscribe(
+    this.appService.getRequestHistory(this.requestId!).subscribe(
       (response: IRequestHistoryResponse) => {
         this.historyResponse = response.history;
       },

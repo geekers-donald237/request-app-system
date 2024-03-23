@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
-import {AuthService} from "../../../features/services/shared/auth/auth.service";
 import {MessageService} from "primeng/api";
 import {Utils} from "../../../features/services/shared/utils/utils";
 import {ILoginResponse} from "../../../features/models/login.response.model";
+import {AppService} from "../../../features/services/app-services/app.service";
 
 @Component({
   selector: 'app-login',
@@ -24,7 +24,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private appService: AppService,
     private utils: Utils
   ) {
   }
@@ -44,7 +44,7 @@ export class LoginComponent {
 
     this.isLoading = true;
     const {email, password} = this.loginForm.value;
-    this.authService.login(email!, password!).subscribe(
+    this.appService.login(email!, password!).subscribe(
       (response) => {
         this.handleLogin(response);
       },

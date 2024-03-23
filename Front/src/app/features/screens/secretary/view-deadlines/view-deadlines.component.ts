@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {RequestService} from "../../../services/request/request.service";
 import {Utils} from "../../../services/shared/utils/utils";
 import {IUe} from "../../../models/ue.model";
 import {BadgeStatus} from "../../../services/shared/utils/badge.status";
-import {DateUtils} from "../../../services/shared/utils/date";
 import {FormBuilder, Validators} from "@angular/forms";
-import {UeService} from "../../../services/ue/ue.service";
+import {AppService} from "../../../services/app-services/app.service";
+import {DateUtils} from "../../../services/shared/utils/date";
 
 @Component({
   selector: 'app-view-deadlines',
@@ -29,7 +28,7 @@ export class ViewDeadlinesComponent implements OnInit {
   pageIsLoad = true;
   isLoading = false;
 
-  constructor(private ueService: UeService, private fb: FormBuilder, private requestService: RequestService, private utils: Utils) {
+  constructor(private appService: AppService, private fb: FormBuilder, private utils: Utils) {
     this.badgeStatus = new BadgeStatus(this.date!);
 
   }
@@ -44,7 +43,7 @@ export class ViewDeadlinesComponent implements OnInit {
 
   ngOnInit() {
     const secretaryId = this.utils.getUserIdFromLocalStorage();
-    this.requestService.getUesWithDeadlines(secretaryId).subscribe(
+    this.appService.getUesWithDeadlines(secretaryId).subscribe(
       (data) => {
         this.ues = data.ues;
       },
@@ -71,7 +70,7 @@ export class ViewDeadlinesComponent implements OnInit {
         newSendingRequestInterval: this.sendingRequestInterval.value
       };
 
-      this.ueService.updateDeadline(ueId, updatedDeadlineData).subscribe(
+      this.appService.updateDeadline(ueId, updatedDeadlineData).subscribe(
         (response) => {
           this.showMessage(response.message, 'success');
           this.relaodPageAfterUpdated();

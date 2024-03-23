@@ -4,11 +4,4 @@ import {Pipe} from '@angular/core';
   standalone: true,
   name: 'dateFormat'
 })
-export class DateUtils {
-  isRequestIntervalValid(startDate: Date, endDate: Date): boolean {
-    const timeDiff = endDate.getTime() - startDate.getTime();
-    return timeDiff > 0;
-  }
-
-}
-
+export class DateUtils {}

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {RequestService} from '../../../services/request/request.service';
 import {RequestStateConstants} from '../../../constant/constant';
 import {IRequestPattern} from '../../../models/request.patterns.model';
 import {IStudent, IStudentResponse} from "../../../models/student.model";
 import {Utils} from "../../../services/shared/utils/utils";
 import {RedirectLink} from "../../../services/shared/utils/redirect.link";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-show-request',
@@ -35,7 +35,7 @@ export class ShowRequestComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private requestService: RequestService
+    private appService: AppService
     , private requestPatternService: RequestPatternService
   ) {
     this.utils = new Utils(this.router);
@@ -67,7 +67,7 @@ export class ShowRequestComponent implements OnInit {
   }
 
   getRequestDetails(): void {
-    this.requestService.getDetailsRequest(this.requestId).subscribe(
+    this.appService.getDetailsRequest(this.requestId).subscribe(
       (response) => {
         console.log(response);
         this.request = response.request;
@@ -93,7 +93,7 @@ export class ShowRequestComponent implements OnInit {
   }
 
   loadStudentInformation(senderId: number): void {
-    this.requestService.getStudentInformation(senderId).subscribe(
+    this.appService.getStudentInformation(senderId).subscribe(
       (response: IStudentResponse) => {
         this.userData = response.data;
       },
@@ -104,7 +104,7 @@ export class ShowRequestComponent implements OnInit {
   }
 
   private updateRequestStatus(statut: string): void {
-    this.requestService.updateRequestStatus(this.requestId, statut).subscribe(
+    this.appService.updateRequestStatus(this.requestId, statut).subscribe(
       () => {
         this.router.navigate(['/app/receive-request']);
       },

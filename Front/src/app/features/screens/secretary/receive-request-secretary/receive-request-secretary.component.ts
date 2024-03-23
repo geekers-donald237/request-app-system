@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {Utils} from "../../../services/shared/utils/utils";
 import {ButtonDirective} from "@coreui/angular";
 import {IRequest} from "../../../models/request.model";
-import {DateUtils} from "../../../services/shared/utils/date";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-receive-request-secretary',
   standalone: true,
-  imports: [CommonModule, ButtonDirective, DateUtils],
+  imports: [CommonModule, ButtonDirective],
   templateUrl: './receive-request-secretary.component.html',
   styleUrl: './receive-request-secretary.component.scss'
 })
@@ -20,7 +19,7 @@ export class ReceiveRequestSecretaryComponent implements OnInit {
   pageIsLoad = true;
 
 
-  constructor(private requestService: RequestService, private router: Router, private utils: Utils) {
+  constructor(private appService: AppService, private router: Router, private utils: Utils) {
   }
 
   ngOnInit(): void {
@@ -35,7 +34,7 @@ export class ReceiveRequestSecretaryComponent implements OnInit {
 
   // GET SECRETARY REQUEST
   getAllSecretaryRequest(secretaryId: number): void {
-    this.requestService.getRequestReceiveBySecretary(secretaryId).subscribe(
+    this.appService.getRequestReceiveBySecretary(secretaryId).subscribe(
       (response) => {
         this.requests = response.requests
       },

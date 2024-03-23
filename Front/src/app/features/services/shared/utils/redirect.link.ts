@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {environment} from "../../../../../environments/environment";
 
 export class RedirectLink {
   // @ts-ignore
@@ -9,7 +10,7 @@ export class RedirectLink {
   }
 
   getAttachmentUrl(filePath: string): string {
-    const laravelBaseUrl = 'http://127.0.0.1:8000/storage';
+    const laravelBaseUrl = environment.laravelBaseUrl;
     return `${laravelBaseUrl}/${filePath}`;
   }
 

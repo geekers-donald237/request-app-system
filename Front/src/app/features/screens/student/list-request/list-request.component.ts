@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {RequestService} from "../../../services/request/request.service";
 import {Router} from "@angular/router";
 import {RequestStateConstants} from "../../../constant/constant";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 import {Utils} from "../../../services/shared/utils/utils";
 import {IRequest} from "../../../models/request.model";
+import {AppService} from "../../../services/app-services/app.service";
 
 @Component({
   selector: 'app-list-request',
@@ -24,7 +24,7 @@ export class ListRequestComponent implements OnInit {
   requestPatterns: IRequestPattern[] = [];
 
 
-  constructor(private requestService: RequestService, private requestPatternService: RequestPatternService, private router: Router) {
+  constructor(private appService: AppService, private requestPatternService: RequestPatternService, private router: Router) {
     this.utils = new Utils(this.router);
   }
 
@@ -54,7 +54,7 @@ export class ListRequestComponent implements OnInit {
 
   // REQUEST OPERATIONS.....
   getRequestsFromStudent(studentId: number): void {
-    this.requestService.getRequestFromStudent(studentId).subscribe(
+    this.appService.getRequestFromStudent(studentId).subscribe(
       (response) => {
         this.requests = response.requests;
       },
@@ -65,7 +65,7 @@ export class ListRequestComponent implements OnInit {
   }
 
   deleteRequest(requestId: number): void {
-    this.requestService.deleteRequest(requestId).subscribe(
+    this.appService.deleteRequest(requestId).subscribe(
       (response) => {
         if (response.isDeleted) {
           this.getRequestsFromStudent(this.studentId);
