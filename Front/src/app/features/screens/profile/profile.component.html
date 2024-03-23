@@ -1,29 +1,51 @@
 <div class="container-xl px-4 mt-4">
   <h3>Your Profile</h3>
   <hr class="mt-0 mb-4">
+  <c-alert [(visible)]="visible"
+           [dismissible]="dismissible"
+           color="{{color}}"
+           fade
+           *ngIf="visible">
+    <strong>{{ message }}</strong>
+  </c-alert>
   <div class="row">
+
     <div class="col-lg-6">
       <!-- Change password card-->
       <div class="card mb-4">
         <div class="card-header">Change Password</div>
         <div class="card-body">
-          <form>
+          <form action="update-user-password" method="post" [formGroup]="userPasswordFormData"
+                (ngSubmit)="updateUserPassword()">
             <!-- Form Group (current password)-->
             <div class="mb-3">
               <label class="small mb-1" for="currentPassword">Current Password</label>
-              <input class="form-control" id="currentPassword" value="00000000000" type="password" placeholder="Enter current password">
+              <input class="form-control" [readonly]="true" id="currentPassword" value="00000000000" type="password"
+                     placeholder="Enter current password">
             </div>
             <!-- Form Group (new password)-->
             <div class="mb-3">
               <label class="small mb-1" for="newPassword">New Password</label>
-              <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
+              <input class="form-control" name="password" formControlName="password" id="newPassword" type="password"
+                     placeholder="Enter new password">
+              <div *ngIf="password.invalid && password.touched" class="text-danger">
+                <div *ngIf="password.errors?.['required']">password is required</div>
+              </div>
             </div>
             <!-- Form Group (confirm password)-->
             <div class="mb-3">
               <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-              <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
+              <input class="form-control" name="cPassword" formControlName="cPassword" id="confirmPassword"
+                     type="password" placeholder="Confirm new password">
+              <div *ngIf="cPassword.invalid && cPassword.touched" class="text-danger">
+                <div *ngIf="cPassword.errors?.['required']">Confirm password is required</div>
+              </div>
             </div>
-            <button class="btn btn-primary" type="button">Save</button>
+            <button type="submit"
+                    class="btn btn-primary" [disabled]="!userPasswordFormData.valid "
+                    style="font-size: 12px;">
+              Save
+            </button>
           </form>
         </div>
       </div>
@@ -45,20 +67,35 @@
       </div>
     </div>
     <div class="col-lg-6">
-      <!-- Two factor authentication card-->
+      <!-- Update User Info  card-->
       <div class="card mb-4">
         <div class="card-header">Change Profile</div>
         <div class="card-body">
-          <form>
+          <form action="update-user-info" method="post" [formGroup]="userInfoFormData"
+                (ngSubmit)="updateUserProfile()">
             <div class="mb-3">
               <label class="small mb-1" for="name">Your name</label>
-              <input class="form-control" id="name" type="text" placeholder="Enter name" >
+              <input class="form-control" formControlName="name" name="name" id="name" type="text"
+                     placeholder="Enter name">
+              <div *ngIf="name.invalid && name.touched" class="text-danger">
+                <div *ngIf="name.errors?.['required']">Name is required</div>
+              </div>
             </div>
             <div class="mb-3">
               <label class="small mb-1" for="email">Email</label>
-              <input class="form-control" id="email" type="email" placeholder="Enter email" >
+              <input class="form-control" formControlName="email" name="email" id="email" type="email"
+                     placeholder="Enter email">
+              <div *ngIf="email.invalid && email.touched" class="text-danger">
+                <div *ngIf="email.errors?.['required']">Email is required</div>
+                <div *ngIf="email.errors?.['email']">Invalid email</div>
+              </div>
             </div>
-            <button class="btn btn-primary" type="button">Save</button>
+            <button type="submit"
+                    class="btn btn-primary" [disabled]="!userInfoFormData.valid"
+                    style="font-size: 12px;">
+              <span *ngIf="isLoading1" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Save
+            </button>
           </form>
         </div>
       </div>
@@ -68,9 +105,33 @@
         <div class="card-body">
           <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your
             account, select the button below.</p>
-          <button class="btn btn-danger text-white" (click)="deleteUserAccount()" type="button">I understand, delete my account</button>
+          <button class="btn btn-danger text-white" data-toggle="modal" data-target="#confirmDeleteModal" type="button">
+            I understand, delete my account
+          </button>
         </div>
       </div>
+      <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+           aria-labelledby="confirmDeleteModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression du compte</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Êtes-vous sûr de vouloir supprimer votre compte? Cette action est irréversible.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" (click)="deleteUserAccount()">Supprimer mon compte</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

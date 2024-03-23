@@ -42,6 +42,7 @@ class SendMail extends Mailable
             EmailEnum::STATUT2->value => 'email.etat',
             EmailEnum::STATUT3->value => 'email.password',
             EmailEnum::STATUT4->value => 'email.newsletter',
+            EmailEnum::STATUT5->value => 'email.update_password',
             default => 'email.default',
         };
 

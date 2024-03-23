@@ -9,7 +9,6 @@
     <h1>Changement de statut de la requête</h1>
     <p>Cher.e <span style="font-weight: bold">{{$userData['name']}}</span></p>
     <p>Nous tenons à vous informer que le statut de votre requête a été mis à jour :</p>
-
     <div class="status-update">
         <p>Requête : <span class="highlight">[{{$userData['request_number']}}]</span></p>
         <p>Nouveau statut : <span class="highlight">[{{$userData['new_state']}}]</span></p>

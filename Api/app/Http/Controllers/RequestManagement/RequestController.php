@@ -7,10 +7,10 @@ use App\Factories\SaveRequestActionCommandFactory;
 use App\Factories\SendRequestActionCommandFactory;
 use App\Factories\UpdateRequestActionCommandFactory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SaveActionRequest;
-use App\Http\Requests\SaveDeadlineRequest;
-use App\Http\Requests\SendRequestActionRequest;
-use App\Http\Requests\UpdateActionRequest;
+use App\Http\Request\SaveActionRequest;
+use App\Http\Request\SaveDeadlineRequest;
+use App\Http\Request\SendRequestActionRequest;
+use App\Http\Request\UpdateActionRequest;
 use App\Services\RequestService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -45,7 +45,7 @@ class RequestController extends Controller
         return response()->json($httpJson);
     }
 
-  
+
 
 
 

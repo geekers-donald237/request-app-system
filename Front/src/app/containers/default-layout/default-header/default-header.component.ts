@@ -33,4 +33,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
       }
     );
   }
+
+  showLanguageAlert() {
+    alert("En cours de developpement ");
+  }
+
 }

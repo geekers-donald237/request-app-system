@@ -3,7 +3,7 @@
 namespace App\Factories;
 
 use App\Command\UpdateUserPasswordCommand;
-use App\Request\UpdatePasswordActionRequest;
+use App\Http\Request\UpdatePasswordActionRequest;
 
 class UpdateUserPasswordCommandFactory
 {

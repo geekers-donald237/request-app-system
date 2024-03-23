@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Commands\SaveRequestActionCommand;
-use App\Commands\SendRequestActionCommand;
+use App\Command\SaveRequestActionCommand;
+use App\Command\SendRequestActionCommand;
 use App\Enums\EmailEnum;
 use App\Enums\RequestStateEnum;
 use App\Enums\RuleEnum;
@@ -187,6 +187,7 @@ class RequestService
         $sender =User::findOrFail( $request->sender()->get()->first()->id);
 
         $userData = [
+            'name' => $sender->name,
             'email' => $sender->email,
             'request_number' => $request->request_code,
             'new_state' => $newRequestState

@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\NewsletterActionCommand;
-use App\Http\Requests\NewsletterActionRequest;
+use App\Command\NewsletterActionCommand;
+use App\Http\Request\NewsletterActionRequest;
 
 class NewsletterCommandFactory
 {

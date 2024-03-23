@@ -3,9 +3,11 @@
 namespace App\Services;
 
 
+use App\Command\LoginActionCommand;
 use App\Command\UpdateProfileActionCommand;
 use App\Command\UpdateUserPasswordCommand;
-use App\Commands\LoginActionCommand;
+use App\Enums\EmailEnum;
+use App\Events\SendMailEvent;
 use App\Models\User;
 use App\Responses\DeleteAccountActionResponse;
 use App\Responses\GetUserProfileActionResponse;
@@ -89,7 +91,14 @@ class AuthService
         }
         $user->password = Hash::make($command->password);
         $user->save();
+        $userData = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $command->password,
+        ];
+        event(new SendMailEvent($userData, EmailEnum::STATUT5->value));
         $this->handleLogout();
+        $response->isUpdated = true;
         $response->message = "mot de passe mis à jour avec succès";
         return $response;
     }

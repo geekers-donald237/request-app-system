@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\SaveRequestActionCommand;
-use App\Http\Requests\SaveActionRequest;
+use App\Command\SaveRequestActionCommand;
+use App\Http\Request\SaveActionRequest;
 
 class SaveRequestActionCommandFactory
 {

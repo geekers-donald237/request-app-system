@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Commands\SaveRequestActionCommand;
+use App\Command\SaveRequestActionCommand;
 use App\Enums\StorageDirectoryEnum;
 use App\Events\SaveFileEvent;
 use App\Helpers\HelpersFunction;

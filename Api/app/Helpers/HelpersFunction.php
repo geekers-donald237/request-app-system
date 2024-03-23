@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Events\SendMailEvent;
 use App\Models\Request;
 use App\Models\User;
 use Exception;
@@ -84,5 +85,10 @@ class HelpersFunction
         }
 
         return $password;
+    }
+
+    public static function sendEmail(array $userData, string $emailType): void
+    {
+        event(new SendMailEvent($userData, $emailType));
     }
 }

@@ -5,12 +5,14 @@ namespace Database\Seeders;
 use App\Enums\EmailEnum;
 use App\Enums\RuleEnum;
 use App\Events\SendMailEvent;
+use App\Helpers\HelpersFunction;
 use App\Models\Rule;
 use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Nette\Utils\Helpers;
 
 class UserSeeder extends Seeder
 {
@@ -51,7 +53,7 @@ class UserSeeder extends Seeder
             'password' => '123456789',
 
         ];
-        event(new SendMailEvent($this->userData, EmailEnum::STATUT3->value));
+        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -68,7 +70,7 @@ class UserSeeder extends Seeder
             'email' => 'janedoe@gmail.com',
             'password' => '123456789',
         ];
-        event(new SendMailEvent($this->secretaryData, EmailEnum::STATUT3->value));
+        HelpersFunction::sendEmail($this->secretaryData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -86,7 +88,7 @@ class UserSeeder extends Seeder
             'email' => 'johndoe@gmail.com',
             'password' => '123456789',
         ];
-        event(new SendMailEvent($this->staffData, EmailEnum::STATUT3->value));
+        HelpersFunction::sendEmail($this->staffData, EmailEnum::STATUT3->value);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Commands\SaveRequestActionCommand;
+use App\Command\SaveRequestActionCommand;
 use App\Models\Request;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;

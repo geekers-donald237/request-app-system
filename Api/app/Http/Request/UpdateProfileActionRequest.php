@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Request;
+namespace App\Http\Request;
 
 use App\Shared\Infrastructure\HttpDataRequest;
 
-class UpdateProfilActionRequest extends HttpDataRequest
+class UpdateProfileActionRequest extends HttpDataRequest
 {
     public function messages(): array
     {
@@ -22,5 +22,4 @@ class UpdateProfilActionRequest extends HttpDataRequest
             'email' => 'required|email|string',
         ];
     }
-
 }

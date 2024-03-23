@@ -44,7 +44,7 @@ import {ScreensModule} from "./features/screens/screens.module";
 import {Utils} from "./features/services/shared/utils/utils";
 import {RippleModule} from "primeng/ripple";
 import {ButtonModule} from "primeng/button";
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModalModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const APP_CONTAINERS = [
   DefaultFooterComponent,
@@ -66,6 +66,7 @@ const APP_CONTAINERS = [
     HeaderModule,
 
     SidebarModule,
+    NgbModalModule,
     IconModule,
     NavModule,
     FormModule,

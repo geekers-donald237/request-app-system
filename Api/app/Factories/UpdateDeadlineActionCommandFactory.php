@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\UpdateDeadlineActionCommand;
-use App\Http\Requests\UpdateDeadlineRequest;
+use App\Command\UpdateDeadlineActionCommand;
+use App\Http\Request\UpdateDeadlineRequest;
 
 class UpdateDeadlineActionCommandFactory
 {

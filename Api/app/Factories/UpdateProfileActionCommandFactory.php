@@ -3,11 +3,11 @@
 namespace App\Factories;
 
 use App\Command\UpdateProfileActionCommand;
-use App\Request\UpdateProfilActionRequest;
+use App\Http\Request\UpdateProfileActionRequest;
 
 class UpdateProfileActionCommandFactory
 {
-    public static function buildFromRequest(UpdateProfilActionRequest $request): UpdateProfileActionCommand
+    public static function buildFromRequest(UpdateProfileActionRequest $request): UpdateProfileActionCommand
     {
         return new UpdateProfileActionCommand(
             email: $request->get('email'),

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Commands\SaveDeadlineActionCommand;
-use App\Commands\UpdateDeadlineActionCommand;
+use App\Command\SaveDeadlineActionCommand;
+use App\Command\UpdateDeadlineActionCommand;
 use App\Enums\EmailEnum;
 use App\Events\SendMailEvent;
 use App\Models\Department;

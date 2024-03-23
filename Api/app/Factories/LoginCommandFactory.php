@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\LoginActionCommand;
-use App\Http\Requests\LoginActionRequest;
+use App\Command\LoginActionCommand;
+use App\Http\Request\LoginActionRequest;
 
 class LoginCommandFactory
 {

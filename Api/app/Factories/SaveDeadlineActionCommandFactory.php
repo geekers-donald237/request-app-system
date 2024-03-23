@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\SaveDeadlineActionCommand;
-use App\Http\Requests\SaveDeadlineRequest;
+use App\Command\SaveDeadlineActionCommand;
+use App\Http\Request\SaveDeadlineRequest;
 
 class SaveDeadlineActionCommandFactory
 {

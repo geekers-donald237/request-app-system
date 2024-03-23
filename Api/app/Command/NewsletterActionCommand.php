@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Commands;
+namespace App\Command;
 
-class LoginActionCommand
+class NewsletterActionCommand
 {
     public function __construct(
         public string $email,
-        public string $password
     )
     {
     }

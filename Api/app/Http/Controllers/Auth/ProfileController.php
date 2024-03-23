@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Factories\UpdateProfileActionCommandFactory;
 use App\Factories\UpdateUserPasswordCommandFactory;
 use App\Http\Controllers\Controller;
-use App\Request\UpdatePasswordActionRequest;
-use App\Request\UpdateProfilActionRequest;
+use App\Http\Request\UpdatePasswordActionRequest;
+use App\Http\Request\UpdateProfileActionRequest;
 use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -43,8 +43,8 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function updateUserProfile(
-        UpdateProfilActionRequest $request,
-        AuthService               $handler,
+        UpdateProfileActionRequest $request,
+        AuthService                $handler,
     ): JsonResponse
     {
         $httpJson = [

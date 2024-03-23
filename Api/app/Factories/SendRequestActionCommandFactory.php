@@ -2,8 +2,8 @@
 
 namespace App\Factories;
 
-use App\Commands\SendRequestActionCommand;
-use App\Http\Requests\SendRequestActionRequest;
+use App\Command\SendRequestActionCommand;
+use App\Http\Request\SendRequestActionRequest;
 
 class SendRequestActionCommandFactory
 {
