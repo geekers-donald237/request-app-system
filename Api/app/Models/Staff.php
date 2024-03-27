@@ -27,6 +27,6 @@ class Staff extends Model
 
     public function ues(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(UE::class);
+        return $this->hasMany(Ue::class);
     }
 }

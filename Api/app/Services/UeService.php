@@ -8,7 +8,7 @@ use App\Enums\EmailEnum;
 use App\Events\SendMailEvent;
 use App\Models\Department;
 use App\Models\Student;
-use App\Models\UE;
+use App\Models\Ue;
 use App\Models\User;
 use App\Responses\GetUeFromDepartmentWithDeadlineActionResponse;
 use App\Responses\GetUeFromStaffActionResponse;
@@ -134,7 +134,7 @@ class UeService
         return $response;
     }
 
-    public function updateUeInformation(UE $ue, UpdateDeadlineActionCommand $command): void
+    public function updateUeInformation(Ue $ue, UpdateDeadlineActionCommand $command): void
     {
         $ue->publication_date = $command->newPublicationDate;
         $ue->request_deadline = Carbon::parse($ue->publication_date)->addHours(intval($command->newSendingRequestInterval));
