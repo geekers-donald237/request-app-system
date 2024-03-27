@@ -18,7 +18,7 @@ use App\Models\Rule;
 use App\Models\Secretary;
 use App\Models\Staff;
 use App\Models\Student;
-use App\Models\UE;
+use App\Models\Ue;
 use App\Models\User;
 use App\Responses\DeleteRequestActionResponse;
 use App\Responses\GetAllUserActionResponse;
@@ -337,7 +337,7 @@ class RequestService
         return Staff::with('ues')->find($staff->id);
     }
 
-    protected function getFirstUeForStaff(Staff $staff): UE
+    protected function getFirstUeForStaff(Staff $staff): Ue
     {
         if (!$staff->ues || $staff->ues->isEmpty()) {
             throw new Exception("Cet enseignant n'est associé à aucune UE.");
@@ -345,7 +345,7 @@ class RequestService
         return $staff->ues->first();
     }
 
-    protected function getRequestsForUe(UE $ue): Collection
+    protected function getRequestsForUe(Ue $ue): Collection
     {
         return $ue->requests()
             ->whereStatut(RequestStateEnum::EN_COURS_DE_TRAITEMENT->value)
@@ -445,7 +445,7 @@ class RequestService
      */
     public static function checkIfUeExistOrThrowException(string $ueId)
     {
-        $ue = UE::whereId($ueId)->whereIsDeleted(false)->first();
+        $ue = Ue::whereId($ueId)->whereIsDeleted(false)->first();
         if (is_null($ue)) {
             throw new Exception('Cette UE n\'existe pas!');
         }
@@ -457,7 +457,7 @@ class RequestService
      */
     public function checkDeadlineForUE(string $ueId, Request $request)
     {
-        $ue = UE::findOrFail($ueId);
+        $ue = Ue::findOrFail($ueId);
         $deadline = $ue->request_deadline;
 
         if ($deadline === null) {
@@ -573,7 +573,7 @@ class RequestService
 //                    ->where('department_id', $student->department->id)
 //                    ->get();  getting ue with all Model staff
 
-                $ues = UE::with('staff.user:id,name') //  getting user
+                $ues = Ue::with('staff.user:id,name') //  getting user
                 ->where('level_id', $student->level->id)
                     ->where('department_id', $student->department->id)
                     ->get();

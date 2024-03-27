@@ -28,7 +28,7 @@ class Department extends Model
 
     public function subjects()
     {
-        return $this->hasMany(UE::class);
+        return $this->hasMany(Ue::class);
     }
 
 }

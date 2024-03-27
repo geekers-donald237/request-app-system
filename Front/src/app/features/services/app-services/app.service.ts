@@ -1,23 +1,25 @@
 import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {environment} from "../../../../environments/environment";
-import {IAddDeadlineResponse} from "../../models/add.deadline.model";
-import {IDeleteRequestResponse} from "../../models/delete.request.model";
 import {IGetStudentRequestResponse} from "../../models/student.request.model";
-import {ILoginResponse} from "../../models/login.response.model";
-import {IRequestResponse} from "../../models/request.model";
-import {IRequestHistoryResponse} from "../../models/request.history.model";
+import {IRequestPatternsResponse} from "../../models/request.patterns.model";
 import {ISaveRequestResponse} from "../../models/save.request.model";
 import {ISendRequestResponse} from "../../models/send.request.model";
-import {ISubscribeNewsletterModel} from "../../models/subscribe.newsletter.model";
-import {IUeResponse} from "../../models/ue.model";
-import {IUpdateDeadlineResponse} from "../../models/update.deadline.model";
-import {IUpdatePasswordModel} from "../../models/update.password.model";
-import {IUpdateStatusResponse} from "../../models/update.request.state.model";
-import {IStudentInfoResponse} from "../../models/student.info.model";
+import {IRequestDetailsResponse, IRequestResponse} from "../../models/request.model";
+import {IDeleteRequestResponse} from "../../models/delete.request.model";
+import {IRequestHistoryResponse} from "../../models/request.history.model";
 import {IStudentResponse} from "../../models/student.model";
-import {IRequestPatternsResponse} from "../../models/request.patterns.model";
+import {IUeResponse} from "../../models/ue.model";
+import {IUserResponse} from "../../models/user.model";
+import {IUpdateStatusResponse} from "../../models/update.request.state.model";
+import {Injectable} from "@angular/core";
+import {IStudentInfoResponse} from "../../models/student.info.model";
+import {IAddDeadlineResponse} from "../../models/add.deadline.model";
+import {IUpdateDeadlineResponse} from "../../models/update.deadline.model";
+import {ILoginResponse} from "../../models/login.response.model";
+import {ISubscribeNewsletterModel} from "../../models/subscribe.newsletter.model";
+import {IUpdatePasswordModel} from "../../models/update.password.model";
+import {environment} from "../../../../environments/environment";
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,37 +29,9 @@ export class AppService {
   constructor(private http: HttpClient) {
   }
 
-  // Authentification et gestion du profil utilisateur
-  login(email: string, password: string): Observable<ILoginResponse> {
-    const body = {email, password};
-    return this.http.post<ILoginResponse>(`${environment.baseUrl}/login`, body);
-  }
-
-  logout(): Observable<any> {
-    const url = `${environment.baseUrl}/logout`;
-    return this.http.post(url, '', {headers: environment.headers});
-  }
-
-  updateUserProfile(profileData: any): Observable<any> {
-    return this.http.post(`${environment.baseUrl}/profile`, profileData, {headers: environment.headers});
-  }
-
-  deleteUserAccount(): Observable<any> {
-    return this.http.delete(`${environment.baseUrl}/profile`, {headers: environment.headers});
-  }
-
-  updateUserPassword(passwordData: FormData): Observable<IUpdatePasswordModel> {
-    return this.http.post<IUpdatePasswordModel>(`${environment.baseUrl}/update-password`, passwordData, {headers: environment.headers});
-  }
-
-  subscribeToNewsletter(email: string | null): Observable<ISubscribeNewsletterModel> {
-    const data = {email};
-    return this.http.post<ISubscribeNewsletterModel>(`${environment.baseUrl}/newsletter`, data, {headers: environment.headers});
-  }
-
-  // Gestion des demandes
   getRequestPatterns(): Observable<IRequestPatternsResponse> {
-    return this.http.get<IRequestPatternsResponse>(`${environment.baseUrl}/request/patterns`, {headers: environment.headers});
+    const url = `${environment.baseUrl}/request/patterns`;
+    return this.http.get<IRequestPatternsResponse>(url, {headers: environment.headers});
   }
 
   getRequestFromStudent(studentId: number): Observable<IGetStudentRequestResponse> {
@@ -65,14 +39,27 @@ export class AppService {
   }
 
   saveRequest(requestData: any): Observable<ISaveRequestResponse> {
-    return this.http.post<ISaveRequestResponse>(`${environment.baseUrl}/request`, requestData, {headers: environment.headers});
+    const url = `${environment.baseUrl}/request`;
+    return this.http.post<ISaveRequestResponse>(url, requestData, {headers: environment.headers});
   }
 
   sendRequest(requestId: number, ueId: number): Observable<ISendRequestResponse> {
-    const data = {requestId, ueId};
-    return this.http.post<ISendRequestResponse>(`${environment.baseUrl}/request/send`, data, {headers: environment.headers});
+    const url = `${environment.baseUrl}/request/send`;
+    const data = {
+      requestId: requestId,
+      ueId: ueId
+    };
+    return this.http.post<ISendRequestResponse>(url, data, {headers: environment.headers});
   }
 
+  getStudentInformation(senderId: number): Observable<IStudentResponse> {
+    const url = `${environment.baseUrl}/student/${senderId}`;
+    return this.http.get<IStudentResponse>(url, {headers: environment.headers});
+  }
+
+  getDetailsRequest(requestId: number): Observable<IRequestDetailsResponse> {
+    return this.http.get<IRequestDetailsResponse>(`${environment.baseUrl}/requests/${requestId}/`, {headers: environment.headers});
+  }
 
   updateRequestStatus(requestId: number, statut: string): Observable<IUpdateStatusResponse> {
     const url = `${environment.baseUrl}/request/${requestId}/statut/${statut}`;
@@ -96,29 +83,67 @@ export class AppService {
     return this.http.get<IRequestHistoryResponse>(`${environment.baseUrl}/requests/${requestId}/history`, {headers: environment.headers});
   }
 
-  // Gestion des étudiants et des UE
-  getStudentInformation(senderId: number): Observable<IStudentResponse> {
-    return this.http.get<IStudentResponse>(`${environment.baseUrl}/student/${senderId}`, {headers: environment.headers});
+  getUsers(): Observable<IUserResponse> {
+    const url = `${environment.baseUrl}/users`;
+    return this.http.get<IUserResponse>(url, {headers: environment.headers});
   }
 
   getUesWithDeadlines(secretaryId: number): Observable<IUeResponse> {
-    return this.http.get<IUeResponse>(`${environment.baseUrl}/ues/${secretaryId}/deadline`, {headers: environment.headers});
+    const url = `${environment.baseUrl}/ues/${secretaryId}/deadline`;
+    return this.http.get<IUeResponse>(url, {headers: environment.headers});
   }
 
   getUesWithDeadlinesForStaff(staffId: number): Observable<IUeResponse> {
-    return this.http.get<IUeResponse>(`${environment.baseUrl}/staff/${staffId}/ues`, {headers: environment.headers});
+    const url = `${environment.baseUrl}/staff/${staffId}/ues`;
+    return this.http.get<IUeResponse>(url, {headers: environment.headers});
   }
+
 
   getStudentInfo(studentId: number): Observable<IStudentInfoResponse> {
-    return this.http.get<IStudentInfoResponse>(`${environment.baseUrl}/student/${studentId}/student`, {headers: environment.headers});
+
+    const url = `${environment.baseUrl}/student/${studentId}/student`;
+    return this.http.get<IStudentInfoResponse>(url, {headers: environment.headers});
   }
 
-  // Gestion des délais
   createDeadline(secretaryId: number, deadlineData: any): Observable<IAddDeadlineResponse> {
-    return this.http.post<IAddDeadlineResponse>(`${environment.baseUrl}/ues/${secretaryId}/deadline`, deadlineData, {headers: environment.headers});
+    const url = `${environment.baseUrl}/ues/${secretaryId}/deadline`;
+    return this.http.post<IAddDeadlineResponse>(url, deadlineData, {headers: environment.headers});
   }
 
   updateDeadline(ueId: number, updatedDeadlineData: any): Observable<IUpdateDeadlineResponse> {
-    return this.http.post<IUpdateDeadlineResponse>(`${environment.baseUrl}/ues/${ueId}/deadline/update`, updatedDeadlineData, {headers: environment.headers});
+    const url = `${environment.baseUrl}/ues/${ueId}/deadline/update`;
+    return this.http.post<IUpdateDeadlineResponse>(url, updatedDeadlineData, {headers: environment.headers});
   }
+
+
+  login(email: string, password: string): Observable<ILoginResponse> {
+    const body = {email, password};
+    return this.http.post<ILoginResponse>(`${environment.baseUrl}/login`, body);
+  }
+
+  updateUserProfile(profileData: any) {
+    return this.http.post(`${environment.baseUrl}/profile`, profileData, {headers: environment.headers});
+  }
+
+  subscribeToNewsletter(email: string | null): Observable<ISubscribeNewsletterModel> {
+    const url = `${environment.baseUrl}/newsletter`;
+    const data = {
+      email: email
+    };
+    return this.http.post<ISubscribeNewsletterModel>(url, data, {headers: environment.headers});
+  }
+
+  deleteUserAccount() {
+    return this.http.delete(`${environment.baseUrl}/profile`, {headers: environment.headers});
+  }
+
+  updateUserPassword(passwordData: FormData) {
+    return this.http.post<IUpdatePasswordModel>(`${environment.baseUrl}/update-password`, passwordData, {headers: environment.headers});
+  }
+
+  logout(): Observable<any> {
+    const url = `${environment.baseUrl}/logout`;
+    return this.http.post(url, '', {headers: environment.headers});
+  }
+
 }

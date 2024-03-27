@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\UE;
+use App\Models\Ue;
 use Illuminate\Database\Seeder;
 
 class UeSeeder extends Seeder
@@ -19,7 +19,7 @@ class UeSeeder extends Seeder
 
     private function seedUE(string $code, string $libelle, int $departmentId, int $levelId, int $staffId): void
     {
-        UE::factory()->create([
+        Ue::factory()->create([
             'code_ue' => $code,
             'libelle' => $libelle,
             'department_id' => $departmentId,
