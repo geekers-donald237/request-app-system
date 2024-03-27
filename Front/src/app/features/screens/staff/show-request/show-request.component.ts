@@ -67,15 +67,15 @@ export class ShowRequestComponent implements OnInit {
   }
 
   getRequestDetails(): void {
-    this.appService.getDetailsRequest(this.requestId).subscribe(
-      (response) => {
+    this.appService['getDetailsRequest'](this.requestId).subscribe(
+      (response: { request: any; }) => {
         console.log(response);
         this.request = response.request;
         if (this.request?.sender_id) {
           this.loadStudentInformation(this.request.sender_id);
         }
       },
-      (error) => {
+      (error: any) => {
         console.log('An error occurred while fetching request details:', error);
       }
     );

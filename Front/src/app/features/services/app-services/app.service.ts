@@ -23,6 +23,7 @@ import {IRequestPatternsResponse} from "../../models/request.patterns.model";
   providedIn: 'root'
 })
 export class AppService {
+  [x: string]: any;
 
   constructor(private http: HttpClient) {
   }

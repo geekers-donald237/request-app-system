@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {IStudentResponse} from "../../../models/student.model";
 import {AppService} from "../../app-services/app.service";
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,11 +22,11 @@ export class RequestDetailsService {
   }
 
   fetchRequestDetails(): void {
-    this.appService.getDetailsRequest(this.requestId).subscribe(
-      (response) => {
+    this.appService['getDetailsRequest'](this.requestId).subscribe(
+      (response: { request: any; }) => {
         this.requestDetailsSubject.next(response.request);
       },
-      (error) => {
+      (error: any) => {
         console.error('Erreur lors de la récupération des détails de la demande:', error);
       }
     );
