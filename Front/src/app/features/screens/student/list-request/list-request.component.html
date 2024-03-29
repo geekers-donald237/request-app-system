@@ -35,13 +35,13 @@
           <td> {{ request.ues[0].code_ue }} </td>
           <td>
             <div [ngClass]="{
-                  'badge': true,
-                   'badge-success': request.statut === RequestStateConstants.ACCEPTED,
-                  'badge-danger': request.statut === RequestStateConstants.REFUSED || RequestStateConstants.TERMINEE,
-                  'badge-warning': request.statut === RequestStateConstants.ATTENTE_DE_VALIDATION,
-                  'badge-info': request.statut === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
-                  'badge-primary': request.statut === RequestStateConstants.ATTENTE_DE_SOUMISSION,
-                }">
+              'badge': true,
+              'badge-success': request.statut === RequestStateConstants.ACCEPTED,
+              'badge-danger': request.statut === RequestStateConstants.REFUSED || request.statut === RequestStateConstants.TERMINEE,
+              'badge-warning': request.statut === RequestStateConstants.ATTENTE_DE_VALIDATION,
+              'badge-info': request.statut === RequestStateConstants.EN_COURS_DE_TRAITEMENT,
+              'badge-primary': request.statut === RequestStateConstants.ATTENTE_DE_SOUMISSION,
+            }">
               {{ request.statut }}
             </div>
           </td>
