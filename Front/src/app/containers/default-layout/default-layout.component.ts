@@ -73,7 +73,7 @@ export class DefaultLayoutComponent implements OnInit {
     } else if (role === UserRoleConstants.STAFF) {
       gestionDesRequetes.children = [
         {
-          name: 'Dashbord ',
+          name: 'Echeance des Requêtes ',
           url: '/app/staff/requests',
         },
         {
