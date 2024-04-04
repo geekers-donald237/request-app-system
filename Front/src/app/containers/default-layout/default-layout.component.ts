@@ -51,14 +51,14 @@ export class DefaultLayoutComponent implements OnInit {
     const gestionDesRequetes: INavData = {
       name: 'Gestion des Requêtes',
       url: '/app',
-      iconComponent: {name: 'cil-puzzle'},
+      // iconComponent: {name: 'cil-puzzle'},
       children: [],
     };
 
     if (role === UserRoleConstants.STUDENT) {
       gestionDesRequetes.children = [
         {
-          name: 'Dashboard',
+          name: 'Echeance des Requêtes',
           url: '/app/student-dashboard',
         },
         {
@@ -73,7 +73,7 @@ export class DefaultLayoutComponent implements OnInit {
     } else if (role === UserRoleConstants.STAFF) {
       gestionDesRequetes.children = [
         {
-          name: 'Dashboard',
+          name: 'Dashbord ',
           url: '/app/staff/requests',
         },
         {

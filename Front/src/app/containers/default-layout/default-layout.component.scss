@@ -1,21 +1,21 @@
 :host {
   ng-scrollbar {
-    --scrollbar-thumb-color: var(--cui-border-color, #999);
+    --scrollbar-thumb-color: var(--cui-border-color, #1b1b1b);
     --scrollbar-track-color: var(--cui-body-color, #fff);
-    --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
+    --scrollbar-hover-size: calc(var(--scrollbar-size) * 2);
   }
 }
 
 .sidebar {
-  background-color: #292929; 
+  background-color: #1b1b1b; 
 }
 
 
 .sidebar-nav .c-sidebar-nav-item.c-active {
-  background-color: #363636;
+  background-color: #1b1b1b;
 }
 .sidebar-nav .c-sidebar-nav-item.c-active:hover {
-  background-color: #1f2b33;
+  background-color: #1b1b1b;
 }
 
 
