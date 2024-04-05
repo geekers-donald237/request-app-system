@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
             'password' => '123456789',
 
         ];
-        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
+//        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -70,7 +70,7 @@ class UserSeeder extends Seeder
             'email' => 'janedoe@gmail.com',
             'password' => '123456789',
         ];
-        HelpersFunction::sendEmail($this->secretaryData, EmailEnum::STATUT3->value);
+//        HelpersFunction::sendEmail($this->secretaryData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -88,7 +88,7 @@ class UserSeeder extends Seeder
             'email' => 'johndoe@gmail.com',
             'password' => '123456789',
         ];
-        HelpersFunction::sendEmail($this->staffData, EmailEnum::STATUT3->value);
+//        HelpersFunction::sendEmail($this->staffData, EmailEnum::STATUT3->value);
     }
 
     /**

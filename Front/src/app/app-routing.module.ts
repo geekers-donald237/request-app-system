@@ -33,16 +33,6 @@ const routes: Routes = [
       },
 
       {
-        path: 'icons',
-        loadChildren: () =>
-          import('./views/icons/icons.module').then((m) => m.IconsModule)
-      },
-      {
-        path: 'notifications',
-        loadChildren: () =>
-          import('./views/notifications/notifications.module').then((m) => m.NotificationsModule)
-      },
-      {
         path: 'widgets',
         loadChildren: () =>
           import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
@@ -89,7 +79,7 @@ const routes: Routes = [
   },
   {
     path: 'profil',
-    component: ProfileComponent ,
+    component: ProfileComponent,
     data: {
       title: 'profil page'
     }
