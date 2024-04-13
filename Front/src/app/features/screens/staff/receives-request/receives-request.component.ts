@@ -33,6 +33,7 @@ export class ReceivesRequestComponent implements OnInit {
     this.appService.getRequestReceiveByStaff(staffId).subscribe(
       (response) => {
         this.requests = response.requests;
+        console.log(this.requests)
       },
       (error) => {
         console.log('An error occurred. Please try again later.');

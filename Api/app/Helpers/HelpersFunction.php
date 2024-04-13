@@ -28,7 +28,6 @@ class HelpersFunction
 
         $filename = time() . '_' . $file->getClientOriginalName();
         $file->storeAs($storagePath, $filename);
-
         return $storagePath . DIRECTORY_SEPARATOR . $filename;
     }
 

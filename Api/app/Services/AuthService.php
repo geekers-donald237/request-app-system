@@ -4,15 +4,21 @@ namespace App\Services;
 
 
 use App\Command\LoginActionCommand;
+use App\Command\RegisterActionCommand;
 use App\Command\UpdateProfileActionCommand;
 use App\Command\UpdateUserPasswordCommand;
 use App\Enums\EmailEnum;
+use App\Enums\RuleEnum;
 use App\Events\SendMailEvent;
+use App\Helpers\HelpersFunction;
+use App\Models\Rule;
+use App\Models\Student;
 use App\Models\User;
 use App\Responses\DeleteAccountActionResponse;
 use App\Responses\GetUserProfileActionResponse;
 use App\Responses\LoginActionResponse;
 use App\Responses\LogoutActionResponse;
+use App\Responses\RegisterActionResponse;
 use App\Responses\UpdatePasswordActionResponse;
 use App\Responses\UpdateProfilActionResponse;
 use Exception;
@@ -52,11 +58,49 @@ class AuthService
         throw new Exception('User Not Found');
     }
 
+    /**
+     * @throws Exception
+     */
+    public function handleRegister(RegisterActionCommand $command): RegisterActionResponse
+    {
+        if ($command->password !== $command->cPassword) {
+            throw new \Exception("La confirmation du mot de passe ne correspond pas.");
+        }
+        $response = new RegisterActionResponse();
+        $user = User::factory()->create([
+            'name' => $command->name,
+            'email' => $command->email,
+            'password' => bcrypt($command->password)
+        ]);
+
+        $rule = Rule::whereName(RuleEnum::STUDENT)->firstOrFail();
+        $user->rules()->attach($rule->id);
+
+        // Créer un nouvel étudiant avec les informations spécifiques
+        Student::factory()->create([
+            'user_id' => $user->id,
+            'matricule' => $command->matricule,
+            'department_id' => '4',
+            'level_id' => 3
+        ]);
+
+
+        $response->isRegistered = true;
+        $response->message = 'Utilisateur enregistré avec succès';
+        $this->userData = [
+            'name' => $command->name,
+            'email' => $command->email,
+            'password' => $command->password,
+        ];
+        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
+
+        return $response;
+
+    }
+
     public function handleGetUserProfile(): GetUserProfileActionResponse
     {
         $response = new GetUserProfileActionResponse();
-
-
         $response->user = Auth::user()->where('is_deleted', false)
             ->with(['rules'])
             ->first();

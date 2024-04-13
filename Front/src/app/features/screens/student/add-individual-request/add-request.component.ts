@@ -175,7 +175,7 @@ export class AddRequestComponent implements OnInit {
           this.isLoading = false;
           this.isReadonly = false;
           this.router.navigate(['/app/list-requests']);
-        }, 1000);
+        }, 300);
       },
       (saveError) => {
         this.showMessage(saveError.message, 'danger')

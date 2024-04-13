@@ -93,9 +93,7 @@ class RequestService
     private function saveStudentRequest(SaveRequestActionCommand $command): Request
     {
         $request = $this->saveRequest($command);
-        //TODO: implements event listeners for upload file on disk
 
-//        SaveFileEvent::dispatch($command, $request);
         $this->saveFileHandWritten($command, $request);
 
         $this->saveFileAttachments($command->fileAttachments, $request);

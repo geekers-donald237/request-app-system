@@ -9,4 +9,5 @@ export class Page404Component {
 
   constructor() { }
 
+    protected readonly navigator = navigator;
 }

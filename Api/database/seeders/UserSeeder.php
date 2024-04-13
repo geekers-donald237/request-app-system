@@ -42,8 +42,8 @@ class UserSeeder extends Seeder
 
         Student::factory()->create(['user_id' => (User::whereEmail('danymckeny@gmail.com')->first()->id),
             'matricule' => '21Q2915'
-            , 'department_id' => '4'
-            , 'level_id' => 3,
+            ,'department_id' => '4'
+            ,'level_id' => 3,
 
         ]);
 
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
             'password' => '123456789',
 
         ];
-//        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
+        HelpersFunction::sendEmail($this->userData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -70,7 +70,7 @@ class UserSeeder extends Seeder
             'email' => 'janedoe@gmail.com',
             'password' => '123456789',
         ];
-//        HelpersFunction::sendEmail($this->secretaryData, EmailEnum::STATUT3->value);
+        HelpersFunction::sendEmail($this->secretaryData, EmailEnum::STATUT3->value);
     }
 
     /**
@@ -88,7 +88,7 @@ class UserSeeder extends Seeder
             'email' => 'johndoe@gmail.com',
             'password' => '123456789',
         ];
-//        HelpersFunction::sendEmail($this->staffData, EmailEnum::STATUT3->value);
+        HelpersFunction::sendEmail($this->staffData, EmailEnum::STATUT3->value);
     }
 
     /**

@@ -15,7 +15,7 @@ import {AppService} from "../../../services/app-services/app.service";
 })
 export class ReceiveRequestSecretaryComponent implements OnInit {
   secretaryId: number | null = null;
-  requests: IRequest[] = [];
+    requests: IRequest[] = [];
   pageIsLoad = true;
 
 

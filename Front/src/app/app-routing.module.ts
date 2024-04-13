@@ -86,7 +86,7 @@ const routes: Routes = [
   },
 
 
-  {path: '**', redirectTo: 'home'}
+  {path: '**', redirectTo: '404'}
 ];
 
 @NgModule({

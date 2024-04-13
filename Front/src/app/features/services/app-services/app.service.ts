@@ -19,6 +19,7 @@ import {ILoginResponse} from "../../models/login.response.model";
 import {ISubscribeNewsletterModel} from "../../models/subscribe.newsletter.model";
 import {IUpdatePasswordModel} from "../../models/update.password.model";
 import {environment} from "../../../../environments/environment";
+import {IRegisterResponse} from "../../models/register.response.model";
 
 
 @Injectable({
@@ -120,6 +121,12 @@ export class AppService {
     const body = {email, password};
     return this.http.post<ILoginResponse>(`${environment.baseUrl}/login`, body);
   }
+
+  register(name: string, email: string, password: string, matricule: string , password_confirmation: string): Observable<IRegisterResponse> {
+    const body = { name, email, password, matricule , password_confirmation};
+    return this.http.post<IRegisterResponse>(`${environment.baseUrl}/register`, body);
+  }
+
 
   updateUserProfile(profileData: any) {
     return this.http.post(`${environment.baseUrl}/profile`, profileData, {headers: environment.headers});
