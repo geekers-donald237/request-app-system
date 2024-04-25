@@ -18,16 +18,3 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-
-Route::get('/test-email', function () {
-    $userData = [
-        'name' => 'John Doe',
-        'email' => 'bayonidris@gmail.com',
-        'password' => 'hfhfhfhfhf',
-    ];
-
-    event(new SendMailEvent($userData, 'status3'));
-
-    return 'E-mail sent successfully!';
-});
-
