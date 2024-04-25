@@ -9,7 +9,7 @@ export const navItems: INavData[] = [
   {
     name: 'Gestion des requêtes',
     url: '/app/student-dashboard',
-    // iconComponent: {name: 'cil-puzzle'},
+    iconComponent: {name: 'cil-puzzle'},
     children: [
       // {
       //   name: 'Dashboard',
