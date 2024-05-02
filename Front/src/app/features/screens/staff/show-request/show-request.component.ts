@@ -4,7 +4,6 @@ import {RequestStateConstants} from '../../../constant/constant';
 import {IRequestPattern} from '../../../models/request.patterns.model';
 import {IStudent, IStudentResponse} from "../../../models/student.model";
 import {Utils} from "../../../services/shared/utils/utils";
-import {RedirectLink} from "../../../services/shared/utils/redirect.link";
 import {RequestPatternService} from "../../../services/shared/request-pattern/request-pattern.service";
 import {AppService} from "../../../services/app-services/app.service";
 
@@ -29,7 +28,6 @@ export class ShowRequestComponent implements OnInit {
   dismissible = true;
   message: string | undefined;
   color: string | undefined;
-  redirectLink: RedirectLink;
   showAlert: boolean = false;
   pageIsLoad = true;
 
@@ -39,7 +37,6 @@ export class ShowRequestComponent implements OnInit {
     , private requestPatternService: RequestPatternService
   ) {
     this.utils = new Utils(this.router);
-    this.redirectLink = new RedirectLink()
   }
 
   showMessage(message: string, color: string): void {

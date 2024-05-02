@@ -51,52 +51,67 @@ export class DefaultLayoutComponent implements OnInit {
     const gestionDesRequetes: INavData = {
       name: 'Gestion des Requêtes',
       url: '/app',
-      // iconComponent: {name: 'cil-puzzle'},
+      iconComponent: {name: 'cil-puzzle'},
       children: [],
     };
 
-    if (role === UserRoleConstants.STUDENT) {
-      gestionDesRequetes.children = [
-        {
-          name: 'Echeance des Requêtes',
-          url: '/app/student-dashboard',
-        },
-        {
-          name: 'Suivis des Requêtes',
-          url: '/app/list-requests',
-        },
-        {
-          name: 'Creation des Requêtes',
-          url: '/app/add-individual-request',
-        },
-      ];
-    } else if (role === UserRoleConstants.STAFF) {
-      gestionDesRequetes.children = [
-        {
-          name: 'Echeance des Requêtes ',
-          url: '/app/staff/requests',
-        },
-        {
-          name: 'Traitement des Requêtes',
-          url: '/app/receive-request',
-        },
-      ];
-    } else if (role === UserRoleConstants.SECRETARY) {
-      gestionDesRequetes.children = [
-        {
-          name: 'Requêtes Reçus',
-          url: '/app/secretary/requests',
-        },
-        {
-          name: 'Echeance Requêtes',
-          url: '/app/show-program',
-        },
-        {
-          name: 'Ajouter une echeance',
-          url: '/app/add-program',
-        },
-      ];
+    switch (role) {
+      case UserRoleConstants.STUDENT:
+        gestionDesRequetes.children = [
+          {
+            name: 'Echeance des Requêtes',
+            url: '/app/student-dashboard',
+            iconComponent: { name: 'cilSpeedometer' },
+          },
+          {
+            name: 'Suivis des Requêtes',
+            url: '/app/list-requests',
+            iconComponent: { name: 'cilList' },
+          },
+          {
+            name: 'Creation des Requêtes',
+            url: '/app/add-individual-request',
+            iconComponent: { name: 'cilPencil' },
+          },
+        ];
+        break;
+      case UserRoleConstants.STAFF:
+        gestionDesRequetes.children = [
+          {
+            name: 'Echeance des Requêtes',
+            url: '/app/staff/requests',
+            iconComponent: { name: 'cilCalendar' },
+          },
+          {
+            name: 'Traitement des Requêtes',
+            url: '/app/receive-request',
+            iconComponent: { name: 'cilTask' },
+          },
+        ];
+        break;
+      case UserRoleConstants.SECRETARY:
+        gestionDesRequetes.children = [
+          {
+            name: 'Requêtes Reçus',
+            url: '/app/secretary/requests',
+            iconComponent: { name: 'cilInbox' },
+          },
+          {
+            name: 'Echeance Requêtes',
+            url: '/app/show-program',
+            iconComponent: { name: 'cilCalendar' },
+          },
+          {
+            name: 'Ajouter une échéance',
+            url: '/app/add-program',
+            iconComponent: { name: 'cilSettings' },
+          },
+        ];
+        break;
+      default:
+        break;
     }
+
 
     userSection.push(gestionDesRequetes);
 

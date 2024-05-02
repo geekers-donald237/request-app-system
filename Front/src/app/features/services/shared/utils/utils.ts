@@ -5,6 +5,7 @@ import {ILoginResponse} from "../../../models/login.response.model";
 import {IRequestPattern} from "../../../models/request.patterns.model";
 import {IUser} from "../../../models/user.model";
 import {IUserRole} from "../../../models/user.role.model";
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -67,5 +68,13 @@ export class Utils {
 
   public loadRequestIdFromLocalStorage(): number {
     return  Number(localStorage.getItem('requestId'));
+  }
+
+
+  laravelBaseUrl = environment.laravelBaseUrl;
+
+  public getAttachmentUrl(filePath: string): void {
+    window.open(this.laravelBaseUrl + '/' + filePath, '_blank');
+
   }
 }

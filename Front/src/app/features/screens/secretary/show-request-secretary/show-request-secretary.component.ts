@@ -4,7 +4,6 @@ import {IRequestPattern} from '../../../models/request.patterns.model';
 import {IStudent} from '../../../models/student.model';
 import {RequestPatternService} from '../../../services/shared/request-pattern/request-pattern.service';
 import {Utils} from '../../../services/shared/utils/utils';
-import {RedirectLink} from '../../../services/shared/utils/redirect.link';
 import {RequestDetailsService} from '../../../services/shared/request-details/request-details.service';
 import {UpdateRequestStateService} from '../../../services/shared/update-request-state/update-request-state.service';
 import {AlertComponent} from '@coreui/angular';
@@ -34,7 +33,6 @@ export class ShowRequestSecretaryComponent {
   courses: IUe[] = [];
   color: string | undefined;
   utils: Utils | undefined;
-  redirectLink: RedirectLink | undefined;
   pageIsLoad = true;
 
 
@@ -42,7 +40,7 @@ export class ShowRequestSecretaryComponent {
     private requestPatternService: RequestPatternService,
     private requestDetailsService: RequestDetailsService,
     private router: Router,
-    private updateRequestStateService: UpdateRequestStateService
+    private updateRequestStateService: UpdateRequestStateService,
   ) {
   }
 
@@ -137,4 +135,5 @@ export class ShowRequestSecretaryComponent {
       this.router.navigate(['/app/secretary/requests']);
     }, 1000);
   }
+
 }

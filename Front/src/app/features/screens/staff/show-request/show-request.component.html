@@ -59,11 +59,15 @@
           <h6 style="font-weight: bold;">Pièces jointes</h6><br>
           <ng-container *ngIf="request.attachments && request.attachments.length > 0; else noAttachments">
             <p class="section-lead" *ngFor="let attachment of request.attachments; let i = index">
-              <button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top"
-                      title="Voir la piece jointe.">
-                <a [href]="redirectLink.getAttachmentUrl(attachment.file_path)" target="_blank"
-                   style="color: white;text-decoration: none; ">Pièce {{ i + 1 }}</a>
-              </button>
+              <a class="btn btn-info"
+                 (click)="this.utils?.getAttachmentUrl(attachment.file_path)"
+                 target="_blank"
+                 role="button"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Voir la pièce jointe">
+                Pièce {{ i + 1 }}
+              </a>
             </p>
           </ng-container>
 

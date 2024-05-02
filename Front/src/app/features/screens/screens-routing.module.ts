@@ -21,7 +21,7 @@ const routes: Routes = [
     path: 'student-dashboard',
     component: StudentDashboardComponent,
     data: {
-      title: 'Ma liste des requêtes'
+      title: 'Ma liste des requêtes',
     }
   },
 

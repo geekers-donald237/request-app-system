@@ -3,6 +3,7 @@ import {NavigationEnd, Router} from '@angular/router';
 
 import {IconSetService} from '@coreui/icons-angular';
 import {Title} from '@angular/platform-browser';
+import {iconSubset} from "./icons/icon-subset";
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
   ) {
     titleService.setTitle(this.title);
     // iconSet singleton
+    iconSetService.icons = {...iconSubset};
   }
 
   ngOnInit(): void {
