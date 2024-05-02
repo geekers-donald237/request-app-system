@@ -15,6 +15,6 @@ use App\Events\SendMailEvent;
 */
 
 Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+    return view('welcome');
 });
 
