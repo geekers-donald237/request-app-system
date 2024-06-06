@@ -34,9 +34,9 @@ class UserSeeder extends Seeder
      */
     public function createdStudentUsers(): void
     {
-        User::factory()->create(['name' => 'Compte test eleve', 'email' => 'student@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
+        User::factory()->create(['name' => 'Compte test eleve', 'email' => 'danymckeny@gmail.com', 'password' => '123456789'])->rules()->attach(Rule::whereName(RuleEnum::STUDENT->value)->first()->id);
 
-        Student::factory()->create(['user_id' => (User::whereEmail('student@gmail.com')->first()->id),
+        Student::factory()->create(['user_id' => (User::whereEmail('danymckeny@gmail.com')->first()->id),
             'matricule' => '21Q2915'
             , 'department_id' => '4'
             , 'level_id' => 3,
